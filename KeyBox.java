@@ -1,4 +1,5 @@
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.HashSet;
+import java.util.concurrent.Lock;
 import javax.swing.JFrame;
 import java.awt.event.KeyListener;
 import java.awt.event.KeyEvent;
@@ -8,13 +9,17 @@ import java.awt.FlowLayout;
  * Thomas: Here is a class that handles keyboard input.
  */
 public class KeyBox {
-    // These thread-safe hashmaps will store the state with respect to keyboard input.
+    // A lock to control internal state access
+    private Lock stateLock;
 
     // Which keys have been pressed since the last update or have been held down through the last update?
-    public ConcurrentHashMap<Integer, Boolean> wasPressed;
+    private HashSet<Integer> wasPressed;
 
     // Which keys are being held down now?
-    public ConcurrentHashMap<Integer, Boolean> isPressed;
+    private HashSet<Integer> isPressed;
+
+    // Is a key being held down, but has already been processed?
+    private HashSet<Integer> beenProcessed;
 
     // A subclass of JFrame which implements KeyListener and updates its corresponding KeyBox on input
     public class MyFrame extends JFrame implements KeyListener {
@@ -31,37 +36,81 @@ public class KeyBox {
 
         @Override
         public void keyPressed(KeyEvent e) {
-            KeyBox.this.wasPressed.put(e.getKeyCode(), true);
-            KeyBox.this.isPressed.put(e.getKeyCode(), true);
+            KeyBox.this.stateLock.lock();
+            try {
+                KeyBox.this.wasPressed.add(e.getKeyCode());
+                KeyBox.this.isPressed.add(e.getKeyCode());
+
+                // If a key is still marked as processed from a previous update cycle, unmark it.
+                KeyBox.this.beenProcessed.remove(e.getKeyCode());
+            }
+            finally {
+                KeyBox.this.stateLock.unlock();
+            }
         }
 
         @Override
         public void keyReleased(KeyEvent e) {
-            KeyBox.this.isPressed.put(e.getKeyCode(), false);
+            KeyBox.this.stateLock.lock();
+            try {
+                KeyBox.this.isPressed.remove(e.getKeyCode());
+            }
+            finally {
+                KeyBox.this.stateLock.unlock();
+            }
         }
     }
 
     public MyFrame frame;
 
     public KeyBox() {
-        wasPressed = new ConcurrentHashMap<>();
-        isPressed = new ConcurrentHashMap<>();
+        stateLock = new Lock();
+
+        wasPressed = new HashSet<>();
+        isPressed = new HashSet<>();
+        beenProcessed = new HashSet<>();
 
         frame = new MyFrame();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(new FlowLayout());
     }
 
+    // See if a key has been pressed. Return true even if the signal has already been processed by a client
     public boolean getResetKey(int keyCode) {
-        if (wasPressed.contains(keyCode) && wasPressed.get(keyCode)) {
-            if (!(isPressed.contains(keyCode) && isPressed.get(keyCode))) {
-                // Only reset wasPressed[keyCode] if that key is no longer being held down.
-                wasPressed.put(keyCode, false);
+        stateLock.lock();
+        try {
+            if (wasPressed.contains(keyCode)) {
+                if (!isPressed.contains(keyCode)) {
+                    // Only reset wasPressed[keyCode] if that key is no longer being held down.
+                    wasPressed.remove(keyCode);
+                }
+
+                // Upon returning true, we have processed this signal.
+                beenProcessed.add(keyCode);
+                return true;
             }
 
-            return true;
+            return false;
+        }
+        finally {
+            stateLock.unlock();
+        }
+    }
+
+    // See if a key has been pressed. Return false if the signal has already been processed by a client
+    public boolean getReleaseKey(int keyCode) {
+        stateLock.lock();
+        try {
+            // Return false if the signal has been processed. Otherwise, refer to getResetKey().
+            if (beenProcessed.contains(keyCode)) {
+                return false;
+            }
+        }
+        finally {
+            stateLock.unlock();
         }
 
-        return false;
+        // At this point, the lock is unlocked. Otherwise, this method call would hang
+        return getResetKey(keyCode);
     }
 }
