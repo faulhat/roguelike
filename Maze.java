@@ -58,6 +58,7 @@ public class Maze {
 
     private Cell[][] cells;
 
+    // Should debug info be printed to the command line?
     private final boolean debug;
 
     public Maze(boolean debug, int width, int height) {
@@ -72,6 +73,9 @@ public class Maze {
             for (int j = 0; j < height; j++) {
                 Cell cell = cells[i][j] = new Cell();
 
+                // Walls should not be generated on the edges of the maze,
+                // since then they would not be shared by two cells.
+                // It is implicit that you can't walk over the edges.
                 if (i > 0) {
                     cell.walls.put(Direction.W, cells[i - 1][j].walls.get(Direction.E));
                 }
@@ -98,6 +102,7 @@ public class Maze {
         this.cells = cells;
     }
 
+    // Assume that debug info should not be printed.
     public Maze(int width, int height) {
         this(false, width, height);
     }
@@ -117,6 +122,8 @@ public class Maze {
             for (int j = 0; j < height; j++) {
                 Cell cellAt = cells[i][j];
 
+                // For each cell, we only deal with its S and E wallRefs.
+                // The N and W ones should have already been dealt with when we visited its neighbors.
                 WallRef wallRefE = cellAt.walls.get(Direction.E);
                 if (wallRefE != null && wallRefE.isWall) {
                     if (i < width - 1) {
@@ -159,6 +166,7 @@ public class Maze {
         char[][] charGrid = new char[height * 2 - 1][width * 2 - 1];
         for (int i = 0; i < width * 2 - 1; i++) {
             for (int j = 0; j < height * 2 - 1; j++) {
+                // charGrid is transposed from boolGrid, since otherwise the axes would be backwards.
                 if (boolGrid[i][j]) {
                     charGrid[j][i] = '#';
                 }
@@ -170,6 +178,8 @@ public class Maze {
 
         String out = "   ";
         for (int i = 0; i < width * 2 - 1; i++) {
+            // Plus signs on axes mark true cells (not walls).
+            // A wall should never be at the intersection of a row and a column both marked by plus signs.
             if (i % 2 == 0) {
                 out += "+ ";
             }
@@ -196,6 +206,8 @@ public class Maze {
         return out;
     }
 
+    // Generate maze according to recursive division algorithm.
+    // See README for info on the algorithm.
     public void divRecursive(Random rand) {
         if (width != 1 && height != 1) {
             // Make a vertical wall and a horizontal wall
@@ -247,6 +259,7 @@ public class Maze {
                 System.out.println();
             }
 
+            // Divide and recurse
             Cell[][] NEQuadrant = new Cell[width - slice_x][slice_y];
             Cell[][] SEQuadrant = new Cell[width - slice_x][height - slice_y];
             for (int i = slice_x; i < width; i++) {
@@ -282,6 +295,8 @@ public class Maze {
     }
 
     public static void main(String[] args) {
+        // See README for documentation of command-line options.
+
         int width, height;
         if (args.length >= 2) {
             width = Integer.parseInt(args[0]);
@@ -294,11 +309,20 @@ public class Maze {
 
         boolean debug = args.length >= 3 && args[2].equals("debug");
 
-        Maze maze = new Maze(debug, width, height);
+        // Option to print debug info, but still use a random seed.
+        boolean debug_rand = args.length >= 3 && args[2].equals("debug-rand");
+
+        Maze maze = new Maze(debug || debug_rand, width, height);
         System.out.println(maze.toString());
         System.out.println();
 
-        maze.genMaze();
+        if (debug_rand) {
+            maze.divRecursive(new Random(System.currentTimeMillis()));
+        }
+        else {
+            maze.genMaze();
+        }
+        
         System.out.println("Final:\n" + maze.toString());
     }
 }

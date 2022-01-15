@@ -1,4 +1,3 @@
-import java.util.Arrays;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.awt.geom.Point2D;
 import java.awt.Point;
@@ -6,18 +5,27 @@ import java.awt.Point;
 /*
  * Thomas: This class represents a Chamber in the game,
  * this being a roguelike and all.
+ * Chambers are of constant height and width.
+ * Also, this class handles game dialogue as displayed while in this view.
  */
 public class Chamber implements GameView {
     // Constants
+    
+    // These are the height and width of the chamber object, not the display.
     public static final int WIDTH = 15;
     public static final int HEIGHT = 12;
+
+    // Height of the dialogue box
+    public static final int DIALOGUE_HEIGHT = 10;
+
+    // time delta * this constant = true distance moved
     public static final double PLAYER_SPEED = 0.015;
 
     // The external game state, which this class may need to refer to.
     public Game outerState;
 
-    // A map of which squares are walkable.
-    private boolean[][] walkable;
+    // A map of this chamber
+    private Square[][] squares;
 
     // The player's sub-grid position
     private Point2D.Double playerPosition;
@@ -31,18 +39,11 @@ public class Chamber implements GameView {
     // Is the game waiting for the player to finish scrolling through dialogue?
     private boolean scrolling;
 
-    public Chamber(Game outerState, boolean[][] walkable) {
+    public Chamber(Game outerState, Square[][] squares) {
         this.outerState = outerState;
 
-        this.walkable = new boolean[WIDTH][];
-
-        assert(walkable.length == WIDTH);
-
-        for (int i = 0; i < walkable.length; i++) {
-            assert(walkable[i].length == HEIGHT);
-
-            this.walkable[i] = Arrays.copyOf(walkable[i], HEIGHT);
-        }
+        // This object assumes ownership of the square array.
+        this.squares = squares;
 
         dialogueQueue = new ConcurrentLinkedQueue<>();
         paused = false;
@@ -57,12 +58,13 @@ public class Chamber implements GameView {
     // How to update this view given a time delta
     @Override
     public void update(double delta) {
-
+        // do stuff here
     }
 
     // How to render this view as a string
     @Override
     public String render() {
-        return ""; //
+        // do stuff here
+        return "";
     }
 }

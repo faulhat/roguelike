@@ -21,8 +21,7 @@ public class Game {
     // Must account for the whitespace added to the output
     public static final int DISPLAY_WIDTH = Chamber.WIDTH * 2 - 1;
     public static final int GAME_HEIGHT = Chamber.HEIGHT * 2 - 1;
-    public static final int DIALOGUE_HEIGHT = 10;
-    public static final int DISPLAY_HEIGHT = GAME_HEIGHT + DIALOGUE_HEIGHT;
+    public static final int DISPLAY_HEIGHT = GAME_HEIGHT + Chamber.DIALOGUE_HEIGHT;
     
     public KeyBox keyBox;
     private JTextArea display;
