@@ -1,4 +1,5 @@
 import java.util.Arrays;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.awt.geom.Point2D;
 import java.awt.Point;
 
@@ -21,7 +22,18 @@ public class Chamber implements GameView {
     // The player's sub-grid position
     private Point2D.Double playerPosition;
 
-    public Chamber(boolean[][] walkable) {
+    // Queue of dialogue to be printed
+    private ConcurrentLinkedQueue<String> dialogueQueue;
+
+    // Is the game paused?
+    private boolean paused;
+
+    // Is the game waiting for the player to finish scrolling through dialogue?
+    private boolean scrolling;
+
+    public Chamber(Game outerState, boolean[][] walkable) {
+        this.outerState = outerState;
+
         this.walkable = new boolean[WIDTH][];
 
         assert(walkable.length == WIDTH);
@@ -31,6 +43,10 @@ public class Chamber implements GameView {
 
             this.walkable[i] = Arrays.copyOf(walkable[i], HEIGHT);
         }
+
+        dialogueQueue = new ConcurrentLinkedQueue<>();
+        paused = false;
+        scrolling = false;
     }
 
     // Put the player in the chamber at a given position

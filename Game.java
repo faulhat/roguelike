@@ -9,11 +9,12 @@ import java.time.Instant;
  */
 public class Game {
     // An enumeration representing the current game view
-    public static enum ViewEnum {
+    public static enum View {
         START_MENU,
         INVENTORY,
         OVERWORLD,
-        BATTLE
+        BATTLE,
+        PAUSE_MENU
     }
 
     // Constants regarding the game display
@@ -27,10 +28,10 @@ public class Game {
     private JTextArea display;
 
     // The chamber the player is in
-    public Chamber currentChamber;
+    private Chamber currentChamber;
 
     // The view being displayed
-    public GameView currentView;
+    private GameView currentView;
 
     public Game(Chamber startingChamber) {
         keyBox = new KeyBox();

@@ -1,5 +1,7 @@
 import java.util.HashSet;
-import java.util.concurrent.Lock;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
 import javax.swing.JFrame;
 import java.awt.event.KeyListener;
 import java.awt.event.KeyEvent;
@@ -64,7 +66,7 @@ public class KeyBox {
     public MyFrame frame;
 
     public KeyBox() {
-        stateLock = new Lock();
+        stateLock = new ReentrantLock();
 
         wasPressed = new HashSet<>();
         isPressed = new HashSet<>();

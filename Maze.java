@@ -4,30 +4,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.awt.Point;
 
 /*
  * Thomas: This is a class for generating mazes.
  * This will be used for the procedural level generation.
  */
 public class Maze {
-    public static enum Direction {
-        N, E, S, W;
-
-        public Point asOffset() {
-            switch (this) {
-            case N:
-                return new Point(0, -1);
-            case E:
-                return new Point(1, 0);
-            case S:
-                return new Point(0, 1);
-            default:
-                return new Point(-1, 0);
-            }
-        }
-    }
-
     // An object specifying whether or not a wall exists between two cells.
     // Two Cell objects should share each wall.
     public static class WallRef {
