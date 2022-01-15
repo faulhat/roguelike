@@ -6,3 +6,9 @@ maze-debug: maze-compile
 
 maze: maze-compile
 	java Maze
+
+build-all:
+	javac *.java
+
+run-main: build-all
+	java Game

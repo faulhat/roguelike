@@ -24,56 +24,54 @@ public class Game {
     public static final int DISPLAY_HEIGHT = GAME_HEIGHT + Chamber.DIALOGUE_HEIGHT;
     
     public KeyBox keyBox;
-    private JTextArea display;
-
-    // The chamber the player is in
-    private Chamber currentChamber;
+    private JTextArea displayArea;
 
     // The view being displayed
     private GameView currentView;
 
-    public Game(Chamber startingChamber) {
+    // Display state
+    public Display display;
+
+    public Game() {
         keyBox = new KeyBox();
 
         // Create the game display
-        display = new JTextArea();
-        display.setEditable(false);
-        display.setFocusable(false);
-        display.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 12));
+        displayArea = new JTextArea();
+        displayArea.setEditable(false);
+        displayArea.setFocusable(false);
+        displayArea.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 12));
 
-        String placeholder = "";
-        for (int i = 0; i < DISPLAY_HEIGHT; i++) {
-            for (int j = 0; j < DISPLAY_WIDTH; j++) {
-                placeholder += ' ';
-            }
+        display = new Display(DISPLAY_HEIGHT, DISPLAY_WIDTH);
 
-            placeholder += '\n';
-        }
+        displayArea.setText(display.toString());
 
-        display.setText(placeholder);
-
-        keyBox.frame.add(display);
+        keyBox.frame.add(displayArea);
         keyBox.frame.pack();
         keyBox.frame.setVisible(true);
 
-        currentChamber = startingChamber;
-        startingChamber.outerState = this;
-        currentView = currentChamber;
+        currentView = new StartMenu(this);
     }
 
     // Update and render repeatedly, passing the time delta since the last update to the current view's update method.
-    public void run() {
+    public void run() throws Display.RenderException {
         Instant then = Instant.now();
         while (true) {
             Instant now = Instant.now();
             currentView.update((double) Duration.between(then, now).toNanos() / 1e6);
-        
-            display.setText(currentView.render());
+            currentView.render();
+
+            displayArea.setText(display.toString());
             then = now;
         }
     }
 
     public static void main(String args[]) {
-        //
+        try {
+            new Game().run();
+        }
+        catch (Display.RenderException e) {
+            e.printStackTrace();
+            System.exit(-1);
+        }
     }
 }

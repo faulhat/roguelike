@@ -8,7 +8,7 @@ import java.awt.Point;
  * Chambers are of constant height and width.
  * Also, this class handles game dialogue as displayed while in this view.
  */
-public class Chamber implements GameView {
+public class Chamber extends GameView {
     // Constants
     
     // These are the height and width of the chamber object, not the display.
@@ -40,7 +40,7 @@ public class Chamber implements GameView {
     private boolean scrolling;
 
     public Chamber(Game outerState, Square[][] squares) {
-        this.outerState = outerState;
+        super(outerState);
 
         // This object assumes ownership of the square array.
         this.squares = squares;
@@ -58,13 +58,13 @@ public class Chamber implements GameView {
     // How to update this view given a time delta
     @Override
     public void update(double delta) {
-        // do stuff here
+        // Do stuff here
     }
 
-    // How to render this view as a string
+    // Render to display
     @Override
-    public String render() {
-        // do stuff here
-        return "";
+    public void render() {
+        // Make this do stuff!
+        outerState.display.clear();
     }
 }
