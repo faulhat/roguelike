@@ -13,6 +13,6 @@ public abstract class GameView {
 
     public abstract void update(double delta);
 
-    // Renders this state to outerState.display (see Display class).
-    public abstract void render() throws Display.RenderException;
+    // Renders this state as a string
+    public abstract String render();
 }

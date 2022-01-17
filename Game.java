@@ -2,12 +2,21 @@ import javax.swing.JTextArea;
 import java.awt.Font;
 import java.time.Duration;
 import java.time.Instant;
+import java.util.Arrays;
+import java.util.List;
 
 /*
  * Thomas: the main class that will run the whole thing
  * Manages both the Swing-based display and the game state.
  */
 public class Game {
+    // An exception for when it is requested that a string be rendered which cannot be
+    public static class RenderException extends Exception {
+        public RenderException(String in) {
+            super("Error! From class Game: this String could not be rendered to the display: \"" + in + "\"");
+        }
+    }
+
     // An enumeration representing the current game view
     public static enum View {
         START_MENU,
@@ -27,23 +36,16 @@ public class Game {
     private JTextArea displayArea;
 
     // The view being displayed
-    private GameView currentView;
-
-    // Display state
-    public Display display;
+    public GameView currentView;
 
     public Game() {
         keyBox = new KeyBox();
 
         // Create the game display
-        displayArea = new JTextArea();
+        displayArea = new JTextArea(DISPLAY_WIDTH, DISPLAY_HEIGHT);
         displayArea.setEditable(false);
         displayArea.setFocusable(false);
-        displayArea.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 12));
-
-        display = new Display(DISPLAY_HEIGHT, DISPLAY_WIDTH);
-
-        displayArea.setText(display.toString());
+        displayArea.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 18));
 
         keyBox.frame.add(displayArea);
         keyBox.frame.pack();
@@ -52,15 +54,30 @@ public class Game {
         currentView = new StartMenu(this);
     }
 
+    public void setDisplayText(String toDisplay) throws RenderException {
+        List<String> lines = Arrays.asList(toDisplay.split("\n"));
+
+        if (lines.size() > DISPLAY_HEIGHT) {
+            throw new RenderException(toDisplay);
+        }
+
+        for (String line : lines) {
+            if (line.length() > DISPLAY_WIDTH) {
+                throw new RenderException(line);
+            }
+        }
+
+        displayArea.setText(toDisplay);
+    }
+
     // Update and render repeatedly, passing the time delta since the last update to the current view's update method.
-    public void run() throws Display.RenderException {
+    public void run() throws RenderException {
         Instant then = Instant.now();
         while (true) {
             Instant now = Instant.now();
             currentView.update((double) Duration.between(then, now).toNanos() / 1e6);
-            currentView.render();
 
-            displayArea.setText(display.toString());
+            setDisplayText(currentView.render());
             then = now;
         }
     }
@@ -69,7 +86,7 @@ public class Game {
         try {
             new Game().run();
         }
-        catch (Display.RenderException e) {
+        catch (RenderException e) {
             e.printStackTrace();
             System.exit(-1);
         }

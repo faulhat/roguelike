@@ -12,8 +12,8 @@ public class Chamber extends GameView {
     // Constants
     
     // These are the height and width of the chamber object, not the display.
-    public static final int WIDTH = 15;
-    public static final int HEIGHT = 12;
+    public static final int WIDTH = 20;
+    public static final int HEIGHT = 20;
 
     // Height of the dialogue box
     public static final int DIALOGUE_HEIGHT = 10;
@@ -61,10 +61,10 @@ public class Chamber extends GameView {
         // Do stuff here
     }
 
-    // Render to display
+    // Render to string
     @Override
-    public void render() {
+    public String render() {
         // Make this do stuff!
-        outerState.display.clear();
+        return "";
     }
 }

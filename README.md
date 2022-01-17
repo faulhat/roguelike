@@ -47,3 +47,17 @@ java Maze [width] [height] debug-rand
 # For example:
 java Maze 8 9 debug-rand
 ```
+
+Simple GUI demo:
+
+To build the code:
+
+`make build-all`
+
+To build and run:
+
+`make run-main`
+
+To run after building:
+
+`java Game`
