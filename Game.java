@@ -41,7 +41,9 @@ public class Game {
     // The view being displayed
     public GameView currentView;
     
-   //Maze to render
+    public Direction playerDirection;
+
+    //Maze to use for map of whole game area
     public Maze mapOfGame;
 
     
@@ -69,6 +71,7 @@ public class Game {
                 if (!mapOfGame.render()[j][i]){
                     mapOfGame.chamberAtIndex[j][i] = true;
                     Chamber c = new Chamber(this, EnumSet.allOf(Direction.class));
+                    c.outerState = this;
                     mapOfGame.chambers[j][i] = c;
                     this.currentView = c;
                 }

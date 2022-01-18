@@ -6,6 +6,7 @@ import javax.naming.OperationNotSupportedException;
 
 import java.awt.geom.Point2D;
 import java.awt.Point;
+import java.awt.event.KeyEvent;
 
 /*
  * Thomas: This class represents a Chamber in the game,
@@ -40,6 +41,9 @@ public class Chamber extends GameView {
 
     // Is the game paused?
     private boolean paused;
+
+    // Are events on?
+    private boolean eventsOn;
 
     // Is the game waiting for the player to finish scrolling through dialogue?
     private boolean scrolling;
@@ -105,21 +109,65 @@ public class Chamber extends GameView {
     // How to update this view given a time delta
     @Override
     public void update(double delta) {
-       // boolean startGame = outerState.keyBox.getReleaseKey(
+        double farBottom = (double)HEIGHT - 1;
+        double farRight = (double)WIDTH - 1;
+
+        boolean goingUp = outerState.keyBox.getResetKey(KeyEvent.VK_UP),
+                goingDown = outerState.keyBox.getResetKey(KeyEvent.VK_DOWN),
+                goingLeft = outerState.keyBox.getResetKey(KeyEvent.VK_LEFT),
+                goingRight = outerState.keyBox.getResetKey(KeyEvent.VK_RIGHT),
+                terrainChangeVerticalWall = outerState.keyBox.getResetKey(KeyEvent.VK_V),
+                terrainChangeHorizontalWall = outerState.keyBox.getResetKey(KeyEvent.VK_H),
+                terrainChangeClear = outerState.keyBox.getResetKey(KeyEvent.VK_C),
+                openInsertMenu = outerState.keyBox.getResetKey(KeyEvent.VK_I),
+                closeInsertMenu = outerState.keyBox.getResetKey(KeyEvent.VK_E),
+                Ctrl = outerState.keyBox.getResetKey(KeyEvent.VK_CONTROL),
+                select = outerState.keyBox.getReleaseKey(KeyEvent.VK_S),
+                delete = outerState.keyBox.getResetKey(KeyEvent.VK_BACK_SPACE),
+                reset = outerState.keyBox.getResetKey(KeyEvent.VK_R),
+                checkPos = outerState.keyBox.getResetKey(KeyEvent.VK_P),
+                eventsSwitch = outerState.keyBox.getReleaseKey(KeyEvent.VK_W),
+                interact = outerState.keyBox.getResetKey(KeyEvent.VK_Z);
+        for (int i = (int) Math.max(playerPosition.y - 1, 0.0); i <= (int) Math.min(farBottom, playerPosition.y + 1.0); i++) {
+            for (int j = (int) Math.max(playerPosition.x - 1.0, 0.0); j <= (int) Math.min(farRight, playerPosition.x + 1.0); j++) {
+                Square s = squares[i][j];
+                s.eventOn(new GameEvent.IntersectEvent(outerState.playerDirection));
+            }
+        }
+      this.eventAtPos(playerPosition, new GameEvent.IntersectEvent(outerState.playerDirection));
+      if (goingUp && !goingDown) { // Now that we've dealt with all possible diagonals, we can deal with the normal
+        playerPosition.y = Math.max(0.0, playerPosition.y - delta);
+        outerState.playerDirection = Direction.N;
+      } else if (goingDown && !goingUp) {
+        playerPosition.y = Math.min(farBottom, playerPosition.y + delta);
+       outerState.playerDirection = Direction.S;
+      } else if (goingLeft && !goingRight) {
+       playerPosition.x = Math.max(0.0, playerPosition.x - delta);
+       outerState.playerDirection = Direction.W;
+      } else if (goingRight && !goingLeft) {
+        playerPosition.x = Math.min(farRight, playerPosition.x + delta);
+       outerState.playerDirection =  Direction.E;
+      }
     }
+    
 
     // Render to string
     @Override
     public String render() throws OperationNotSupportedException {
         String renderState = "";
-        for (Square[] line : squares) {
-            for (Square square : line) {
+        this.playerPosition = new Point2D.Double(0.0, 0.0);
+        int trunc_x = (int)playerPosition.x, trunc_y = (int)playerPosition.y;
+        for (int i = 0; i < HEIGHT; i++) {
+            System.out.println(trunc_x + " " + trunc_y);
+            for (int j = 0; j < WIDTH; j++) {
                 char symbol = ' ';
-
-                if (square.isWall) {
+                if (i == trunc_y && j == trunc_x){
+                    symbol = '@';
+                }
+                if (squares[i][j].isWall) {
                     symbol = '*';
-                } else if (square.sprites.size() > 0) {
-                    for (Sprite sprite : square.sprites) {
+                } else if (squares[i][j].sprites.size() > 0) {
+                    for (Sprite sprite : squares[i][j].sprites) {
                         if (sprite.isVisible()) {
                             symbol = sprite.symbol();
                         }
@@ -132,5 +180,9 @@ public class Chamber extends GameView {
         }
 
         return renderState;
+    }
+    public void eventAtPos(Point2D.Double pointAt, GameEvent e){
+        Square square = squares[(int)pointAt.y][(int)pointAt.x];
+        square.eventOn(e);
     }
 }
