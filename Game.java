@@ -1,9 +1,11 @@
 import javax.naming.OperationNotSupportedException;
 import javax.swing.JTextArea;
+
 import java.awt.Font;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.Arrays;
+import java.util.EnumSet;
 import java.util.List;
 
 /*
@@ -38,10 +40,16 @@ public class Game {
 
     // The view being displayed
     public GameView currentView;
+    
+   //Maze to render
+    public Maze mapOfGame;
+
+    
+
 
     public Game() {
         keyBox = new KeyBox();
-
+        mapOfGame = new Maze(false, 10, 10);
         // Create the game display
         displayArea = new JTextArea(DISPLAY_WIDTH, DISPLAY_HEIGHT);
         displayArea.setEditable(false);
@@ -53,6 +61,19 @@ public class Game {
         keyBox.frame.setVisible(true);
 
         currentView = new StartMenu(this);
+    }
+    
+    public void enter(){
+        for (int i = 0; i < mapOfGame.height; i++){
+            for (int j = 0; j < mapOfGame.width; j++){
+                if (!mapOfGame.render()[j][i]){
+                    mapOfGame.chamberAtIndex[j][i] = true;
+                    Chamber c = new Chamber(this, EnumSet.allOf(Direction.class));
+                    mapOfGame.chambers[j][i] = c;
+                    this.currentView = c;
+                }
+            }
+        }
     }
 
     public void setDisplayText(String toDisplay) throws RenderException {

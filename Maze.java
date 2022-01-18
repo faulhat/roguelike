@@ -60,17 +60,32 @@ public class Maze {
 
     // Should debug info be printed to the command line?
     private final boolean debug;
+    
+    //Matrix to check for if chambers are at specific indices
+    public boolean[][] chamberAtIndex;
+    
+    /* Matrix of chambers
+     * boolean matrix avoids null pointer
+     * will always be null at coordinates
+     * which the player has not explored
+     * or which are walls
+     */
+    public Chamber[][] chambers;
 
     public Maze(boolean debug, int width, int height) {
         this.debug = debug;
 
         this.width = width;
         this.height = height;
-        
+        chambers = new Chamber[this.width][this.height];
+        chamberAtIndex = new boolean[this.width][this.height];
+
         // Initialize the matrix of cells such that all neighbors share walls
         cells = new Cell[width][height];
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
+                chambers[i][j] = null;
+                chamberAtIndex[i][j] = false;
                 Cell cell = cells[i][j] = new Cell();
 
                 // Walls should not be generated on the edges of the maze,
@@ -162,10 +177,11 @@ public class Maze {
     @Override
     public String toString() {
         boolean[][] boolGrid = render();
-
+        chamberAtIndex = new boolean[height * 2 - 1][width * 2 - 1];
         char[][] charGrid = new char[height * 2 - 1][width * 2 - 1];
         for (int i = 0; i < width * 2 - 1; i++) {
             for (int j = 0; j < height * 2 - 1; j++) {
+                chamberAtIndex[j][i] = false;
                 // charGrid is transposed from boolGrid, since otherwise the axes would be backwards.
                 if (boolGrid[i][j]) {
                     charGrid[j][i] = '#';
@@ -296,7 +312,7 @@ public class Maze {
 
     public static void main(String[] args) {
         // See README for documentation of command-line options.
-
+        /*
         int width, height;
         if (args.length >= 2) {
             width = Integer.parseInt(args[0]);
@@ -324,5 +340,6 @@ public class Maze {
         }
         
         System.out.println("Final:\n" + maze.toString());
+        */
     }
 }

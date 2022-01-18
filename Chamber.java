@@ -67,7 +67,6 @@ public class Chamber extends GameView {
     // Constructor for Chamber with exits
     public Chamber(Game outerState, EnumSet<Direction> exits) {
         this(outerState);
-
         genChamber(exits);
     }
 
@@ -106,7 +105,7 @@ public class Chamber extends GameView {
     // How to update this view given a time delta
     @Override
     public void update(double delta) {
-        // Do stuff here
+       // boolean startGame = outerState.keyBox.getReleaseKey(
     }
 
     // Render to string
@@ -129,6 +128,7 @@ public class Chamber extends GameView {
 
                 renderState += symbol;
             }
+            renderState += '\n';
         }
 
         return renderState;
