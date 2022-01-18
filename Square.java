@@ -5,7 +5,7 @@ import java.util.ArrayList;
  * It may be a wall, and it may have sprites on it.
  */
 public class Square {
-    public final boolean isWall;
+    public boolean isWall;
 
     public ArrayList<Sprite> sprites;
 

@@ -1,4 +1,9 @@
+import java.util.Arrays;
+import java.util.EnumSet;
 import java.util.concurrent.ConcurrentLinkedQueue;
+
+import javax.naming.OperationNotSupportedException;
+
 import java.awt.geom.Point2D;
 import java.awt.Point;
 
@@ -10,7 +15,7 @@ import java.awt.Point;
  */
 public class Chamber extends GameView {
     // Constants
-    
+
     // These are the height and width of the chamber object, not the display.
     public static final int WIDTH = 20;
     public static final int HEIGHT = 20;
@@ -50,6 +55,49 @@ public class Chamber extends GameView {
         scrolling = false;
     }
 
+    // Constructor for empty Chamber
+    public Chamber(Game outerState) {
+        this(outerState, new Square[WIDTH][HEIGHT]);
+
+        for (int i = 0; i < WIDTH; i++) {
+            Arrays.fill(squares[i], new Square(false));
+        }
+    }
+
+    // Constructor for Chamber with exits
+    public Chamber(Game outerState, EnumSet<Direction> exits) {
+        this(outerState);
+
+        genChamber(exits);
+    }
+
+    // Method to fill in Chamber
+    public void genChamber(EnumSet<Direction> exits) {
+        for (int i = 0; i < WIDTH; i++) {
+            // Make an exit in the middle of the North wall.
+            if (!(exits.contains(Direction.N) && i == WIDTH / 2 + 1)) {
+                squares[i][0].isWall = true;
+            }
+
+            // Make an exit in the middle of the South wall.
+            if (!(exits.contains(Direction.S) && i == WIDTH / 2 + 1)) {
+                squares[i][HEIGHT - 1].isWall = true;
+            }
+        }
+
+        for (int i = 0; i < HEIGHT; i++) {
+            // Make an exit in the middle of the West wall.
+            if (exits.contains(Direction.W) && !(i == HEIGHT / 2 + 1)) {
+                squares[0][i].isWall = true;
+            }
+
+            // Make an exit in the middle of the East wall.
+            if (exits.contains(Direction.E) && !(i == HEIGHT / 2 + 1)) {
+                squares[WIDTH - 1][i].isWall = true;
+            }
+        }
+    }
+
     // Put the player in the chamber at a given position
     public void enterAt(Point initialPosition) {
         playerPosition = new Point2D.Double((double) initialPosition.x, (double) initialPosition.y);
@@ -63,8 +111,26 @@ public class Chamber extends GameView {
 
     // Render to string
     @Override
-    public String render() {
-        // Make this do stuff!
-        return "";
+    public String render() throws OperationNotSupportedException {
+        String renderState = "";
+        for (Square[] line : squares) {
+            for (Square square : line) {
+                char symbol = ' ';
+
+                if (square.isWall) {
+                    symbol = '*';
+                } else if (square.sprites.size() > 0) {
+                    for (Sprite sprite : square.sprites) {
+                        if (sprite.isVisible()) {
+                            symbol = sprite.symbol();
+                        }
+                    }
+                }
+
+                renderState += symbol;
+            }
+        }
+
+        return renderState;
     }
 }

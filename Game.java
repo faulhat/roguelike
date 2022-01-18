@@ -1,3 +1,4 @@
+import javax.naming.OperationNotSupportedException;
 import javax.swing.JTextArea;
 import java.awt.Font;
 import java.time.Duration;
@@ -71,7 +72,7 @@ public class Game {
     }
 
     // Update and render repeatedly, passing the time delta since the last update to the current view's update method.
-    public void run() throws RenderException {
+    public void run() throws RenderException, OperationNotSupportedException {
         Instant then = Instant.now();
         while (true) {
             Instant now = Instant.now();
@@ -86,7 +87,7 @@ public class Game {
         try {
             new Game().run();
         }
-        catch (RenderException e) {
+        catch (Exception e) {
             e.printStackTrace();
             System.exit(-1);
         }

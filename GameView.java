@@ -1,3 +1,5 @@
+import javax.naming.OperationNotSupportedException;
+
 /*
  * Thomas: this class represents a view in the game.
  * This could be a menu, the inventory screen, the overworld...
@@ -14,5 +16,5 @@ public abstract class GameView {
     public abstract void update(double delta);
 
     // Renders this state as a string
-    public abstract String render();
+    public abstract String render() throws OperationNotSupportedException;
 }
