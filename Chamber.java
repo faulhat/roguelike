@@ -125,7 +125,7 @@ public class Chamber extends GameView {
                 select = outerState.keyBox.getReleaseKey(KeyEvent.VK_S),
                 delete = outerState.keyBox.getResetKey(KeyEvent.VK_BACK_SPACE),
                 reset = outerState.keyBox.getResetKey(KeyEvent.VK_R),
-                checkPos = outerState.keyBox.getResetKey(KeyEvent.VK_P),
+                pause = outerState.keyBox.getResetKey(KeyEvent.VK_P),
                 eventsSwitch = outerState.keyBox.getReleaseKey(KeyEvent.VK_W),
                 interact = outerState.keyBox.getResetKey(KeyEvent.VK_Z);
         for (int i = (int) Math.max(playerPosition.y - 1, 0.0); i <= (int) Math.min(farBottom, playerPosition.y + 1.0); i++) {
@@ -146,7 +146,9 @@ public class Chamber extends GameView {
        outerState.playerDirection = Direction.W;
       } else if (goingRight && !goingLeft) {
         playerPosition.x = Math.min(farRight, playerPosition.x + delta);
-       outerState.playerDirection =  Direction.E;
+        outerState.playerDirection =  Direction.E;
+      } else if (pause){
+        outerState.currentView = new StartMenu(outerState);
       }
     }
     
