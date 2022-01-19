@@ -19,37 +19,43 @@ public class Maze {
 
         public final int id;
 
-        public WallRef(boolean isWall) {
+        public WallRef(boolean isWall)
+        {
             this.isWall = isWall;
 
             id = tracker.getAndIncrement();
         }
 
-        public WallRef() {
+        public WallRef()
+        {
             this(false);
         }
 
         // Guarantee that two WallRef objects are only equal if they are identical.
         @Override
-        public boolean equals(Object other) {
+        public boolean equals(Object other)
+        {
             return other instanceof WallRef && id == ((WallRef) other).id;
         }
 
         @Override
-        public int hashCode() {
+        public int hashCode()
+        {
             return id;
         }
     }
-    
+
     // A cell in the maze. Can have a wall on each side.
     public static class Cell {
         public EnumMap<Direction, WallRef> walls;
 
-        public Cell() {
+        public Cell()
+        {
             this.walls = new EnumMap<>(Direction.class);
         }
 
-        public Cell(Map<Direction, WallRef> walls) {
+        public Cell(Map<Direction, WallRef> walls)
+        {
             this.walls = new EnumMap<>(walls);
         }
     }
@@ -61,12 +67,13 @@ public class Maze {
     // Should debug info be printed to the command line?
     private final boolean debug;
 
-    public Maze(boolean debug, int width, int height) {
+    public Maze(boolean debug, int width, int height)
+    {
         this.debug = debug;
 
         this.width = width;
         this.height = height;
-        
+
         // Initialize the matrix of cells such that all neighbors share walls
         cells = new Cell[width][height];
         for (int i = 0; i < width; i++) {
@@ -95,7 +102,8 @@ public class Maze {
         }
     }
 
-    public Maze(boolean debug, int width, int height, Cell[][] cells) {
+    public Maze(boolean debug, int width, int height, Cell[][] cells)
+    {
         this.debug = debug;
         this.width = width;
         this.height = height;
@@ -103,32 +111,36 @@ public class Maze {
     }
 
     // Assume that debug info should not be printed.
-    public Maze(int width, int height) {
+    public Maze(int width, int height)
+    {
         this(false, width, height);
     }
 
-    public Maze(int width, int height, Cell[][] cells) {
+    public Maze(int width, int height, Cell[][] cells)
+    {
         this(false, width, height, cells);
     }
-    
+
     // Get an EnumSet of Directions representing the exits from a cell
-    public EnumSet<Direction> getExits(int x, int y) {
-         Cell cell = cells[x][y];
-         
-         EnumSet<Direction> exits = EnumSet.allOf(Direction.class);
-         for (Direction direction : Direction.values()) {
+    public EnumSet<Direction> getExits(int x, int y)
+    {
+        Cell cell = cells[x][y];
+
+        EnumSet<Direction> exits = EnumSet.allOf(Direction.class);
+        for (Direction direction : Direction.values()) {
             WallRef wallRef = cell.walls.get(direction);
-            
+
             if (wallRef != null && wallRef.isWall) {
-               exits.remove(direction);
+                exits.remove(direction);
             }
-         }
-         
-         return exits;
+        }
+
+        return exits;
     }
-            
+
     // Render the maze as a matrix of booleans where false means walkable and true means non-walkable
-    public boolean[][] render() {
+    public boolean[][] render()
+    {
         boolean[][] grid = new boolean[width * 2 - 1][height * 2 - 1];
         for (boolean[] row : Arrays.asList(grid)) {
             Arrays.fill(row, false);
@@ -176,7 +188,8 @@ public class Maze {
     }
 
     @Override
-    public String toString() {
+    public String toString()
+    {
         boolean[][] boolGrid = render();
 
         char[][] charGrid = new char[height * 2 - 1][width * 2 - 1];
@@ -203,7 +216,7 @@ public class Maze {
                 out += "  ";
             }
         }
-        
+
         for (int i = 0; i < height * 2 - 1; i++) {
             out += '\n';
 
@@ -224,12 +237,13 @@ public class Maze {
 
     // Generate maze according to recursive division algorithm.
     // See README for info on the algorithm.
-    public void divRecursive(Random rand) {
+    public void divRecursive(Random rand)
+    {
         if (width != 1 && height != 1) {
             // Make a vertical wall and a horizontal wall
             int slice_x = rand.nextInt(width - 1) + 1, // position of vertical wall
                 slice_y = rand.nextInt(height - 1) + 1; // position of horizontal wall
-            
+
             if (debug) {
                 System.out.println("width: " + width + ", height: " + height);
                 System.out.println("slice_x: " + slice_x + ", slice y: " + slice_y);
@@ -244,7 +258,7 @@ public class Maze {
             for (int i = 0; i < height; i++) {
                 cells[slice_x][i].walls.get(Direction.W).isWall = true;
             }
-            
+
             // Create openings in three of the arms of the cross we just made
             ArrayList<Direction> directions = new ArrayList<>(Arrays.asList(Direction.values()));
             directions.remove(rand.nextInt(directions.size()));
@@ -301,7 +315,8 @@ public class Maze {
         }
     }
 
-    public void genMaze() {
+    public void genMaze()
+    {
         if (debug) {
             divRecursive(new Random(1));
         }
@@ -310,7 +325,8 @@ public class Maze {
         }
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args)
+    {
         // See README for documentation of command-line options.
 
         int width, height;
@@ -338,7 +354,7 @@ public class Maze {
         else {
             maze.genMaze();
         }
-        
+
         System.out.println("Final:\n" + maze.toString());
     }
 }

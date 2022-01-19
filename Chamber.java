@@ -19,7 +19,8 @@ public class Chamber {
     public Square[][] squares;
 
     // Constructor for creating a Chamber from a matrix of Squares (move semantics)
-    public Chamber(EnumMap<Direction, Chamber> adjacentChambers, Square[][] squares) {
+    public Chamber(EnumMap<Direction, Chamber> adjacentChambers, Square[][] squares)
+    {
         this.adjacentChambers = adjacentChambers;
 
         // This new Chamber assumes ownership of this matrix
@@ -27,12 +28,14 @@ public class Chamber {
     }
 
     // Same as above, but adjacentChambers is initialized to a blank map
-    public Chamber(Square[][] squares) {
+    public Chamber(Square[][] squares)
+    {
         this(new EnumMap<>(Direction.class), squares);
     }
 
     // Constructor for empty Chamber
-    public Chamber() {
+    public Chamber()
+    {
         this(new Square[WIDTH][HEIGHT]);
 
         for (int i = 0; i < WIDTH; i++) {
@@ -43,7 +46,8 @@ public class Chamber {
     }
 
     // Method to fill in Chamber
-    public void genChamber(EnumSet<Direction> exits) {
+    public void genChamber(EnumSet<Direction> exits)
+    {
         for (int i = 0; i < WIDTH; i++) {
             // Make an exit in the middle of the North wall.
             if (!(exits.contains(Direction.N) && i == WIDTH / 2 + 1)) {

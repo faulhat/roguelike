@@ -9,7 +9,8 @@ public abstract class GameView {
     // The Game instance that this object belongs to.
     protected final Game outerState;
 
-    public GameView(Game outerState) {
+    public GameView(Game outerState)
+    {
         this.outerState = outerState;
     }
 

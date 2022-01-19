@@ -13,7 +13,8 @@ import java.util.List;
 public class Game {
     // An exception for when it is requested that a string be rendered which cannot be
     public static class RenderException extends Exception {
-        public RenderException(String in) {
+        public RenderException(String in)
+        {
             super("Error! From class Game: this String could not be rendered to the display: \"" + in + "\"");
         }
     }
@@ -32,22 +33,23 @@ public class Game {
     public static final int DISPLAY_WIDTH = Chamber.WIDTH * 2 - 1;
     public static final int GAME_HEIGHT = Chamber.HEIGHT * 2 - 1;
     public static final int DISPLAY_HEIGHT = GAME_HEIGHT + ChamberView.DIALOGUE_HEIGHT;
-    
+
     // Constants for size of game map (temporary) //
     public static final MAP_WIDTH = 7, MAP_HEIGHT = 6;
-    
+
     public KeyBox keyBox;
     private JTextArea displayArea;
 
     // The view being displayed
     public GameView currentView;
-    
+
     public Direction playerDirection;
 
     //Maze to use for map of whole game area
     public ChamberMaze gameMap;
 
-    public Game() {
+    public Game()
+    {
         keyBox = new KeyBox();
         mapOfGame = new Maze(false, 10, 10);
         // Create the game display
@@ -61,16 +63,18 @@ public class Game {
         keyBox.frame.setVisible(true);
 
         currentView = new StartMenu(this);
-        
+
         gameMap = new ChamberMaze(MAP_WIDTH, MAP_HEIGHT);
     }
-    
+
     // Method to start the game, placing the player in the first chamber (temporary) //
-    public void start() {
-         currentView = new ChamberView(this, gameMap.chambers[0][0]);
+    public void start()
+    {
+        currentView = new ChamberView(this, gameMap.chambers[0][0]);
     }
 
-    public void setDisplayText(String toDisplay) throws RenderException {
+    public void setDisplayText(String toDisplay) throws RenderException
+    {
         List<String> lines = Arrays.asList(toDisplay.split("\n"));
 
         if (lines.size() > DISPLAY_HEIGHT) {
@@ -87,7 +91,8 @@ public class Game {
     }
 
     // Update and render repeatedly, passing the time delta since the last update to the current view's update method.
-    public void run() throws Exception {
+    public void run() throws Exception
+    {
         Instant then = Instant.now();
         while (true) {
             Instant now = Instant.now();
@@ -98,7 +103,8 @@ public class Game {
         }
     }
 
-    public static void main(String args[]) {
+    public static void main(String args[])
+    {
         try {
             new Game().run();
         }

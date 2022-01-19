@@ -9,13 +9,15 @@ public class Square {
 
     public ArrayList<Sprite> sprites;
 
-    public Square(boolean isWall) {
+    public Square(boolean isWall)
+    {
         this.isWall = isWall;
         sprites = new ArrayList<>();
     }
-    
-    public void eventOn(GameEvent e){
-        for (Sprite sprite : sprites){
+
+    public void eventOn(GameEvent e)
+    {
+        for (Sprite sprite : sprites) {
             sprite.onEvent(e);
         }
     }

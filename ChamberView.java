@@ -20,8 +20,8 @@ public class ChamberView extends GameView {
     // time delta * this constant = true distance moved
     public static final double PLAYER_SPEED = 0.015;
 
-   // The ChamberMaze this instance wraps around
-   public ChamberMaze map;
+    // The ChamberMaze this instance wraps around
+    public ChamberMaze map;
 
     // The Chamber the player is currently in.
     public Chamber chamber;
@@ -41,8 +41,9 @@ public class ChamberView extends GameView {
     // Is the game waiting for the player to finish scrolling through dialogue?
     private boolean scrolling;
 
-   // Start player in top-leftmost Chamber
-    public ChamberView(Game outerState, ChamberMaze map) {
+    // Start player in top-leftmost Chamber
+    public ChamberView(Game outerState, ChamberMaze map)
+    {
         super(outerState);
 
         this.map = map;
@@ -55,13 +56,15 @@ public class ChamberView extends GameView {
     }
 
     // Put the player in the chamber at a given position
-    public void enterAt(Point initialPosition) {
+    public void enterAt(Point initialPosition)
+    {
         playerPosition = new Point2D.Double((double) initialPosition.x, (double) initialPosition.y);
     }
 
     // How to update this view given a time delta
     @Override
-    public void update(double delta) throws Exception {
+    public void update(double delta) throws Exception
+    {
         // Calculate distance to move
         double currentSpeed = PLAYER_SPEED * delta;
 
@@ -75,7 +78,7 @@ public class ChamberView extends GameView {
 
         DirectionEx newPlayerDirection = new DirectionEx();
 
-        // Up and down 
+        // Up and down
         if (goingUp) {
             newPlayerDirection.add(Direction.N);
         }
@@ -83,7 +86,7 @@ public class ChamberView extends GameView {
         if (goingRight) {
             newPlayerDirection.add(Direction.E);
         }
-        
+
         if (goingDown) {
             newPlayerDirection.add(Direction.S);
         }
@@ -94,7 +97,7 @@ public class ChamberView extends GameView {
 
         if (!newPlayerDirection.isEmpty()) {
             playerDirection = newPlayerDirection;
-            
+
             Point2D.Double offset = newPlayerDirection.getOffset();
 
             newPosition.x += offset.x * currentSpeed;
@@ -104,7 +107,7 @@ public class ChamberView extends GameView {
             if (!chamber.squares[(int) newPosition.x][(int) newPosition.y].isWall) {
                 // Move to an adjacent chamber if need be
                 Chamber nextChamber = chamber;
-                
+
                 if (Math.floor(newPosition.y) < 0) {
                     nextChamber = chamber.adjacentChambers.get(Direction.N);
                     newPosition.x = (double) Chamber.HEIGHT - 1.0;
@@ -121,11 +124,11 @@ public class ChamberView extends GameView {
                     nextChamber = chamber.adjacentChambers.get(Direction.W);
                     newPosition.x = (double) Chamber.WIDTH - 1.0;
                 }
-                
+
                 // Don't move if doing so would put us outside the map.
                 if (nextChamber != null) {
-                  chamber = nextChamber; // Does nothing if we didn't move to a different Chamber
-                  playerPosition = newPosition;
+                    chamber = nextChamber; // Does nothing if we didn't move to a different Chamber
+                    playerPosition = newPosition;
                 }
             }
         }
@@ -133,7 +136,8 @@ public class ChamberView extends GameView {
 
     // Render to string
     @Override
-    public String render() throws OperationNotSupportedException {
+    public String render() throws OperationNotSupportedException
+    {
         String renderState = "";
         this.playerPosition = new Point2D.Double(0.0, 0.0);
         int trunc_x = (int) playerPosition.x, trunc_y = (int) playerPosition.y;
@@ -146,7 +150,8 @@ public class ChamberView extends GameView {
                 }
                 if (chamber.squares[i][j].isWall) {
                     symbol = '*';
-                } else if (chamber.squares[i][j].sprites.size() > 0) {
+                }
+                else if (chamber.squares[i][j].sprites.size() > 0) {
                     for (Sprite sprite : chamber.squares[i][j].sprites) {
                         if (sprite.isVisible()) {
                             symbol = sprite.symbol();
@@ -162,7 +167,8 @@ public class ChamberView extends GameView {
         return renderState;
     }
 
-    public void eventAtPos(Point2D.Double pointAt, GameEvent e) {
+    public void eventAtPos(Point2D.Double pointAt, GameEvent e)
+    {
         Square square = chamber.squares[(int) pointAt.y][(int) pointAt.x];
         square.eventOn(e);
     }

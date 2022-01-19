@@ -9,7 +9,8 @@ public class MenuItem {
 
     public final Consumer<Game> action;
 
-    public MenuItem(String name, Consumer<Game> action) {
+    public MenuItem(String name, Consumer<Game> action)
+    {
         this.name = name;
         this.action = action;
     }

@@ -12,35 +12,41 @@ public class DirectionEx {
     private EnumSet<Direction> directions;
 
     // Empty
-    public DirectionEx() {
+    public DirectionEx()
+    {
         directions = EnumSet.noneOf(Direction.class);
     }
 
     // Not diagonal
-    public DirectionEx(Direction direction) {
+    public DirectionEx(Direction direction)
+    {
         this();
 
         directions.add(direction);
     }
 
     // Should only be used for diagonals
-    public DirectionEx(Direction direction_a, Direction direction_b) {
+    public DirectionEx(Direction direction_a, Direction direction_b)
+    {
         this(direction_a);
 
         directions.add(direction_b);
     }
 
-    public void add(Direction direction) {
+    public void add(Direction direction)
+    {
         directions.add(direction);
     }
 
-    public boolean isEmpty() {
+    public boolean isEmpty()
+    {
         return directions.isEmpty();
     }
 
     // Get the offset for this compound direction
     // Analagous to Direction.asOffset()
-    public Point2D.Double getOffset() throws Exception {
+    public Point2D.Double getOffset() throws Exception
+    {
 
         // Only one direction
         if (directions.size() == 1) {

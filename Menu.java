@@ -14,31 +14,36 @@ public class Menu extends GameView {
 
     // View to return to if the user presses the cancel key.
     // Cancel key does nothing if this is null.
-    public GameView returnView;    
-    
-    public Menu(Game outerState, ArrayList<MenuItem> items, GameView returnView) {
+    public GameView returnView;
+
+    public Menu(Game outerState, ArrayList<MenuItem> items, GameView returnView)
+    {
         super(outerState);
-        
+
         this.items = items;
         selected = 0;
 
         this.returnView = returnView;
     }
 
-    public Menu(Game outerState, GameView returnView) {
+    public Menu(Game outerState, GameView returnView)
+    {
         this(outerState, new ArrayList<>(), returnView);
     }
 
-    public Menu(Game outerState, ArrayList<MenuItem> items) {
+    public Menu(Game outerState, ArrayList<MenuItem> items)
+    {
         this(outerState, items, null);
     }
 
-    public Menu(Game outerState) {
+    public Menu(Game outerState)
+    {
         this(outerState, new ArrayList<>(), null);
-    } 
+    }
 
     @Override
-    public void update(double delta) {
+    public void update(double delta)
+    {
         boolean upPressed = outerState.keyBox.getReleaseKey(KeyEvent.VK_UP);
         boolean downPressed = outerState.keyBox.getReleaseKey(KeyEvent.VK_DOWN);
         boolean selectPressed = outerState.keyBox.getReleaseKey(KeyEvent.VK_Z) || outerState.keyBox.getReleaseKey(KeyEvent.VK_ENTER);
@@ -48,7 +53,7 @@ public class Menu extends GameView {
             outerState.currentView = returnView;
             return;
         }
-        
+
         if (upPressed) {
             selected = Math.max(selected - 1, 0);
         }
@@ -61,9 +66,10 @@ public class Menu extends GameView {
             items.get(selected).action.accept(outerState);
         }
     }
-    
+
     @Override
-    public String render() {
+    public String render()
+    {
         String out = "";
         for (int i = 0; i < items.size(); i++) {
             if (i == selected) {

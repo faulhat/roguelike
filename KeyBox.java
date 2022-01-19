@@ -25,7 +25,8 @@ public class KeyBox {
 
     // A subclass of JFrame which implements KeyListener and updates its corresponding KeyBox on input
     public class MyFrame extends JFrame implements KeyListener {
-        public MyFrame() {
+        public MyFrame()
+        {
             super();
             addKeyListener(this);
             setFocusable(true);
@@ -33,11 +34,13 @@ public class KeyBox {
         }
 
         @Override
-        public void keyTyped(KeyEvent e) {
+        public void keyTyped(KeyEvent e)
+        {
         }
 
         @Override
-        public void keyPressed(KeyEvent e) {
+        public void keyPressed(KeyEvent e)
+        {
             KeyBox.this.stateLock.lock();
             try {
                 KeyBox.this.wasPressed.add(e.getKeyCode());
@@ -52,7 +55,8 @@ public class KeyBox {
         }
 
         @Override
-        public void keyReleased(KeyEvent e) {
+        public void keyReleased(KeyEvent e)
+        {
             KeyBox.this.stateLock.lock();
             try {
                 KeyBox.this.isPressed.remove(e.getKeyCode());
@@ -65,7 +69,8 @@ public class KeyBox {
 
     public MyFrame frame;
 
-    public KeyBox() {
+    public KeyBox()
+    {
         stateLock = new ReentrantLock();
 
         wasPressed = new HashSet<>();
@@ -78,7 +83,8 @@ public class KeyBox {
     }
 
     // See if a key has been pressed. Return true even if the signal has already been processed by a client
-    public boolean getResetKey(int keyCode) {
+    public boolean getResetKey(int keyCode)
+    {
         stateLock.lock();
         try {
             if (wasPressed.contains(keyCode)) {
@@ -100,7 +106,8 @@ public class KeyBox {
     }
 
     // See if a key has been pressed. Return false if the signal has already been processed by a client
-    public boolean getReleaseKey(int keyCode) {
+    public boolean getReleaseKey(int keyCode)
+    {
         stateLock.lock();
         try {
             // Return false if the signal has been processed. Otherwise, refer to getResetKey().
@@ -117,7 +124,8 @@ public class KeyBox {
     }
 
     // Call getResetKey on a group of keys. Return true if any of them are held down.
-    public boolean getResetKeys(int... keyCodes) {
+    public boolean getResetKeys(int... keyCodes)
+    {
         boolean value = false;
         for (int code : keyCodes) {
             if (getResetKey(code)) {
@@ -129,7 +137,8 @@ public class KeyBox {
     }
 
     // Call getReleaseKey on a group of keys.
-    public boolean getReleaseKeys(int... keyCodes) {
+    public boolean getReleaseKeys(int... keyCodes)
+    {
         boolean value = false;
         for (int code : keyCodes) {
             if (getReleaseKey(code)) {

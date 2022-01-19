@@ -9,7 +9,8 @@ public enum Direction {
 
     // Get this direction as an offset.
     // position + offset should be the point you'd get to moving 1 unit in this direction away from position.
-    public Point asOffset() {
+    public Point asOffset()
+    {
         switch (this) {
         case N:
             return new Point(0, -1);

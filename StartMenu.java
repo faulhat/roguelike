@@ -1,7 +1,8 @@
 import java.util.function.Consumer;
 
 public class StartMenu extends Menu {
-    public StartMenu(Game outerState) {
+    public StartMenu(Game outerState)
+    {
         super(outerState);
 
         Consumer<Game> startAction = game -> {
