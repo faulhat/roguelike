@@ -33,6 +33,9 @@ public class Game {
     public static final int GAME_HEIGHT = Chamber.HEIGHT * 2 - 1;
     public static final int DISPLAY_HEIGHT = GAME_HEIGHT + ChamberView.DIALOGUE_HEIGHT;
     
+    // Constants for size of game map (temporary) //
+    public static final MAP_WIDTH = 7, MAP_HEIGHT = 6;
+    
     public KeyBox keyBox;
     private JTextArea displayArea;
 
@@ -42,7 +45,7 @@ public class Game {
     public Direction playerDirection;
 
     //Maze to use for map of whole game area
-    public Maze mapOfGame;
+    public ChamberMaze gameMap;
 
     public Game() {
         keyBox = new KeyBox();
@@ -58,20 +61,13 @@ public class Game {
         keyBox.frame.setVisible(true);
 
         currentView = new StartMenu(this);
+        
+        gameMap = new ChamberMaze(MAP_WIDTH, MAP_HEIGHT);
     }
     
-    public void enter(){
-        for (int i = 0; i < mapOfGame.height; i++){
-            for (int j = 0; j < mapOfGame.width; j++){
-                if (!mapOfGame.render()[j][i]){
-                    mapOfGame.chamberAtIndex[j][i] = true;
-                    Chamber defaultChamber = new Chamber();
-                    defaultChamber.genChamber(EnumSet.noneOf(Direction.class));
-                    currentView = new ChamberView(this, defaultChamber);
-                    mapOfGame.chambers[j][i] = defaultChamber;
-                }
-            }
-        }
+    // Method to start the game, placing the player in the first chamber (temporary) //
+    public void start() {
+         currentView = new ChamberView(this, gameMap.chambers[0][0]);
     }
 
     public void setDisplayText(String toDisplay) throws RenderException {

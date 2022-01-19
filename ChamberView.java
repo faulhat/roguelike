@@ -8,7 +8,7 @@ import java.awt.Point;
 import java.awt.event.KeyEvent;
 
 /*
- * Thomas: This class is a wrapper for a Chamber that allows it to be used as a game view,
+ * Thomas: This class is a wrapper for a ChamberMaze that allows it to be used as a game view,
  * since that necessitates it keeping track of certain state
  */
 public class ChamberView extends GameView {
@@ -20,7 +20,10 @@ public class ChamberView extends GameView {
     // time delta * this constant = true distance moved
     public static final double PLAYER_SPEED = 0.015;
 
-    // The Chamber this instance wraps around
+   // The ChamberMaze this instance wraps around
+   public ChamberMaze map;
+
+    // The Chamber the player is currently in.
     public Chamber chamber;
 
     // The player's sub-grid position
@@ -38,10 +41,12 @@ public class ChamberView extends GameView {
     // Is the game waiting for the player to finish scrolling through dialogue?
     private boolean scrolling;
 
-    public ChamberView(Game outerState, Chamber chamber) {
+   // Start player in top-leftmost Chamber
+    public ChamberView(Game outerState, ChamberMaze map) {
         super(outerState);
 
-        this.chamber = chamber;
+        this.map = map;
+        this.chamber = map.chambers[0][0];
 
         dialogueQueue = new ConcurrentLinkedQueue<>();
         paused = false;
@@ -98,24 +103,30 @@ public class ChamberView extends GameView {
             // Don't move into a wall.
             if (!chamber.squares[(int) newPosition.x][(int) newPosition.y].isWall) {
                 // Move to an adjacent chamber if need be
+                Chamber nextChamber = chamber;
+                
                 if (Math.floor(newPosition.y) < 0) {
-                    chamber = chamber.adjacentChambers.get(Direction.N);
+                    nextChamber = chamber.adjacentChambers.get(Direction.N);
                     newPosition.x = (double) Chamber.HEIGHT - 1.0;
                 }
                 else if ((int) newPosition.x >= Chamber.WIDTH - 1) {
-                    chamber = chamber.adjacentChambers.get(Direction.E);
+                    nextChamber = chamber.adjacentChambers.get(Direction.E);
                     newPosition.x = 0.0;
                 }
                 else if ((int) newPosition.y >= Chamber.HEIGHT - 1) {
-                    chamber = chamber.adjacentChambers.get(Direction.S);
+                    nextChamber = chamber.adjacentChambers.get(Direction.S);
                     newPosition.y = 0.0;
                 }
                 else if (Math.floor(newPosition.x) < 0) {
-                    chamber = chamber.adjacentChambers.get(Direction.W);
+                    nextChamber = chamber.adjacentChambers.get(Direction.W);
                     newPosition.x = (double) Chamber.WIDTH - 1.0;
                 }
                 
-                playerPosition = newPosition;
+                // Don't move if doing so would put us outside the map.
+                if (nextChamber != null) {
+                  chamber = nextChamber; // Does nothing if we didn't move to a different Chamber
+                  playerPosition = newPosition;
+                }
             }
         }
     }
