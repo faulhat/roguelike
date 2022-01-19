@@ -115,4 +115,28 @@ public class KeyBox {
         // At this point, the lock is unlocked. Otherwise, this method call would hang
         return getResetKey(keyCode);
     }
+
+    // Call getResetKey on a group of keys. Return true if any of them are held down.
+    public boolean getResetKeys(int... keyCodes) {
+        boolean value = false;
+        for (int code : keyCodes) {
+            if (getResetKey(code)) {
+                value = true;
+            }
+        }
+
+        return value;
+    }
+
+    // Call getReleaseKey on a group of keys.
+    public boolean getReleaseKeys(int... keyCodes) {
+        boolean value = false;
+        for (int code : keyCodes) {
+            if (getReleaseKey(code)) {
+                value = true;
+            }
+        }
+
+        return value;
+    }
 }

@@ -13,6 +13,7 @@ public class Square {
         this.isWall = isWall;
         sprites = new ArrayList<>();
     }
+    
     public void eventOn(GameEvent e){
         for (Sprite sprite : sprites){
             sprite.onEvent(e);

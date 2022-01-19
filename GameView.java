@@ -13,7 +13,7 @@ public abstract class GameView {
         this.outerState = outerState;
     }
 
-    public abstract void update(double delta);
+    public abstract void update(double delta) throws Exception;
 
     // Renders this state as a string
     public abstract String render() throws OperationNotSupportedException;

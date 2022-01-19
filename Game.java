@@ -1,6 +1,4 @@
-import javax.naming.OperationNotSupportedException;
 import javax.swing.JTextArea;
-
 import java.awt.Font;
 import java.time.Duration;
 import java.time.Instant;
@@ -33,7 +31,7 @@ public class Game {
     // Must account for the whitespace added to the output
     public static final int DISPLAY_WIDTH = Chamber.WIDTH * 2 - 1;
     public static final int GAME_HEIGHT = Chamber.HEIGHT * 2 - 1;
-    public static final int DISPLAY_HEIGHT = GAME_HEIGHT + Chamber.DIALOGUE_HEIGHT;
+    public static final int DISPLAY_HEIGHT = GAME_HEIGHT + ChamberView.DIALOGUE_HEIGHT;
     
     public KeyBox keyBox;
     private JTextArea displayArea;
@@ -45,9 +43,6 @@ public class Game {
 
     //Maze to use for map of whole game area
     public Maze mapOfGame;
-
-    
-
 
     public Game() {
         keyBox = new KeyBox();
@@ -70,10 +65,10 @@ public class Game {
             for (int j = 0; j < mapOfGame.width; j++){
                 if (!mapOfGame.render()[j][i]){
                     mapOfGame.chamberAtIndex[j][i] = true;
-                    Chamber c = new Chamber(this, EnumSet.allOf(Direction.class));
-                    c.outerState = this;
-                    mapOfGame.chambers[j][i] = c;
-                    this.currentView = c;
+                    Chamber defaultChamber = new Chamber();
+                    defaultChamber.genChamber(EnumSet.noneOf(Direction.class));
+                    currentView = new ChamberView(this, defaultChamber);
+                    mapOfGame.chambers[j][i] = defaultChamber;
                 }
             }
         }
@@ -96,7 +91,7 @@ public class Game {
     }
 
     // Update and render repeatedly, passing the time delta since the last update to the current view's update method.
-    public void run() throws RenderException, OperationNotSupportedException {
+    public void run() throws Exception {
         Instant then = Instant.now();
         while (true) {
             Instant now = Instant.now();
