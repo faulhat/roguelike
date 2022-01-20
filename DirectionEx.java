@@ -53,7 +53,8 @@ public class DirectionEx {
     }
 
     @Override
-    public boolean equals(Object other) {
+    public boolean equals(Object other)
+    {
         // this.equals(other) if this and other contain the same directions
 
         if (!(other instanceof DirectionEx)) {

@@ -113,18 +113,22 @@ public class ChamberView extends GameView {
         }
 
         playerDirection = newPlayerDirection;
+
+        // If the user is pressing a key to move...
         if (!playerDirection.isEmpty()) {
             Point2D.Double offset = playerDirection.getOffset();
-            System.out.println(offset.toString());
 
             newPosition.x += offset.x * currentSpeed;
             newPosition.y += offset.y * currentSpeed;
 
-            // Don't move into a wall.
-            if (!chamber.squares[(int) newPosition.x][(int) newPosition.y].isWall) {
-                System.out.println("New position x: " + newPosition.x + ", y: " + newPosition.y);
+            int newGridPos_x = (int) newPosition.x, newGridPos_y = (int) newPosition.y;
+
+            // If we'd end up outside of chamber
+            if (newGridPos_x > Chamber.WIDTH - 1 || newGridPos_x < 0 || newGridPos_y > Chamber.HEIGHT - 1 || newGridPos_y < 0) {
+                // System.out.println("New position x: " + newPosition.x + ", y: " + newPosition.y); //Fcrus
 
                 // Move to an adjacent chamber if need be
+                // We use Math.floor here because if y were -0.9 and we used newGridPos_y, it would be 0 and not -1.
                 if (Math.floor(newPosition.y) < 0) {
                     // Don't move into the adjacent chamber if there is no adjacent chamber!
                     if (location.y - 1 < 0) {
@@ -137,8 +141,8 @@ public class ChamberView extends GameView {
                         newPosition.y = (double) Chamber.HEIGHT - 1.0;
                     }
                 }
-                
-                if ((int) newPosition.x > Chamber.WIDTH - 1) {
+
+                if (newGridPos_x > Chamber.WIDTH - 1) {
                     if (location.x + 1 >= map.width) {
                         newPosition.x = position.x;
                     }
@@ -148,10 +152,8 @@ public class ChamberView extends GameView {
                         newPosition.x = 0.0;
                     }
                 }
-                
-                if ((int) newPosition.y > Chamber.HEIGHT - 1) {
-                    System.out.println("Cruisin' down the street in my '64");
 
+                if (newGridPos_y > Chamber.HEIGHT - 1) {
                     if (location.y + 1 >= map.height) {
                         newPosition.y = position.y;
                     }
@@ -161,7 +163,7 @@ public class ChamberView extends GameView {
                         newPosition.y = 0.0;
                     }
                 }
-                
+
                 if (Math.floor(newPosition.x) < 0) {
                     if (location.x - 1 < 0) {
                         newPosition.x = position.x;
@@ -175,10 +177,14 @@ public class ChamberView extends GameView {
 
                 // Update our position
                 position = newPosition;
-                
-                // Update lastPlayerDirection. We do this here because we must only do it after the player has moved.
-                lastPlayerDirection = playerDirection;
             }
+            // Otherwise, move normally, but don't run into a wall.
+            else if (!chamber.squares[newGridPos_x][newGridPos_y].isWall) {
+                position = newPosition;
+            }
+
+            // Update lastPlayerDirection. We do this here because we must only do it after the player has moved.
+            lastPlayerDirection = playerDirection;
         }
     }
 
