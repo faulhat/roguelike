@@ -48,7 +48,7 @@ java Maze [width] [height] debug-rand
 java Maze 8 9 debug-rand
 ```
 
-Simple GUI demo:
+Game demo:
 
 To build the code:
 
@@ -61,3 +61,5 @@ To build and run:
 To run after building:
 
 `java Game`
+
+For now you can just travel from room-to-room in an empty procedurally generated level. More stuff will be added soon.
