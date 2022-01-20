@@ -10,6 +10,9 @@ public class ChamberMaze {
 
     public ChamberMaze(int width, int height)
     {
+        this.width = width;
+        this.height = height;
+
         Maze maze = new Maze(width, height);
         maze.genMaze();
 

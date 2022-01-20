@@ -1,4 +1,3 @@
-import java.util.EnumMap;
 import java.util.EnumSet;
 
 /*
@@ -9,28 +8,17 @@ public class Chamber {
     // Constants
 
     // These are the height and width of the chamber object, not the display.
-    public static final int WIDTH = 20;
+    public static final int WIDTH = 25;
     public static final int HEIGHT = 20;
-
-    // The four Chambers directly adjacent to this one
-    public EnumMap<Direction, Chamber> adjacentChambers;
 
     // A map of this Chamber
     public Square[][] squares;
 
     // Constructor for creating a Chamber from a matrix of Squares (move semantics)
-    public Chamber(EnumMap<Direction, Chamber> adjacentChambers, Square[][] squares)
-    {
-        this.adjacentChambers = adjacentChambers;
-
-        // This new Chamber assumes ownership of this matrix
-        this.squares = squares;
-    }
-
-    // Same as above, but adjacentChambers is initialized to a blank map
     public Chamber(Square[][] squares)
     {
-        this(new EnumMap<>(Direction.class), squares);
+        // This new Chamber assumes ownership of this matrix
+        this.squares = squares;
     }
 
     // Constructor for empty Chamber

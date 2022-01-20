@@ -22,4 +22,18 @@ public enum Direction {
             return new Point(-1, 0);
         }
     }
+
+    public Direction getOpposite()
+    {
+        switch (this) {
+        case N:
+            return S;
+        case E:
+            return W;
+        case S:
+            return N;
+        default:
+            return E;
+        }
+    }
 }

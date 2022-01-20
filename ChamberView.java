@@ -1,11 +1,10 @@
-import java.util.EnumMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import javax.naming.OperationNotSupportedException;
 
 import java.awt.geom.Point2D;
-import java.awt.Point;
 import java.awt.event.KeyEvent;
+import java.awt.Point;
 
 /*
  * Thomas: This class is a wrapper for a ChamberMaze that allows it to be used as a game view,
@@ -18,7 +17,7 @@ public class ChamberView extends GameView {
     public static final int DIALOGUE_HEIGHT = 10;
 
     // time delta * this constant = true distance moved
-    public static final double PLAYER_SPEED = 0.015;
+    public static final double PLAYER_SPEED = 0.9;
 
     // The ChamberMaze this instance wraps around
     public ChamberMaze map;
@@ -26,8 +25,11 @@ public class ChamberView extends GameView {
     // The Chamber the player is currently in.
     public Chamber chamber;
 
+    // And where in the map is that Chamber?
+    public Point location;
+
     // The player's sub-grid position
-    public Point2D.Double playerPosition;
+    public Point2D.Double position;
 
     // Which direction is the player going?
     public DirectionEx playerDirection;
@@ -47,7 +49,6 @@ public class ChamberView extends GameView {
         super(outerState);
 
         this.map = map;
-        this.chamber = map.chambers[0][0];
 
         dialogueQueue = new ConcurrentLinkedQueue<>();
         paused = false;
@@ -56,9 +57,11 @@ public class ChamberView extends GameView {
     }
 
     // Put the player in the chamber at a given position
-    public void enterAt(Point initialPosition)
+    public void enterAt(int map_x, int map_y, int chamber_x, int chamber_y)
     {
-        playerPosition = new Point2D.Double((double) initialPosition.x, (double) initialPosition.y);
+        location = new Point(map_x, map_y);
+        chamber = map.chambers[map_x][map_y];
+        position = new Point2D.Double((double) chamber_x, (double) chamber_y);
     }
 
     // How to update this view given a time delta
@@ -68,13 +71,19 @@ public class ChamberView extends GameView {
         // Calculate distance to move
         double currentSpeed = PLAYER_SPEED * delta;
 
-        Point2D.Double newPosition = new Point2D.Double(playerPosition.x, playerPosition.y);
+        Point2D.Double newPosition = new Point2D.Double(position.x, position.y);
 
         // Get key input
         boolean goingUp = outerState.keyBox.getReleaseKeys(KeyEvent.VK_UP, KeyEvent.VK_W);
         boolean goingRight = outerState.keyBox.getReleaseKeys(KeyEvent.VK_RIGHT, KeyEvent.VK_D);
         boolean goingDown = outerState.keyBox.getReleaseKeys(KeyEvent.VK_DOWN, KeyEvent.VK_S);
         boolean goingLeft = outerState.keyBox.getReleaseKeys(KeyEvent.VK_LEFT, KeyEvent.VK_A);
+        boolean toPause = outerState.keyBox.getResetKeys(KeyEvent.VK_ESCAPE, KeyEvent.VK_P);
+
+        if (toPause) {
+            outerState.currentView = new PauseMenu(outerState, this);
+            return;
+        }
 
         DirectionEx newPlayerDirection = new DirectionEx();
 
@@ -99,37 +108,78 @@ public class ChamberView extends GameView {
             playerDirection = newPlayerDirection;
 
             Point2D.Double offset = newPlayerDirection.getOffset();
-
             newPosition.x += offset.x * currentSpeed;
             newPosition.y += offset.y * currentSpeed;
 
+            // Avoid lag when switching directions
+            if ((int) newPosition.y == (int) position.y) {
+                if (newPlayerDirection.contains(Direction.N) && playerDirection.contains(Direction.S)) {
+                    newPosition.y = Math.floor(newPosition.y);
+                }
+                else if (newPlayerDirection.contains(Direction.S) && playerDirection.contains(Direction.N)) {
+                    newPosition.y = Math.floor(newPosition.y) + 0.99;
+                }
+            }
+
+            if ((int) newPosition.x == (int) position.x) {
+                if (newPlayerDirection.contains(Direction.E) && playerDirection.contains(Direction.W)) {
+                    newPosition.x = Math.floor(newPosition.x);
+                }
+                else if (newPlayerDirection.contains(Direction.W) && playerDirection.contains(Direction.E)) {
+                    newPosition.x = Math.floor(newPosition.x) + 0.99;
+                }
+            }
+
             // Don't move into a wall.
             if (!chamber.squares[(int) newPosition.x][(int) newPosition.y].isWall) {
-                // Move to an adjacent chamber if need be
-                Chamber nextChamber = chamber;
+                System.out.println("New position x: " + newPosition.x + ", y: " + newPosition.y);
 
+                // Move to an adjacent chamber if need be
                 if (Math.floor(newPosition.y) < 0) {
-                    nextChamber = chamber.adjacentChambers.get(Direction.N);
-                    newPosition.x = (double) Chamber.HEIGHT - 1.0;
+                    // Don't move into the adjacent chamber if there is no adjacent chamber!
+                    if (location.y - 1 < 0) {
+                        newPosition = position;
+                    }
+                    // Otherwise, we should end up in the next chamber in the direction we're going.
+                    else {
+                        chamber = map.chambers[location.x][location.y - 1];
+                        location.y--;
+                        newPosition.y = (double) Chamber.HEIGHT - 1.0;
+                    }
                 }
                 else if ((int) newPosition.x >= Chamber.WIDTH - 1) {
-                    nextChamber = chamber.adjacentChambers.get(Direction.E);
-                    newPosition.x = 0.0;
+                    if (location.x + 1 >= map.width) {
+                        newPosition = position;
+                    }
+                    else {
+                        chamber = map.chambers[location.x + 1][location.y];
+                        location.x++;
+                        newPosition.x = 0.0;
+                    }
                 }
                 else if ((int) newPosition.y >= Chamber.HEIGHT - 1) {
-                    nextChamber = chamber.adjacentChambers.get(Direction.S);
-                    newPosition.y = 0.0;
+                    if (location.y + 1 >= map.height) {
+                        newPosition = position;
+                    }
+                    else {
+                        chamber = map.chambers[location.x][location.y + 1];
+                        location.y++;
+                        newPosition.y = 0.0;
+                    }
                 }
                 else if (Math.floor(newPosition.x) < 0) {
-                    nextChamber = chamber.adjacentChambers.get(Direction.W);
-                    newPosition.x = (double) Chamber.WIDTH - 1.0;
+                    if (location.x - 1 < 0) {
+                        newPosition = position;
+                    }
+                    else {
+                        chamber = map.chambers[location.x - 1][location.y];
+                        location.x--;
+                        newPosition.x = (double) Chamber.WIDTH - 1.0;
+                    }
                 }
 
-                // Don't move if doing so would put us outside the map.
-                if (nextChamber != null) {
-                    chamber = nextChamber; // Does nothing if we didn't move to a different Chamber
-                    playerPosition = newPosition;
-                }
+                // Update our position
+                position = newPosition;
             }
         }
     }
@@ -139,28 +189,36 @@ public class ChamberView extends GameView {
     public String render() throws OperationNotSupportedException
     {
         String renderState = "";
-        this.playerPosition = new Point2D.Double(0.0, 0.0);
-        int trunc_x = (int) playerPosition.x, trunc_y = (int) playerPosition.y;
+
+        // chamber.squares must be transposed for rendering
+        // otherwise the dimensions would be backwards.
+        int trunc_x = (int) position.x, trunc_y = (int) position.y;
         for (int i = 0; i < Chamber.HEIGHT; i++) {
-            System.out.println(trunc_x + " " + trunc_y);
             for (int j = 0; j < Chamber.WIDTH; j++) {
+                Square square = chamber.squares[j][i];
+
                 char symbol = ' ';
-                if (i == trunc_y && j == trunc_x) {
+                if (j == trunc_x && i == trunc_y) {
                     symbol = '@';
                 }
-                if (chamber.squares[i][j].isWall) {
+                else if (square.isWall) {
                     symbol = '*';
                 }
-                else if (chamber.squares[i][j].sprites.size() > 0) {
-                    for (Sprite sprite : chamber.squares[i][j].sprites) {
+                else if (square.sprites.size() > 0) {
+                    for (Sprite sprite : square.sprites) {
                         if (sprite.isVisible()) {
                             symbol = sprite.symbol();
                         }
                     }
                 }
 
+                if (j > 0) {
+                    renderState += ' ';
+                }
+
                 renderState += symbol;
             }
+
             renderState += '\n';
         }
 

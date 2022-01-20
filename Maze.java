@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.EnumSet;
 
 /*
  * Thomas: This is a class for generating mazes.

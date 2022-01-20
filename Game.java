@@ -3,7 +3,6 @@ import java.awt.Font;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.Arrays;
-import java.util.EnumSet;
 import java.util.List;
 
 /*
@@ -35,7 +34,8 @@ public class Game {
     public static final int DISPLAY_HEIGHT = GAME_HEIGHT + ChamberView.DIALOGUE_HEIGHT;
 
     // Constants for size of game map (temporary) //
-    public static final MAP_WIDTH = 7, MAP_HEIGHT = 6;
+    // 7 chambers by 6 chambers
+    public static final int MAP_WIDTH = 7, MAP_HEIGHT = 6;
 
     public KeyBox keyBox;
     private JTextArea displayArea;
@@ -51,7 +51,7 @@ public class Game {
     public Game()
     {
         keyBox = new KeyBox();
-        mapOfGame = new Maze(false, 10, 10);
+
         // Create the game display
         displayArea = new JTextArea(DISPLAY_WIDTH, DISPLAY_HEIGHT);
         displayArea.setEditable(false);
@@ -70,7 +70,10 @@ public class Game {
     // Method to start the game, placing the player in the first chamber (temporary) //
     public void start()
     {
-        currentView = new ChamberView(this, gameMap.chambers[0][0]);
+        ChamberView chamberView = new ChamberView(this, gameMap);
+        chamberView.enterAt(0, 0, Chamber.WIDTH / 2, Chamber.HEIGHT / 2);
+
+        currentView = chamberView;
     }
 
     public void setDisplayText(String toDisplay) throws RenderException

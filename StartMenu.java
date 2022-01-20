@@ -6,7 +6,7 @@ public class StartMenu extends Menu {
         super(outerState);
 
         Consumer<Game> startAction = game -> {
-            game.enter();
+            game.start();
         };
 
         Consumer<Game> exitAction = game -> {

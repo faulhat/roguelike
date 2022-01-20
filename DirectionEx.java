@@ -20,9 +20,7 @@ public class DirectionEx {
     // Not diagonal
     public DirectionEx(Direction direction)
     {
-        this();
-
-        directions.add(direction);
+        directions = EnumSet.of(direction);
     }
 
     // Should only be used for diagonals
@@ -30,12 +28,18 @@ public class DirectionEx {
     {
         this(direction_a);
 
-        directions.add(direction_b);
+        add(direction_b);
     }
 
     public void add(Direction direction)
     {
-        directions.add(direction);
+        Direction opposite = direction.getOpposite();
+        if (directions.contains(opposite)) {
+            directions.remove(opposite);
+        }
+        else {
+            directions.add(direction);
+        }
     }
 
     public boolean isEmpty()
@@ -43,25 +47,16 @@ public class DirectionEx {
         return directions.isEmpty();
     }
 
+    public boolean contains(Direction direction)
+    {
+        return directions.contains(direction);
+    }
+
     // Get the offset for this compound direction
     // Analagous to Direction.asOffset()
+    // Note: it should be impossible for there to be two opposite directions in this.directions
     public Point2D.Double getOffset() throws Exception
     {
-
-        // Only one direction
-        if (directions.size() == 1) {
-            for (Direction direction : directions) {
-                Point offset = direction.asOffset();
-
-                return new Point2D.Double((double) offset.x, (double) offset.y);
-            }
-        }
-
-        // Two opposite directions
-        if ((directions.contains(Direction.N) && directions.contains(Direction.S)) || (directions.contains(Direction.E) && directions.contains(Direction.W))) {
-            return new Point2D.Double(0.0, 0.0);
-        }
-
         // Diagonals. x and y offsets will both be cos(pi/4) (which is the value of the constant DIAG_INTERVAL) or -cos(pi/4).
         if (directions.contains(Direction.N)) {
             if (directions.contains(Direction.E)) {
@@ -83,7 +78,15 @@ public class DirectionEx {
             }
         }
 
-        // Something has gone terribly wrong
-        throw new Exception("WTF how did I get here?");
+        // If there is only one Direction in directions
+        if (directions.size() == 1) {
+            for (Direction direction : directions) {
+                Point intOffset = direction.asOffset();
+                return new Point2D.Double((double) intOffset.x, (double) intOffset.y);
+            }
+        }
+
+        // directions must be empty if we've gotten here.
+        return new Point2D.Double(0.0, 0.0);
     }
 }
