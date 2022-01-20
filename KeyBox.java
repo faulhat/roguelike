@@ -83,7 +83,7 @@ public class KeyBox {
     }
 
     // See if a key has been pressed. Return true even if the signal has already been processed by a client
-    public boolean getResetKey(int keyCode)
+    public boolean getKey(int keyCode)
     {
         stateLock.lock();
         try {
@@ -110,7 +110,7 @@ public class KeyBox {
     {
         stateLock.lock();
         try {
-            // Return false if the signal has been processed. Otherwise, refer to getResetKey().
+            // Return false if the signal has been processed. Otherwise, refer to getKey().
             if (beenProcessed.contains(keyCode)) {
                 return false;
             }
@@ -120,15 +120,15 @@ public class KeyBox {
         }
 
         // At this point, the lock is unlocked. Otherwise, this method call would hang
-        return getResetKey(keyCode);
+        return getKey(keyCode);
     }
 
-    // Call getResetKey on a group of keys. Return true if any of them are held down.
-    public boolean getResetKeys(int... keyCodes)
+    // Call getKey on a group of keys. Return true if any of them are held down.
+    public boolean getKeys(int... keyCodes)
     {
         boolean value = false;
         for (int code : keyCodes) {
-            if (getResetKey(code)) {
+            if (getKey(code)) {
                 value = true;
             }
         }

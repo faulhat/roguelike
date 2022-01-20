@@ -17,7 +17,7 @@ public class ChamberView extends GameView {
     public static final int DIALOGUE_HEIGHT = 10;
 
     // time delta * this constant = true distance moved
-    public static final double PLAYER_SPEED = 0.9;
+    public static final double PLAYER_SPEED = 0.012;
 
     // The ChamberMaze this instance wraps around
     public ChamberMaze map;
@@ -33,6 +33,9 @@ public class ChamberView extends GameView {
 
     // Which direction is the player going?
     public DirectionEx playerDirection;
+
+    // Which direction was the player last going?
+    public DirectionEx lastPlayerDirection;
 
     // Queue of dialogue to be printed
     private ConcurrentLinkedQueue<String> dialogueQueue;
@@ -50,6 +53,8 @@ public class ChamberView extends GameView {
         dialogueQueue = new ConcurrentLinkedQueue<>();
         scrolling = false;
 
+        playerDirection = new DirectionEx();
+        lastPlayerDirection = new DirectionEx(Direction.N);
     }
 
     // Put the player in the chamber at a given position
@@ -70,11 +75,11 @@ public class ChamberView extends GameView {
         Point2D.Double newPosition = new Point2D.Double(position.x, position.y);
 
         // Get key input
-        boolean goingUp = outerState.keyBox.getReleaseKeys(KeyEvent.VK_UP, KeyEvent.VK_W);
-        boolean goingRight = outerState.keyBox.getReleaseKeys(KeyEvent.VK_RIGHT, KeyEvent.VK_D);
-        boolean goingDown = outerState.keyBox.getReleaseKeys(KeyEvent.VK_DOWN, KeyEvent.VK_S);
-        boolean goingLeft = outerState.keyBox.getReleaseKeys(KeyEvent.VK_LEFT, KeyEvent.VK_A);
-        boolean toPause = outerState.keyBox.getResetKeys(KeyEvent.VK_ESCAPE, KeyEvent.VK_P);
+        boolean goingUp = outerState.keyBox.getKeys(KeyEvent.VK_UP, KeyEvent.VK_W);
+        boolean goingRight = outerState.keyBox.getKeys(KeyEvent.VK_RIGHT, KeyEvent.VK_D);
+        boolean goingDown = outerState.keyBox.getKeys(KeyEvent.VK_DOWN, KeyEvent.VK_S);
+        boolean goingLeft = outerState.keyBox.getKeys(KeyEvent.VK_LEFT, KeyEvent.VK_A);
+        boolean toPause = outerState.keyBox.getReleaseKeys(KeyEvent.VK_ESCAPE, KeyEvent.VK_P);
 
         if (toPause) {
             outerState.currentView = new PauseMenu(outerState, this);
@@ -100,41 +105,30 @@ public class ChamberView extends GameView {
             newPlayerDirection.add(Direction.W);
         }
 
-        if (!newPlayerDirection.isEmpty()) {
-            playerDirection = newPlayerDirection;
+        // Re-align with grid if we are changing directions.
+        // This prevents staggered movement when going diagonally.
+        if (!newPlayerDirection.equals(playerDirection)) {
+            newPosition.x = Math.floor(newPosition.x);
+            newPosition.y = Math.floor(newPosition.y);
+        }
 
-            Point2D.Double offset = newPlayerDirection.getOffset();
+        playerDirection = newPlayerDirection;
+        if (!playerDirection.isEmpty()) {
+            Point2D.Double offset = playerDirection.getOffset();
+            System.out.println(offset.toString());
+
             newPosition.x += offset.x * currentSpeed;
             newPosition.y += offset.y * currentSpeed;
 
-            // Avoid lag when switching directions
-            if ((int) newPosition.y == (int) position.y) {
-                if (newPlayerDirection.contains(Direction.N) && playerDirection.contains(Direction.S)) {
-                    newPosition.y = Math.floor(newPosition.y);
-                }
-                else if (newPlayerDirection.contains(Direction.S) && playerDirection.contains(Direction.N)) {
-                    newPosition.y = Math.floor(newPosition.y) + 0.99;
-                }
-            }
-
-            if ((int) newPosition.x == (int) position.x) {
-                if (newPlayerDirection.contains(Direction.E) && playerDirection.contains(Direction.W)) {
-                    newPosition.x = Math.floor(newPosition.x);
-                }
-                else if (newPlayerDirection.contains(Direction.W) && playerDirection.contains(Direction.E)) {
-                    newPosition.x = Math.floor(newPosition.x) + 0.99;
-                }
-            }
-
             // Don't move into a wall.
             if (!chamber.squares[(int) newPosition.x][(int) newPosition.y].isWall) {
-                // System.out.println("New position x: " + newPosition.x + ", y: " + newPosition.y);
+                System.out.println("New position x: " + newPosition.x + ", y: " + newPosition.y);
 
                 // Move to an adjacent chamber if need be
                 if (Math.floor(newPosition.y) < 0) {
                     // Don't move into the adjacent chamber if there is no adjacent chamber!
                     if (location.y - 1 < 0) {
-                        newPosition = position;
+                        newPosition.y = position.y;
                     }
                     // Otherwise, we should end up in the next chamber in the direction we're going.
                     else {
@@ -143,9 +137,10 @@ public class ChamberView extends GameView {
                         newPosition.y = (double) Chamber.HEIGHT - 1.0;
                     }
                 }
-                else if ((int) newPosition.x >= Chamber.WIDTH - 1) {
+                
+                if ((int) newPosition.x > Chamber.WIDTH - 1) {
                     if (location.x + 1 >= map.width) {
-                        newPosition = position;
+                        newPosition.x = position.x;
                     }
                     else {
                         chamber = map.chambers[location.x + 1][location.y];
@@ -153,9 +148,12 @@ public class ChamberView extends GameView {
                         newPosition.x = 0.0;
                     }
                 }
-                else if ((int) newPosition.y >= Chamber.HEIGHT - 1) {
+                
+                if ((int) newPosition.y > Chamber.HEIGHT - 1) {
+                    System.out.println("Cruisin' down the street in my '64");
+
                     if (location.y + 1 >= map.height) {
-                        newPosition = position;
+                        newPosition.y = position.y;
                     }
                     else {
                         chamber = map.chambers[location.x][location.y + 1];
@@ -163,9 +161,10 @@ public class ChamberView extends GameView {
                         newPosition.y = 0.0;
                     }
                 }
-                else if (Math.floor(newPosition.x) < 0) {
+                
+                if (Math.floor(newPosition.x) < 0) {
                     if (location.x - 1 < 0) {
-                        newPosition = position;
+                        newPosition.x = position.x;
                     }
                     else {
                         chamber = map.chambers[location.x - 1][location.y];
@@ -176,6 +175,9 @@ public class ChamberView extends GameView {
 
                 // Update our position
                 position = newPosition;
+                
+                // Update lastPlayerDirection. We do this here because we must only do it after the player has moved.
+                lastPlayerDirection = playerDirection;
             }
         }
     }
@@ -220,20 +222,14 @@ public class ChamberView extends GameView {
 
         renderState += "Location in chamber map: ( x = " + location.x + ", y = " + location.y + " )\n";
 
-        String[] mazeStringLines = map.maze.toString().split("\n");
-        for (int i = 0; i < mazeStringLines.length; i++) {
-            if (i == 1 + location.y * 2) {
-                for (int j = 0; j < mazeStringLines[i].length(); j++) {
-                    if (j == 3+ location.x * 4) {
-                        renderState += "*";
-                    }
-                    else {
-                        renderState += mazeStringLines[i].charAt(j);
-                    }
+        for (int i = 0; i < Game.MAP_HEIGHT; i++) {
+            for (int j = 0; j < Game.MAP_WIDTH; j++) {
+                if (i == location.y && j == location.x) {
+                    renderState += "* ";
                 }
-            }
-            else {
-                renderState += mazeStringLines[i];
+                else {
+                    renderState += "- ";
+                }
             }
 
             renderState += "\n";

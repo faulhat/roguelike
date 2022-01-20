@@ -52,6 +52,23 @@ public class DirectionEx {
         return directions.contains(direction);
     }
 
+    @Override
+    public boolean equals(Object other) {
+        // this.equals(other) if this and other contain the same directions
+
+        if (!(other instanceof DirectionEx)) {
+            return false;
+        }
+
+        for (Direction direction : Direction.values()) {
+            if (((DirectionEx) other).contains(direction) != contains(direction)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     // Get the offset for this compound direction
     // Analagous to Direction.asOffset()
     // Note: it should be impossible for there to be two opposite directions in this.directions
@@ -74,7 +91,7 @@ public class DirectionEx {
             }
 
             if (directions.contains(Direction.W)) {
-                return new Point2D.Double(DIAG_INTERVAL, -DIAG_INTERVAL);
+                return new Point2D.Double(-DIAG_INTERVAL, DIAG_INTERVAL);
             }
         }
 
