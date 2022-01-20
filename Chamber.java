@@ -34,28 +34,29 @@ public class Chamber {
     }
 
     // Method to fill in Chamber
+    // For now it just puts walls on each side with two-block exits in them according to the exits set provided
     public void genChamber(EnumSet<Direction> exits)
     {
         for (int i = 0; i < WIDTH; i++) {
             // Make an exit in the middle of the North wall.
-            if (!(exits.contains(Direction.N) && i == WIDTH / 2 + 1)) {
+            if (!(exits.contains(Direction.N) && (i == WIDTH / 2 || i == WIDTH / 2 + 1))) {
                 squares[i][0].isWall = true;
             }
 
             // Make an exit in the middle of the South wall.
-            if (!(exits.contains(Direction.S) && i == WIDTH / 2 + 1)) {
+            if (!(exits.contains(Direction.S) && (i == WIDTH / 2 || i == WIDTH / 2 + 1))) {
                 squares[i][HEIGHT - 1].isWall = true;
             }
         }
 
         for (int i = 0; i < HEIGHT; i++) {
             // Make an exit in the middle of the West wall.
-            if (exits.contains(Direction.W) && !(i == HEIGHT / 2 + 1)) {
+            if (!(exits.contains(Direction.W) && (i == HEIGHT / 2 || i == HEIGHT / 2 + 1))) {
                 squares[0][i].isWall = true;
             }
 
             // Make an exit in the middle of the East wall.
-            if (exits.contains(Direction.E) && !(i == HEIGHT / 2 + 1)) {
+            if (!(exits.contains(Direction.E) && (i == HEIGHT / 2 || i == HEIGHT / 2 + 1))) {
                 squares[WIDTH - 1][i].isWall = true;
             }
         }

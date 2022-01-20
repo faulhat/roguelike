@@ -46,8 +46,8 @@ public class Menu extends GameView {
     {
         boolean upPressed = outerState.keyBox.getReleaseKey(KeyEvent.VK_UP);
         boolean downPressed = outerState.keyBox.getReleaseKey(KeyEvent.VK_DOWN);
-        boolean selectPressed = outerState.keyBox.getReleaseKey(KeyEvent.VK_Z) || outerState.keyBox.getReleaseKey(KeyEvent.VK_ENTER);
-        boolean cancelPressed = outerState.keyBox.getReleaseKey(KeyEvent.VK_X) || outerState.keyBox.getReleaseKey(KeyEvent.VK_ESCAPE);
+        boolean selectPressed = outerState.keyBox.getReleaseKeys(KeyEvent.VK_Z, KeyEvent.VK_ENTER);
+        boolean cancelPressed = outerState.keyBox.getReleaseKeys(KeyEvent.VK_X, KeyEvent.VK_ESCAPE);
 
         if (cancelPressed && returnView != null) {
             outerState.currentView = returnView;

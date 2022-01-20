@@ -37,9 +37,6 @@ public class ChamberView extends GameView {
     // Queue of dialogue to be printed
     private ConcurrentLinkedQueue<String> dialogueQueue;
 
-    // Is the game paused?
-    private boolean paused;
-
     // Is the game waiting for the player to finish scrolling through dialogue?
     private boolean scrolling;
 
@@ -51,7 +48,6 @@ public class ChamberView extends GameView {
         this.map = map;
 
         dialogueQueue = new ConcurrentLinkedQueue<>();
-        paused = false;
         scrolling = false;
 
     }
@@ -87,7 +83,7 @@ public class ChamberView extends GameView {
 
         DirectionEx newPlayerDirection = new DirectionEx();
 
-        // Up and down
+        // Which direction?
         if (goingUp) {
             newPlayerDirection.add(Direction.N);
         }
@@ -202,7 +198,7 @@ public class ChamberView extends GameView {
                     symbol = '@';
                 }
                 else if (square.isWall) {
-                    symbol = '*';
+                    symbol = '+';
                 }
                 else if (square.sprites.size() > 0) {
                     for (Sprite sprite : square.sprites) {
@@ -221,6 +217,8 @@ public class ChamberView extends GameView {
 
             renderState += '\n';
         }
+
+        renderState += "Location in chamber map: ( x = " + location.x + ", y = " + location.y + " )";
 
         return renderState;
     }

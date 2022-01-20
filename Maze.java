@@ -131,7 +131,7 @@ public class Maze {
         for (Direction direction : Direction.values()) {
             WallRef wallRef = cell.walls.get(direction);
 
-            if (wallRef != null && wallRef.isWall) {
+            if (wallRef == null || wallRef.isWall) {
                 exits.remove(direction);
             }
         }
