@@ -37,12 +37,6 @@ public class ChamberView extends GameView {
     // Which direction was the player last going?
     public DirectionEx lastPlayerDirection;
 
-    // Queue of dialogue to be printed
-    private ConcurrentLinkedQueue<String> dialogueQueue;
-
-    // Is the game waiting for the player to finish scrolling through dialogue?
-    private boolean scrolling;
-
     // Start player in top-leftmost Chamber
     public ChamberView(Game outerState, ChamberMaze map)
     {
@@ -50,11 +44,20 @@ public class ChamberView extends GameView {
 
         this.map = map;
 
-        dialogueQueue = new ConcurrentLinkedQueue<>();
-        scrolling = false;
-
         playerDirection = new DirectionEx();
         lastPlayerDirection = new DirectionEx(Direction.N);
+    }
+
+    public ChamberView(Game outerState, ChamberMaze map, int map_x, int map_y, int chamber_x, chamber_y)
+    {
+        this(outerState, map);
+
+        enterAt(map_x, map_y, chamber_x, chamber_y);
+    }
+
+    public ChamberView(Game outerState, ChamberMaze map, Point location, Point position)
+    {
+        this(outerState, map, location.x, location.y, position.x, position.y);
     }
 
     // Put the player in the chamber at a given position

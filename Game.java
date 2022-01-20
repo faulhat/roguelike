@@ -34,7 +34,8 @@ public class Game {
     public static final int DISPLAY_HEIGHT = GAME_HEIGHT + ChamberView.DIALOGUE_HEIGHT;
 
     // Constants for size of game map (temporary) //
-    public static final int MAP_WIDTH = 3, MAP_HEIGHT = 3;
+    public static final int MAP_WIDTH = 5, MAP_HEIGHT = 5;
+
 
     public KeyBox keyBox;
     private JTextArea displayArea;
@@ -42,10 +43,14 @@ public class Game {
     // The view being displayed
     public GameView currentView;
 
+    // Which direciton is the player moving?
     public Direction playerDirection;
 
-    //Maze to use for map of whole game area
+    // Maze to use for map of whole game area
     public ChamberMaze gameMap;
+
+    // The player's current state
+    public PlayerState playerState;
 
     public Game()
     {
@@ -62,10 +67,8 @@ public class Game {
         keyBox.frame.setVisible(true);
 
         currentView = new StartMenu(this);
-
         gameMap = new ChamberMaze(MAP_WIDTH, MAP_HEIGHT);
-
-        System.out.println(gameMap.maze.toString());
+        playerState = new PlayerState();
     }
 
     // Method to start the game, placing the player in the first chamber (temporary) //

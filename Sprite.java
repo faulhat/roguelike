@@ -17,5 +17,5 @@ public interface Sprite {
 
     // All-purpose event handling method.
     // Different event types should be dealt with separately.
-    public void onEvent(GameEvent e);
+    public void onEvent(Game outerState, GameEvent e);
 }
