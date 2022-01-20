@@ -128,7 +128,7 @@ public class ChamberView extends GameView {
 
             // Don't move into a wall.
             if (!chamber.squares[(int) newPosition.x][(int) newPosition.y].isWall) {
-                System.out.println("New position x: " + newPosition.x + ", y: " + newPosition.y);
+                // System.out.println("New position x: " + newPosition.x + ", y: " + newPosition.y);
 
                 // Move to an adjacent chamber if need be
                 if (Math.floor(newPosition.y) < 0) {
@@ -218,7 +218,26 @@ public class ChamberView extends GameView {
             renderState += '\n';
         }
 
-        renderState += "Location in chamber map: ( x = " + location.x + ", y = " + location.y + " )";
+        renderState += "Location in chamber map: ( x = " + location.x + ", y = " + location.y + " )\n";
+
+        String[] mazeStringLines = map.maze.toString().split("\n");
+        for (int i = 0; i < mazeStringLines.length; i++) {
+            if (i == 1 + location.y * 2) {
+                for (int j = 0; j < mazeStringLines[i].length(); j++) {
+                    if (j == 3+ location.x * 4) {
+                        renderState += "*";
+                    }
+                    else {
+                        renderState += mazeStringLines[i].charAt(j);
+                    }
+                }
+            }
+            else {
+                renderState += mazeStringLines[i];
+            }
+
+            renderState += "\n";
+        }
 
         return renderState;
     }

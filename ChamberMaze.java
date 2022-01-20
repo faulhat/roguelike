@@ -5,6 +5,8 @@
 public class ChamberMaze {
     public final int width, height;
 
+    public Maze maze;
+
     // A matrix of chambers representing this maze.
     public Chamber[][] chambers;
 
@@ -13,7 +15,7 @@ public class ChamberMaze {
         this.width = width;
         this.height = height;
 
-        Maze maze = new Maze(width, height);
+        maze = new Maze(width, height);
         maze.genMaze();
 
         // Generate the matrix of Chambers
