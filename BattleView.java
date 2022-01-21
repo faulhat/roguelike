@@ -4,7 +4,7 @@ import java.awt.event.*;
 import java.util.Arrays;
 
 public class BattleView extends GameView {
-    public static enum State { WAITING, MENU, ENEMY_SELECT, INVENTORY, BATTLE_COMPLETE }
+    public static enum State { WAITING, MENU, ENEMY_SELECT, INVENTORY, BATTLE_COMPLETE, PLAYER_DEAD }
 
     public State battleState;
 
@@ -46,6 +46,9 @@ public class BattleView extends GameView {
     // How long until we can put something to the dialogue box next?
     public double dialogueTimeLeft;
 
+    // All of the enemies there were at the start of the fight
+    public ArrayList<Enemy> allEnemies;
+
     public BattleView(Game outerState, ArrayList<Enemy> enemies, GameView returnView)
     {
         super(outerState);
@@ -63,6 +66,9 @@ public class BattleView extends GameView {
         if (enemies.size() == 1) {
             dialogueNow = firstEnemy.approachMessage + "\n" + firstEnemy.name + " attacks!";
         }
+        else if (enemies.size() == 2) {
+            dialogueNow = firstEnemy.approachMessage + "\n" + firstEnemy.name + " and " + enemies.get(1).name + " attack!";
+        }
         else {
             dialogueNow = firstEnemy.approachMessage + "\n" + firstEnemy.name + " and its cohorts attack!";
         }
@@ -71,6 +77,14 @@ public class BattleView extends GameView {
         dialogueTimeLeft = dialogueWaitPeriod;
 
         this.returnView = returnView;
+
+        allEnemies = new ArrayList<>();
+        double offset = 0.0;
+        for (Enemy enemy : enemies) {
+            enemy.timeLeft += offset;
+            allEnemies.add(enemy);
+            offset += 5000.0;
+        }
     }
 
     public BattleView(Game outerState, Enemy enemy, GameView returnView)
@@ -85,14 +99,29 @@ public class BattleView extends GameView {
         if (battleState == State.BATTLE_COMPLETE) {
             if (selectPressed) {
                 outerState.currentView = returnView;
-                return;
             }
+
+            return;
+        }
+        else if (battleState == State.PLAYER_DEAD) {
+            if (selectPressed) {
+                outerState.init();
+            }
+
+            return;
         }
 
-        dialogueTimeLeft -= delta;
-        if (dialogueTimeLeft <= 0 && !dialogueQueue.isEmpty()) {
-            dialogueNow = dialogueQueue.poll(); // Gets and removes head
-            dialogueTimeLeft = dialogueWaitPeriod;
+        if (battleState != State.PLAYER_DEAD && battleState != State.BATTLE_COMPLETE) {
+            dialogueTimeLeft -= delta;
+            if (dialogueTimeLeft <= 0) {
+                if (dialogueQueue.isEmpty()) {
+                    dialogueNow = "";
+                }
+                else {
+                    dialogueNow = dialogueQueue.poll(); // Gets and removes head
+                    dialogueTimeLeft = dialogueWaitPeriod;
+                }
+            }
         }
 
         boolean upPressed = outerState.keyBox.getReleaseKeys(KeyEvent.VK_UP, KeyEvent.VK_W);
@@ -113,9 +142,17 @@ public class BattleView extends GameView {
                 }
                 else {
                     int prevPoints = player.hitPoints;
-                    player.receiveAttack(enemy.attackPoints);
-                    enemy.timeLeft = enemy.waitPeriod;
-                    dialogueQueue.addLast(enemy.attackMessage + "\nYou took " + (prevPoints - player.hitPoints) + " points of damage.");
+                    boolean playerDead = player.receiveAttack(enemy.attackPoints);
+
+                    if (playerDead) {
+                        battleState = State.PLAYER_DEAD;
+                        dialogueNow = enemy.attackMessage + "\nIt was too much!\nYou died.";
+                        return;
+                    }
+                    else {
+                        enemy.timeLeft = enemy.waitPeriod;
+                        dialogueQueue.addLast(enemy.attackMessage + "\nYou took " + (prevPoints - player.hitPoints) + " points of damage.");
+                    }
                 }
             }
         }
@@ -167,12 +204,14 @@ public class BattleView extends GameView {
             }
 
             if (upPressed) {
-                selectedEnemy = Math.max(selectedEnemy - 1, 0);
+                selectedEnemy--;
             }
 
             if (downPressed) {
-                selectedEnemy = Math.min(selectedEnemy + 1, enemies.size() - 1);
+                selectedEnemy++;
             }
+
+            selectedEnemy = Math.min(Math.max(selectedEnemy, 0), enemies.size() - 1);
 
             if (selectPressed) {
                 Enemy enemySelected = enemies.get(selectedEnemy);
@@ -200,6 +239,8 @@ public class BattleView extends GameView {
                     }
 
                     battleState = State.BATTLE_COMPLETE;
+                    dialogueNow = nextDialogue;
+                    break;
                 }
                 else {
                     battleState = State.WAITING;
@@ -221,6 +262,11 @@ public class BattleView extends GameView {
 
             if (downPressed) {
                 selectedItem = Math.min(selectedItem + 1, player.inventory.size() - 1);
+            }
+
+            if (cancelPressed) {
+                selectedItem = 0;
+                battleState = State.MENU;
             }
 
             if (selectPressed) {
@@ -255,8 +301,13 @@ public class BattleView extends GameView {
 
         out += "\n\n  ";
 
-        for (Enemy enemy : enemies) {
-            out += " " + enemy.getSymbol();
+        for (Enemy enemy : allEnemies) {
+            if (enemies.contains(enemy)) {
+                out += " " + enemy.getSymbol();
+            }
+            else {
+                out += "  ";
+            }
         }
 
         out += "\n\n\n\n";

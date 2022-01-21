@@ -1,7 +1,12 @@
 public abstract class Weapon extends GameItem {
-    public abstract int getAttackPoints();
+    public int attackPoints;
 
     public static class Default extends Weapon {
+        public Default()
+        {
+            attackPoints = 4;
+        }
+
         @Override
         public String getName()
         {
@@ -18,12 +23,6 @@ public abstract class Weapon extends GameItem {
         public void onUse(Game outerState)
         {
             outerState.playerState.equippedWeapon = this;
-        }
-
-        @Override
-        public int getAttackPoints()
-        {
-            return 2;
         }
     }
 }

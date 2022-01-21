@@ -1,7 +1,12 @@
 public abstract class Shield extends GameItem {
-    public abstract int getDefensePoints();
+    public int defensePoints;
 
     public static class Default extends Shield {
+        public Default()
+        {
+            defensePoints = 3;
+        }
+
         @Override
         public String getName()
         {
@@ -18,12 +23,6 @@ public abstract class Shield extends GameItem {
         public void onUse(Game outerState)
         {
             outerState.playerState.equippedShield = this;
-        }
-
-        @Override
-        public int getDefensePoints()
-        {
-            return 1;
         }
     }
 }

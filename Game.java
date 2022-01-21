@@ -61,6 +61,11 @@ public class Game {
         keyBox.frame.pack();
         keyBox.frame.setVisible(true);
 
+        init();
+    }
+
+    public void init()
+    {
         // Set current view to start menu
         currentView = new StartMenu(this);
 

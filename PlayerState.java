@@ -24,7 +24,7 @@ public class PlayerState extends GameCharacter {
 
     public PlayerState()
     {
-        super("Player", 10, 0, 0, 7000.0, 0.0);
+        super("Player", 20, 0, 0, 7000.0, 0.0);
 
         equipWeapon(new Weapon.Default());
         equipShield(new Shield.Default());
@@ -44,12 +44,12 @@ public class PlayerState extends GameCharacter {
     public void equipWeapon(Weapon weapon)
     {
         equippedWeapon = weapon;
-        attackPoints = weapon.getAttackPoints();
+        attackPoints = weapon.attackPoints;
     }
 
     public void equipShield(Shield shield)
     {
         equippedShield = shield;
-        defensePoints = shield.getDefensePoints();
+        defensePoints = shield.defensePoints;
     }
 }
