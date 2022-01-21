@@ -327,67 +327,67 @@ public class BattleView extends GameView {
         switch (battleState) {
         case WAITING:
             int frac = (int) Math.floor(8.0 * (1 - player.timeLeft / player.waitPeriod));
-            String blank = "|        |\n";
-            out += " --------\n" + blank;
+            String blank = "|       |\n";
+            out += " -------\n" + blank;
             if (frac == 0) {
-                out += "|   ||   |\n";
-                out += "|   ||   |\n";
-                out += blank;
+                out += "|   |   |\n";
+                out += "|   |   |\n";
+                out += "|   +   |\n";
                 out += blank;
                 out += blank;
             }
             else if (frac == 1) {
-                out += "|     // |\n";
-                out += "|    //  |\n";
-                out += blank;
+                out += "|     / |\n";
+                out += "|    /  |\n";
+                out += "|   +   |\n";
                 out += blank;
                 out += blank;
             }
             else if (frac == 2) {
                 out += blank;
                 out += blank;
-                out += "|    === |\n";
+                out += "|   +---|\n";
                 out += blank;
                 out += blank;
             }
             else if (frac == 3) {
                 out += blank;
                 out += blank;
-                out += blank;
-                out += "|    \\\\  |\n";
-                out += "|     \\\\ |\n";
+                out += "|   +   |\n";
+                out += "|    \\  |\n";
+                out += "|     \\ |\n";
             }
             else if (frac == 4) {
                 out += blank;
                 out += blank;
-                out += blank;
-                out += "|   ||   |\n";
-                out += "|   ||   |\n";
+                out += "|   +   |\n";
+                out += "|   |   |\n";
+                out += "|   |   |\n";
             }
             else if (frac == 5) {
                 out += blank;
                 out += blank;
-                out += blank;
-                out += "|  //    |\n";
-                out += "| //     |\n";
+                out += "|   +   |\n";
+                out += "|  /    |\n";
+                out += "| /     |\n";
             }
             else if (frac == 6) {
                 out += blank;
                 out += blank;
-                out += "| ===    |\n";
+                out += "|---+   |\n";
                 out += blank;
                 out += blank;
             }
             else if (frac == 7) {
-                out += "| \\\\     |\n";
-                out += "|  \\\\    |\n";
-                out += blank;
+                out += "| \\     |\n";
+                out += "|  \\    |\n";
+                out += "|   +   |\n";
                 out += blank;
                 out += blank;
             }
 
             out += blank;
-            out += " --------\n";
+            out += " -------\n";
 
             break;
         case MENU:
