@@ -18,6 +18,6 @@ public class Cookie extends GameItem {
     @Override
     public String getDescription()
     {
-        return "One of those pepperidge farm chessmen cookies. Heals 2 HP.";
+        return "One of those pepperidge farm chessmen cookies.\nHeals 2 HP.";
     }
 }

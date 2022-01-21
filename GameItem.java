@@ -21,6 +21,11 @@ public abstract class GameItem {
         for (int i = 0; i < desc.length(); i++) {
             out += desc.charAt(i);
 
+            if (desc.charAt(i) == '\n') {
+                col = 0;
+                continue;
+            }
+
             if (col == Game.DISPLAY_WIDTH - 1) {
                 out += "\n";
                 col = 0;
