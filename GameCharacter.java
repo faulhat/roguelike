@@ -1,8 +1,16 @@
+import java.util.ArrayList;
+
 /*
  * Thomas: this class represents a character who can engage in battle.
  */
 public abstract class GameCharacter {
     public String name;
+
+    // How long between this character's turns?
+    public double waitPeriod;
+
+    // How much time until his next turn?
+    public double timeLeft;
 
     public double trueHitPoints;
 
@@ -12,14 +20,20 @@ public abstract class GameCharacter {
 
     public int defensePoints;
 
-    public GameCharacter(String name, int hitPoints, int attackPoints, int defensePoints)
+    public ArrayList<Spell> spellsAffecting;
+
+    public GameCharacter(String name, int hitPoints, int attackPoints, int defensePoints, double waitPeriod, double timeLeft)
     {
         this.name = name;
         this.hitPoints = hitPoints;
         this.attackPoints = attackPoints;
         this.defensePoints = defensePoints;
+        this.waitPeriod = waitPeriod;
+        this.timeLeft = timeLeft;
 
         trueHitPoints = (double) hitPoints;
+
+        spellsAffecting = new ArrayList<>();
     }
 
     public void deductHP(double hpDeducted)

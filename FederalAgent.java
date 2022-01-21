@@ -2,55 +2,44 @@ public class FederalAgent extends Enemy {
     public int counter;
 
     public static class MKSpell extends Spell {
-        public boolean effective;
-
         public int turnsRemaining;
 
-        public MKSpell()
+        public MKSpell(GameCharacter user, GameCharacter target)
         {
-            isGood = false;
-            turnsRemaining = 4;
+            super(false, user, target, 4);
         }
 
         @Override
-        public String apply(GameCharacter user, GameCharacter target)
+        public String apply()
         {
             String message = user.name + " used secret MKUltra tech.";
 
             if (target.defensePoints == 0) {
-                effective = false;
+                target.spellsAffecting.remove(this);
                 return message + "\nIt had no effect.";
             }
 
             target.defensePoints -= 1;
-            effective = false;
-            return message + "\n" + target.name + "'s def went down by 1.";
+            return message + "\n" + target.name + "'s DEF went down by 1.";
         }
 
         @Override
-        public String eachTurn(GameCharacter target)
+        public String unapply()
         {
-            if (!effective) {
-                return null;
-            }
+            target.defensePoints++;
 
-            turnsRemaining--;
-            if (turnsRemaining == 0) {
-                effective = false;
-                return target.name + " has been freed from CIA mind control!\nDef +1";
-            }
-
-            return null;
+            return target.name + "has been freed from CIA mind control!\nDEF +1";
         }
     }
 
     private FederalAgent(String name)
     {
-        super(name, 12, 2, 2, 3, 7000.0);
+        super(name, 3, 2, 2, 10, 10000.0);
 
-        approachMessage = "You suddenly see a bright green glow in the darkness...";
+        approachMessage = "A glowing being swiftly approaches...";
         attackMessage = "Prepare for some freedom!";
         counter = 0;
+        timeLeft = 12000.0;
     }
 
     public FederalAgent()
@@ -74,12 +63,13 @@ public class FederalAgent extends Enemy {
     {
         try {
             if (counter % 3 == 0) {
-                return new MKSpell();
+                return new MKSpell(this, outerState.playerState);
             }
 
             return null;
         }
         finally {
+            timeLeft = waitPeriod;
             counter++;
         }
     }

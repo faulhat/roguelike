@@ -2,11 +2,8 @@
  * Thomas: Here's a class that represents an enemy that you can fight.
  */
 public abstract class Enemy extends GameCharacter {
+    // How much gold is this enemy carrying?
     public int gold;
-
-    public double waitPeriod;
-
-    public double timeLeft;
 
     // What to say when a battle with this enemy starts
     public String approachMessage;
@@ -16,7 +13,7 @@ public abstract class Enemy extends GameCharacter {
 
     public Enemy(String name, int hitPoints, int attackPoints, int defensePoints, int gold, double waitPeriod)
     {
-        super(name, hitPoints, attackPoints, defensePoints);
+        super(name, hitPoints, attackPoints, defensePoints, waitPeriod, waitPeriod);
 
         this.gold = gold;
 

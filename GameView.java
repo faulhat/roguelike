@@ -7,11 +7,14 @@ import javax.naming.OperationNotSupportedException;
  */
 public abstract class GameView {
     // The Game instance that this object belongs to.
-    protected final Game outerState;
+    public Game outerState;
+
+    public PlayerState player;
 
     public GameView(Game outerState)
     {
         this.outerState = outerState;
+        player = outerState.playerState;
     }
 
     public abstract void update(double delta) throws Exception;

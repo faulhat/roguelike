@@ -78,13 +78,13 @@ public class Menu extends GameView {
         String out = "";
         for (int i = 0; i < items.size(); i++) {
             if (i == selected) {
-                out += "-+> ";
+                out += " -> ";
             }
             else {
-                out += " -  ";
+                out += "    ";
             }
 
-            out += items.get(i).name + "\n";
+            out += "- " + items.get(i).name + "\n";
         }
 
         return out;

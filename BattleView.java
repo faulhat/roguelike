@@ -8,9 +8,6 @@ public class BattleView extends GameView {
 
     public State battleState;
 
-    // How much time between the player's turns (in miliseconds)?
-    public static final double waitPeriod = 5000.0;
-
     // How many options are there in the battle menu?
     public static final int N_OPTIONS = 3;
 
@@ -21,9 +18,6 @@ public class BattleView extends GameView {
     public static final int ATTACK = 0, DEFEND = 1, INVENTORY = 2;
 
     public ArrayList<Enemy> enemies;
-
-    // How much time is left until the player's next turn?
-    public double timeLeft;
 
     public int selectedMenuOption;
 
@@ -47,13 +41,10 @@ public class BattleView extends GameView {
     public GameView returnView;
 
     // How long should the game wait before putting a new message to the dialogue box?
-    public static double dialogueWaitPeriod = 1000.0;
+    public static double dialogueWaitPeriod = 2000.0;
 
     // How long until we can put something to the dialogue box next?
     public double dialogueTimeLeft;
-
-    // The player
-    public PlayerState player;
 
     public BattleView(Game outerState, ArrayList<Enemy> enemies, GameView returnView)
     {
@@ -61,7 +52,6 @@ public class BattleView extends GameView {
 
         battleState = State.MENU;
         this.enemies = enemies;
-        timeLeft = waitPeriod;
         selectedMenuOption = 0;
         selectedEnemy = 0;
         selectedItem = 0;
@@ -81,7 +71,6 @@ public class BattleView extends GameView {
         dialogueTimeLeft = dialogueWaitPeriod;
 
         this.returnView = returnView;
-        player = outerState.playerState;
     }
 
     public BattleView(Game outerState, Enemy enemy, GameView returnView)
@@ -113,19 +102,29 @@ public class BattleView extends GameView {
         for (Enemy enemy : enemies) {
             enemy.timeLeft -= delta;
 
+            for (Spell spell : enemy.spellsAffecting) {
+                spell.eachTurn();
+            }
+
             if (enemy.timeLeft <= 0) {
-                int prevPoints = player.hitPoints;
-                player.receiveAttack(enemy.attackPoints);
-                enemy.timeLeft = enemy.waitPeriod;
-                dialogueQueue.addLast(enemy.attackMessage + "\nYou took " + (player.hitPoints - prevPoints) + " points of damage.");
+                Spell enemySpell = enemy.getNextSpell(outerState);
+                if (enemySpell != null) {
+                    dialogueQueue.addLast(enemySpell.apply());
+                }
+                else {
+                    int prevPoints = player.hitPoints;
+                    player.receiveAttack(enemy.attackPoints);
+                    enemy.timeLeft = enemy.waitPeriod;
+                    dialogueQueue.addLast(enemy.attackMessage + "\nYou took " + (prevPoints - player.hitPoints) + " points of damage.");
+                }
             }
         }
 
         switch (battleState) {
         case WAITING:
-            timeLeft -= delta;
+            player.timeLeft -= delta;
 
-            if (timeLeft <= 0) {
+            if (player.timeLeft <= 0) {
                 defending = false;
                 battleState = State.MENU;
             }
@@ -150,11 +149,13 @@ public class BattleView extends GameView {
                     player.defensePoints += player.defensePoints / 2;
                     selectedMenuOption = 0;
                     battleState = State.WAITING;
-                    timeLeft = waitPeriod;
+                    player.timeLeft = player.waitPeriod;
                 }
                 else if (selectedMenuOption == INVENTORY) {
-                    selectedMenuOption = 0;
-                    battleState = State.INVENTORY;
+                    if (player.inventory.size() > 0) {
+                        selectedMenuOption = 0;
+                        battleState = State.INVENTORY;
+                    }
                 }
             }
 
@@ -186,18 +187,21 @@ public class BattleView extends GameView {
                     gold += enemySelected.gold;
                 }
                 else {
-                    nextDialogue += "\n" + (prevEnemyHP - enemySelected.hitPoints) + " damage!";
+                    nextDialogue += "\n" + (prevEnemyHP - enemySelected.hitPoints) + " damage! HP: " + enemySelected.hitPoints;
                 }
 
                 if (enemies.size() == 0) {
-                    nextDialogue += "\nYou won! You got $" + gold;
+                    nextDialogue += "\nYou won! GOLD +" + gold;
+                    nextDialogue += "\nPress enter to continue...";
                     player.gold += gold;
                     battleState = State.BATTLE_COMPLETE;
                 }
+                else {
+                    battleState = State.WAITING;
+                    player.timeLeft = player.waitPeriod;
+                }
 
                 dialogueQueue.addLast(nextDialogue);
-                battleState = State.WAITING;
-                timeLeft = waitPeriod;
             }
 
             break;
@@ -218,7 +222,7 @@ public class BattleView extends GameView {
                 player.inventory.get(selectedItem).onUse(outerState);
                 selectedItem = 0;
                 battleState = State.WAITING;
-                timeLeft = waitPeriod;
+                player.timeLeft = player.waitPeriod;
             }
 
             break;
@@ -232,7 +236,7 @@ public class BattleView extends GameView {
         String yourHP = "Your HP: " + player.hitPoints;
 
         String dialogueWrapped = Game.wrapString(dialogueNow);
-        String out = "";
+        String out = "\n\n";
 
         for (int i = 0; i < MAX_LINES - dialogueWrapped.split("\n").length; i++) {
             out += "\n";
@@ -244,35 +248,91 @@ public class BattleView extends GameView {
             out += "_";
         }
 
-        out += "\n  ";
+        out += "\n\n  ";
 
         for (Enemy enemy : enemies) {
             out += " " + enemy.getSymbol();
         }
 
-        out += "\n";
+        out += "\n\n\n\n";
 
         for (int i = 0; i < Game.DISPLAY_WIDTH - 3; i++) {
             out += " ";
         }
 
-        out += "" + player.getSymbol() + "\n";
+        out += "" + player.getSymbol() + "\n\n";
+
+        for (int i = 0; i < Game.DISPLAY_WIDTH; i++) {
+            out += "_";
+        }
+
+        out += "\n\n";
 
         switch (battleState) {
         case WAITING:
-            out += "-------\n";
-
-            int frac = (int) Math.ceil(5.0 * timeLeft / waitPeriod);
-            for (int i = 0; i < 5; i++) {
-                if (i <= frac) {
-                    out += "   |||\n";
-                }
-                else {
-                    out += "\n";
-                }
+            int frac = (int) Math.floor(8.0 * (1 - player.timeLeft / player.waitPeriod));
+            String blank = "|        |\n";
+            out += " --------\n" + blank;
+            if (frac == 0) {
+                out += "|   ||   |\n";
+                out += "|   ||   |\n";
+                out += blank;
+                out += blank;
+                out += blank;
+            }
+            else if (frac == 1) {
+                out += "|     // |\n";
+                out += "|    //  |\n";
+                out += blank;
+                out += blank;
+                out += blank;
+            }
+            else if (frac == 2) {
+                out += blank;
+                out += blank;
+                out += "|    === |\n";
+                out += blank;
+                out += blank;
+            }
+            else if (frac == 3) {
+                out += blank;
+                out += blank;
+                out += blank;
+                out += "|    \\\\  |\n";
+                out += "|     \\\\ |\n";
+            }
+            else if (frac == 4) {
+                out += blank;
+                out += blank;
+                out += blank;
+                out += "|   ||   |\n";
+                out += "|   ||   |\n";
+            }
+            else if (frac == 5) {
+                out += blank;
+                out += blank;
+                out += blank;
+                out += "|  //    |\n";
+                out += "| //     |\n";
+            }
+            else if (frac == 6) {
+                out += blank;
+                out += blank;
+                out += "| ===    |\n";
+                out += blank;
+                out += blank;
+            }
+            else if (frac == 7) {
+                out += "| \\\\     |\n";
+                out += "|  \\\\    |\n";
+                out += blank;
+                out += blank;
+                out += blank;
             }
 
-            out += "-------";
+            out += blank;
+            out += " --------\n";
+
             break;
         case MENU:
             if (selectedMenuOption == ATTACK) {
@@ -290,10 +350,20 @@ public class BattleView extends GameView {
             }
 
             if (selectedMenuOption == INVENTORY) {
-                out += " -> USE ITEM\n";
+                if (player.inventory.size() > 0) {
+                    out += " -> USE ITEM\n";
+                }
+                else {
+                    out += " -> (INVENTORY EMPTY)";
+                }
             }
             else {
-                out += "    USE ITEM\n";
+                if (player.inventory.size() > 0) {
+                    out += "    USE ITEM\n";
+                }
+                else {
+                    out += "    (INVENTORY EMPTY)";
+                }
             }
             break;
         case INVENTORY:

@@ -12,6 +12,8 @@ public class Cookie extends GameItem {
     @Override
     public void onUse(Game outerState)
     {
+        outerState.playerState.inventory.remove(this);
+
         outerState.playerState.hitPoints += 2;
     }
 

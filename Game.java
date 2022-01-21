@@ -67,10 +67,14 @@ public class Game {
         // Initialize full game map.
         gameMap = new ChamberMaze(MAP_WIDTH, MAP_HEIGHT);
 
-        // Create the player's inventory and give him three cookies
+        // Create the player's inventory and give him three cookies and two coffees
         playerState = new PlayerState();
         for (int i = 0; i < 3; i++) {
             playerState.inventory.add(new Cookie());
+        }
+
+        for (int i = 0; i < 2; i++) {
+            playerState.inventory.add(new Coffee());
         }
 
         // Initialize RNG with random seed.

@@ -13,14 +13,16 @@ public class InventoryMenu extends Menu {
             this.item = item;
             this.action = game -> {
                 item.onUse(game);
-                game.playerState.inventory.remove(item);
 
                 assert(game.currentView instanceof InventoryMenu);
-                InventoryMenu.this.items.remove(InventoryMenu.this.selected);
 
-                if (!(InventoryMenu.this.selected == 0))
+                if (!player.inventory.contains(item))
                 {
-                    InventoryMenu.this.selected--;
+                    InventoryMenu.this.items.remove(InventoryMenu.this.selected);
+
+                    if (!(InventoryMenu.this.selected == 0)) {
+                        InventoryMenu.this.selected--;
+                    }
                 }
             };
         }
@@ -30,7 +32,7 @@ public class InventoryMenu extends Menu {
     {
         super(outerState, returnView);
 
-        for (GameItem item : outerState.playerState.inventory) {
+        for (GameItem item : player.inventory) {
             MenuItem menuItem = new GameItemMenuItem(item);
             items.add(menuItem);
         }
@@ -42,7 +44,9 @@ public class InventoryMenu extends Menu {
         String menuStr = "Press X to return...\n";
 
         // Show the player's hit points.
-        menuStr += "\nHP: " + outerState.playerState.hitPoints + "\n";
+        menuStr += "\nHP: " + player.hitPoints + " ";
+        menuStr += "ATK:" + player.attackPoints + " ";
+        menuStr += "DEF:" + player.defensePoints + "\n";
 
         if (items.size() == 0) {
             menuStr += "Your inventory is empty!";
