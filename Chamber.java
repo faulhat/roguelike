@@ -14,6 +14,9 @@ public class Chamber {
     // A map of this Chamber
     public Square[][] squares;
 
+    // What is the encounter rate in this chamber?
+    public double encounterRate;
+
     // Constructor for creating a Chamber from a matrix of Squares (move semantics)
     public Chamber(Square[][] squares)
     {
@@ -31,6 +34,8 @@ public class Chamber {
                 squares[i][j] = new Square(false);
             }
         }
+
+        encounterRate = 0.02;
     }
 
     // Method to fill in Chamber

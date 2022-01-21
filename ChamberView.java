@@ -1,6 +1,7 @@
 import javax.naming.OperationNotSupportedException;
 
 import java.awt.geom.Point2D;
+import java.util.ArrayList;
 import java.awt.event.KeyEvent;
 import java.awt.Point;
 
@@ -16,10 +17,6 @@ public class ChamberView extends GameView {
 
     // time delta * this constant = true distance moved
     public static final double PLAYER_SPEED = 0.012;
-
-    // How likely is the player to encounter an enemy after each step?
-    // Extra high atm for debugging reasons //
-    public static final double ENCOUNTER_RATE = 0.25;
 
     // The ChamberMaze this instance wraps around
     public ChamberMaze map;
@@ -199,8 +196,12 @@ public class ChamberView extends GameView {
 
             // Roll the dice
             if ((int) position.x != prevGridPos_x || (int) position.y != prevGridPos_y) {
-                if (outerState.rand.nextDouble() < ENCOUNTER_RATE) {
-                    outerState.currentView = new BattleView(outerState, new FederalAgent(), this);
+                if (outerState.rand.nextDouble() < chamber.encounterRate) {
+                    ArrayList<Enemy> enemies = new ArrayList<>();
+                    enemies.add(new FederalAgent(1));
+                    enemies.add(new FederalAgent(2));
+
+                    outerState.currentView = new BattleView(outerState, enemies, this);
                 }
             }
 

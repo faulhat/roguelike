@@ -34,12 +34,12 @@ public class FederalAgent extends Enemy {
 
     private FederalAgent(String name)
     {
-        super(name, 3, 2, 2, 10, 10000.0);
+        super(name, 3, 2, 2, 10, 7000.0);
 
         approachMessage = "A glowing being swiftly approaches...";
         attackMessage = "Prepare for some freedom!";
         counter = 0;
-        timeLeft = 12000.0;
+        timeLeft = 9000.0;
     }
 
     public FederalAgent()

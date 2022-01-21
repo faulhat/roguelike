@@ -67,13 +67,13 @@ public class Game {
         // Initialize full game map.
         gameMap = new ChamberMaze(MAP_WIDTH, MAP_HEIGHT);
 
-        // Create the player's inventory and give him three cookies and two coffees
+        // Create the player's inventory and give him some supplies
         playerState = new PlayerState();
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 2; i++) {
             playerState.inventory.add(new Cookie());
         }
 
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < 5; i++) {
             playerState.inventory.add(new Coffee());
         }
 

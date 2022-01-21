@@ -26,5 +26,8 @@ public class ChamberMaze {
                 chambers[i][j].genChamber(maze.getExits(i, j));
             }
         }
+
+        chambers[0][0].encounterRate = 0.0;
+        chambers[width - 1][height - 1].encounterRate = 0.0;
     }
 }

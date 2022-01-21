@@ -3,6 +3,8 @@
  * Increases the player's speed in battle.
  */
 public class Coffee extends GameItem {
+    public static final double FACTOR = 0.7;
+
     public static class Caffeine extends Spell {
         public int counter;
 
@@ -16,7 +18,7 @@ public class Coffee extends GameItem {
         @Override
         public String apply()
         {
-            user.waitPeriod *= 0.8;
+            user.waitPeriod *= FACTOR;
 
             return "You go faster now!";
         }
@@ -24,7 +26,7 @@ public class Coffee extends GameItem {
         @Override
         public String unapply()
         {
-            user.waitPeriod /= 0.8;
+            user.waitPeriod /= FACTOR;
 
             return "Coffee wore off...";
         }

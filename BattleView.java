@@ -194,6 +194,11 @@ public class BattleView extends GameView {
                     nextDialogue += "\nYou won! GOLD +" + gold;
                     nextDialogue += "\nPress enter to continue...";
                     player.gold += gold;
+
+                    for (int i = 0; i < player.spellsAffecting.size(); i++) {
+                        player.spellsAffecting.remove(i);
+                    }
+
                     battleState = State.BATTLE_COMPLETE;
                 }
                 else {
@@ -215,7 +220,7 @@ public class BattleView extends GameView {
             }
 
             if (downPressed) {
-                selectedItem = Math.min(selectedItem + 1, player.inventory.size());
+                selectedItem = Math.min(selectedItem + 1, player.inventory.size() - 1);
             }
 
             if (selectPressed) {

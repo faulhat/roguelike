@@ -3,7 +3,6 @@ import java.util.Random;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EnumMap;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.EnumSet;
 
 /*
@@ -14,35 +13,16 @@ public class Maze {
     // An object specifying whether or not a wall exists between two cells.
     // Two Cell objects should share each wall.
     public static class WallRef {
-        private static AtomicInteger tracker = new AtomicInteger();
-
         public boolean isWall;
-
-        public final int id;
 
         public WallRef(boolean isWall)
         {
             this.isWall = isWall;
-
-            id = tracker.getAndIncrement();
         }
 
         public WallRef()
         {
             this(false);
-        }
-
-        // Guarantee that two WallRef objects are only equal if they are identical.
-        @Override
-        public boolean equals(Object other)
-        {
-            return other instanceof WallRef && id == ((WallRef) other).id;
-        }
-
-        @Override
-        public int hashCode()
-        {
-            return id;
         }
     }
 
