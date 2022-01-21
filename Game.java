@@ -4,6 +4,7 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 
 /*
  * Thomas: the main class that will run the whole thing
@@ -43,6 +44,9 @@ public class Game {
     // The player's current state
     public PlayerState playerState;
 
+    // The RNG for the game to use
+    public Random rand;
+
     public Game()
     {
         keyBox = new KeyBox();
@@ -57,13 +61,20 @@ public class Game {
         keyBox.frame.pack();
         keyBox.frame.setVisible(true);
 
+        // Set current view to start menu
         currentView = new StartMenu(this);
-        gameMap = new ChamberMaze(MAP_WIDTH, MAP_HEIGHT);
-        playerState = new PlayerState();
 
+        // Initialize full game map.
+        gameMap = new ChamberMaze(MAP_WIDTH, MAP_HEIGHT);
+
+        // Create the player's inventory and give him three cookies
+        playerState = new PlayerState();
         for (int i = 0; i < 3; i++) {
             playerState.inventory.add(new Cookie());
         }
+
+        // Initialize RNG with random seed.
+        rand = new Random(System.currentTimeMillis());
     }
 
     // Method to start the game, placing the player in the first chamber (temporary) //

@@ -17,6 +17,10 @@ public class ChamberView extends GameView {
     // time delta * this constant = true distance moved
     public static final double PLAYER_SPEED = 0.012;
 
+    // How likely is the player to encounter an enemy after each step?
+    // Extra high atm for debugging reasons //
+    public static final double ENCOUNTER_RATE = 0.25;
+
     // The ChamberMaze this instance wraps around
     public ChamberMaze map;
 
@@ -130,6 +134,7 @@ public class ChamberView extends GameView {
             newPosition.x += offset.x * currentSpeed;
             newPosition.y += offset.y * currentSpeed;
 
+            int prevGridPos_x = (int) position.x, prevGridPos_y = (int) position.y;
             int newGridPos_x = (int) newPosition.x, newGridPos_y = (int) newPosition.y;
 
             // If we'd end up outside of chamber
@@ -190,6 +195,13 @@ public class ChamberView extends GameView {
             // Otherwise, move normally, but don't run into a wall.
             else if (!chamber.squares[newGridPos_x][newGridPos_y].isWall) {
                 position = newPosition;
+            }
+
+            // Roll the dice
+            if ((int) position.x != prevGridPos_x || (int) position.y != prevGridPos_y) {
+                if (outerState.rand.nextDouble() < ENCOUNTER_RATE) {
+                    outerState.currentView = new BattleView(outerState, new FederalAgent(), this);
+                }
             }
 
             // Update lastPlayerDirection. We do this here because we must only do it after the player has moved.

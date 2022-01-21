@@ -18,7 +18,8 @@ public class InventoryMenu extends Menu {
                 assert(game.currentView instanceof InventoryMenu);
                 InventoryMenu.this.items.remove(InventoryMenu.this.selected);
 
-                if (!(InventoryMenu.this.selected == 0)) {
+                if (!(InventoryMenu.this.selected == 0))
+                {
                     InventoryMenu.this.selected--;
                 }
             };

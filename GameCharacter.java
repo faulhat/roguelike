@@ -2,6 +2,8 @@
  * Thomas: this class represents a character who can engage in battle.
  */
 public abstract class GameCharacter {
+    public String name;
+
     public double trueHitPoints;
 
     public int hitPoints;
@@ -10,8 +12,9 @@ public abstract class GameCharacter {
 
     public int defensePoints;
 
-    public GameCharacter(int hitPoints, int attackPoints, int defensePoints)
+    public GameCharacter(String name, int hitPoints, int attackPoints, int defensePoints)
     {
+        this.name = name;
         this.hitPoints = hitPoints;
         this.attackPoints = attackPoints;
         this.defensePoints = defensePoints;

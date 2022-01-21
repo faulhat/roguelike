@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.awt.event.*;
+import java.util.Arrays;
 
 public class BattleView extends GameView {
     public static enum State { WAITING, MENU, ENEMY_SELECT, INVENTORY, BATTLE_COMPLETE }
@@ -8,7 +9,7 @@ public class BattleView extends GameView {
     public State battleState;
 
     // How much time between the player's turns (in miliseconds)?
-    public static final double waitPeriod = 2000.0;
+    public static final double waitPeriod = 5000.0;
 
     // How many options are there in the battle menu?
     public static final int N_OPTIONS = 3;
@@ -24,13 +25,10 @@ public class BattleView extends GameView {
     // How much time is left until the player's next turn?
     public double timeLeft;
 
-    // Which option is selected?
     public int selectedMenuOption;
 
-    // Which enemy is selected?
     public int selectedEnemy;
 
-    // Which inventory item is selected?
     public int selectedItem;
 
     // Is the player on guard?
@@ -49,7 +47,7 @@ public class BattleView extends GameView {
     public GameView returnView;
 
     // How long should the game wait before putting a new message to the dialogue box?
-    public static double dialogueWaitPeriod = 100.0;
+    public static double dialogueWaitPeriod = 1000.0;
 
     // How long until we can put something to the dialogue box next?
     public double dialogueTimeLeft;
@@ -70,11 +68,13 @@ public class BattleView extends GameView {
         defending = false;
         gold = 0;
 
+        assert(enemies.size() > 0);
+        Enemy firstEnemy = enemies.get(0);
         if (enemies.size() == 1) {
-            dialogueNow = enemies.get(0) + " attacks!";
+            dialogueNow = firstEnemy.approachMessage + "\n" + firstEnemy.name + " attacks!";
         }
         else {
-            dialogueNow = enemies.get(0) + " and its cohorts attack!";
+            dialogueNow = firstEnemy.approachMessage + "\n" + firstEnemy.name + " and its cohorts attack!";
         }
 
         dialogueQueue = new LinkedList<>();
@@ -82,6 +82,11 @@ public class BattleView extends GameView {
 
         this.returnView = returnView;
         player = outerState.playerState;
+    }
+
+    public BattleView(Game outerState, Enemy enemy, GameView returnView)
+    {
+        this(outerState, new ArrayList<>(Arrays.asList(new Enemy[] { enemy })), returnView);
     }
 
     @Override
@@ -97,7 +102,7 @@ public class BattleView extends GameView {
 
         dialogueTimeLeft -= delta;
         if (dialogueTimeLeft <= 0 && !dialogueQueue.isEmpty()) {
-            dialogueNow = dialogueQueue.getFirst();
+            dialogueNow = dialogueQueue.poll(); // Gets and removes head
             dialogueTimeLeft = dialogueWaitPeriod;
         }
 
@@ -112,7 +117,7 @@ public class BattleView extends GameView {
                 int prevPoints = player.hitPoints;
                 player.receiveAttack(enemy.attackPoints);
                 enemy.timeLeft = enemy.waitPeriod;
-                dialogueQueue.addLast(enemy.name + " attacks!\nYou took " + (player.hitPoints - prevPoints) + " points of damage.");
+                dialogueQueue.addLast(enemy.attackMessage + "\nYou took " + (player.hitPoints - prevPoints) + " points of damage.");
             }
         }
 
@@ -171,6 +176,7 @@ public class BattleView extends GameView {
             if (selectPressed) {
                 Enemy enemySelected = enemies.get(selectedEnemy);
                 String nextDialogue = "You attacked " + enemySelected.name;
+                int prevEnemyHP = enemySelected.hitPoints;
 
                 boolean enemyDied = enemySelected.receiveAttack(player.attackPoints);
 
@@ -178,6 +184,9 @@ public class BattleView extends GameView {
                     enemies.remove(enemySelected);
                     nextDialogue += "\n" + enemySelected.name + " has died!";
                     gold += enemySelected.gold;
+                }
+                else {
+                    nextDialogue += "\n" + (prevEnemyHP - enemySelected.hitPoints) + " damage!";
                 }
 
                 if (enemies.size() == 0) {
@@ -220,6 +229,8 @@ public class BattleView extends GameView {
     @Override
     public String render()
     {
+        String yourHP = "Your HP: " + player.hitPoints;
+
         String dialogueWrapped = Game.wrapString(dialogueNow);
         String out = "";
 
@@ -227,7 +238,7 @@ public class BattleView extends GameView {
             out += "\n";
         }
 
-        out = dialogueWrapped + out;
+        out = yourHP + "\n\n" + dialogueWrapped + out;
 
         for (int i = 0; i < Game.DISPLAY_WIDTH; i++) {
             out += "_";
@@ -294,10 +305,23 @@ public class BattleView extends GameView {
                     out += "    ";
                 }
 
-                out += player.inventory.get(i).getName();
+                out += player.inventory.get(i).getName() + "\n";
             }
             break;
         case ENEMY_SELECT:
+            out += "To whom?\n";
+
+            for (int i = 0; i < enemies.size(); i++) {
+                if (i == selectedEnemy) {
+                    out += " -> ";
+                }
+                else {
+                    out += "    ";
+                }
+
+                out += enemies.get(i).name + "\n";
+            }
+
             break;
         default:
         }

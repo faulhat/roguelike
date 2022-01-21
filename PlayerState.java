@@ -24,7 +24,7 @@ public class PlayerState extends GameCharacter {
 
     public PlayerState()
     {
-        super(5, 0, 0);
+        super("Player", 5, 0, 0);
 
         equipWeapon(new Weapon.Default());
         equipShield(new Shield.Default());
