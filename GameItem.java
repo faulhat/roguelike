@@ -14,26 +14,6 @@ public abstract class GameItem {
     // Format that description
     public String getDescWrap()
     {
-        String desc = getDescription();
-
-        String out = "";
-        int col = 0;
-        for (int i = 0; i < desc.length(); i++) {
-            out += desc.charAt(i);
-
-            if (desc.charAt(i) == '\n') {
-                col = 0;
-                continue;
-            }
-
-            if (col == Game.DISPLAY_WIDTH - 1) {
-                out += "\n";
-                col = 0;
-            }
-
-            col++;
-        }
-
-        return out;
+        return Game.wrapString(getDescription());
     }
 }

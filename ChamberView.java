@@ -83,7 +83,7 @@ public class ChamberView extends GameView {
         }
 
         // Has the inventory key been pressed?
-        boolean goToInventory = outerState.keyBox.getReleaseKeys(KeyEvent.VK_CONTROL, KeyEvent.VK_I);
+        boolean goToInventory = outerState.keyBox.getReleaseKey(KeyEvent.VK_I);
         if (goToInventory) {
             outerState.currentView = new InventoryMenu(outerState, this);
             return;

@@ -105,6 +105,29 @@ public class Game {
         }
     }
 
+    public static String wrapString(String in)
+    {
+        String out = "";
+        int col = 0;
+        for (int i = 0; i < in.length(); i++) {
+            out += in.charAt(i);
+
+            if (in.charAt(i) == '\n') {
+                col = 0;
+                continue;
+            }
+
+            if (col == DISPLAY_WIDTH - 1) {
+                out += "\n";
+                col = 0;
+            }
+
+            col++;
+        }
+
+        return out;
+    }
+
     public static void main(String args[])
     {
         try {
