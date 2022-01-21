@@ -18,15 +18,6 @@ public class Game {
         }
     }
 
-    // An enumeration representing the current game view
-    public static enum View {
-        START_MENU,
-        INVENTORY,
-        OVERWORLD,
-        BATTLE,
-        PAUSE_MENU
-    }
-
     // Constants regarding the game display
     // Must account for the whitespace added to the output
     public static final int DISPLAY_WIDTH = Chamber.WIDTH * 2 - 1;
@@ -69,6 +60,10 @@ public class Game {
         currentView = new StartMenu(this);
         gameMap = new ChamberMaze(MAP_WIDTH, MAP_HEIGHT);
         playerState = new PlayerState();
+
+        for (int i = 0; i < 3; i++) {
+            playerState.inventory.add(new Cookie());
+        }
     }
 
     // Method to start the game, placing the player in the first chamber (temporary) //

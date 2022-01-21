@@ -1,5 +1,3 @@
-import java.util.concurrent.ConcurrentLinkedQueue;
-
 import javax.naming.OperationNotSupportedException;
 
 import java.awt.geom.Point2D;
@@ -48,7 +46,7 @@ public class ChamberView extends GameView {
         lastPlayerDirection = new DirectionEx(Direction.N);
     }
 
-    public ChamberView(Game outerState, ChamberMaze map, int map_x, int map_y, int chamber_x, chamber_y)
+    public ChamberView(Game outerState, ChamberMaze map, int map_x, int map_y, int chamber_x,int chamber_y)
     {
         this(outerState, map);
 
@@ -77,17 +75,25 @@ public class ChamberView extends GameView {
 
         Point2D.Double newPosition = new Point2D.Double(position.x, position.y);
 
+        // Has the pause key been pressed?
+        boolean toPause = outerState.keyBox.getReleaseKeys(KeyEvent.VK_ESCAPE, KeyEvent.VK_P);
+        if (toPause) {
+            outerState.currentView = new PauseMenu(outerState, this);
+            return;
+        }
+
+        // Has the inventory key been pressed?
+        boolean goToInventory = outerState.keyBox.getReleaseKeys(KeyEvent.VK_CONTROL, KeyEvent.VK_I);
+        if (goToInventory) {
+            outerState.currentView = new InventoryMenu(outerState, this);
+            return;
+        }
+
         // Get key input
         boolean goingUp = outerState.keyBox.getKeys(KeyEvent.VK_UP, KeyEvent.VK_W);
         boolean goingRight = outerState.keyBox.getKeys(KeyEvent.VK_RIGHT, KeyEvent.VK_D);
         boolean goingDown = outerState.keyBox.getKeys(KeyEvent.VK_DOWN, KeyEvent.VK_S);
         boolean goingLeft = outerState.keyBox.getKeys(KeyEvent.VK_LEFT, KeyEvent.VK_A);
-        boolean toPause = outerState.keyBox.getReleaseKeys(KeyEvent.VK_ESCAPE, KeyEvent.VK_P);
-
-        if (toPause) {
-            outerState.currentView = new PauseMenu(outerState, this);
-            return;
-        }
 
         DirectionEx newPlayerDirection = new DirectionEx();
 
@@ -250,6 +256,6 @@ public class ChamberView extends GameView {
     public void eventAtPos(Point2D.Double pointAt, GameEvent e)
     {
         Square square = chamber.squares[(int) pointAt.y][(int) pointAt.x];
-        square.eventOn(e);
+        square.onEvent(outerState, e);
     }
 }

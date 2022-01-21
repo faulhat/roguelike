@@ -15,10 +15,10 @@ public class Square {
         sprites = new ArrayList<>();
     }
 
-    public void eventOn(GameEvent e)
+    public void onEvent(Game outerState, GameEvent e)
     {
         for (Sprite sprite : sprites) {
-            sprite.onEvent(e);
+            sprite.onEvent(outerState, e);
         }
     }
 }

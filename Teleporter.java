@@ -4,7 +4,7 @@ import java.awt.Point;
  * Thomas: A class for a Teleporter sprite
  * It takes you to a different map from the current one.
  */
-public class Teleporter extends Sprite {
+public class Teleporter implements Sprite {
     public String name;
 
     public ChamberMaze toMaze;
@@ -46,9 +46,9 @@ public class Teleporter extends Sprite {
     }
 
     @Override
-    public onEvent(Game outerState, GameEvent e)
+    public void onEvent(Game outerState, GameEvent e)
     {
-        if (!(e instanceof InteractEvent)) {
+        if (!(e instanceof GameEvent.InteractEvent)) {
             return;
         }
 
