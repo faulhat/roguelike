@@ -16,8 +16,6 @@ public class PlayerState extends GameCharacter {
 
     public double trueHitPoints;
 
-    public int hitPoints;
-
     public Weapon equippedWeapon;
 
     public Shield equippedShield;

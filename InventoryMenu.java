@@ -16,7 +16,11 @@ public class InventoryMenu extends Menu {
                 game.playerState.inventory.remove(item);
 
                 assert(game.currentView instanceof InventoryMenu);
-                ((InventoryMenu) game.currentView).items.remove(this);
+                InventoryMenu.this.items.remove(InventoryMenu.this.selected);
+
+                if (!(InventoryMenu.this.selected == 0)) {
+                    InventoryMenu.this.selected--;
+                }
             };
         }
     }
