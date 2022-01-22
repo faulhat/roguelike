@@ -24,4 +24,11 @@ hs_err_pid*
 
 .vscode/
 
+# Ignore output files from astyle tool
 *.orig
+
+# Ignore game save files
+
+*.save.txt
+
+savefiles/
