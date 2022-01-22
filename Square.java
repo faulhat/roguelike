@@ -23,7 +23,7 @@ public class Square implements DS.Storable {
         sprites = new ArrayList<>();
     }
 
-    public Square(DS.Node node) throws LoadingException, DS.Node.NonDeserializableException
+    public Square(DS.Node node) throws LoadingException, DS.NonDeserializableException
     {
         load(node);
     }
@@ -35,51 +35,37 @@ public class Square implements DS.Storable {
         }
     }
 
+    public static DS.Node getAndValidate(Map<String, DS.Node> asMap, Class<? extends DS.Node> desired, String key) throws LoadingException
+    {
+        return DS.MapNode.getAndValidate(asMap, desired, key, "Square");
+    }
+
     @Override
-    public void load(DS.Node node) throws LoadingException, DS.Node.NonDeserializableException
+    public void load(DS.Node node) throws LoadingException, DS.NonDeserializableException
     {
         if (!(node instanceof DS.MapNode)) {
             throw new SquareLoadingException("Must be a map node!");
         }
 
         Map<String, DS.Node> asMap = ((DS.MapNode) node).getMap();
-        DS.Node wallNode = asMap.get(":wall");
-        if (wallNode == null) {
-            throw new SquareLoadingException("No isWall node found! (No mapping)");
-        }
+        DS.Node wallNode = getAndValidate(asMap, DS.IdNode.class, ":wall");
 
-        if (!(wallNode instanceof DS.IdNode) || !((DS.IdNode) wallNode).isBool()) {
-            throw new SquareLoadingException("No isWall node found! (Wrong type)");
+        if (!((DS.IdNode) wallNode).isBool()) {
+            throw new SquareLoadingException("isWall node is not a valid boolean.");
         }
 
         isWall = ((DS.IdNode) wallNode).isTrue();
 
-        DS.Node spritesNode = asMap.get(":sprites");
-        if (spritesNode == null) {
-            throw new SquareLoadingException("No sprites node found! (No mapping)");
-        }
-
-        if (!(spritesNode instanceof DS.VectorNode)) {
-            throw new SquareLoadingException("No sprites node found! (Wrong type)");
-        }
+        DS.VectorNode spritesNode = (DS.VectorNode) getAndValidate(asMap, DS.VectorNode.class, ":sprites");
 
         sprites = new ArrayList<>();
-        for (DS.Node spriteNode : ((DS.VectorNode) spritesNode).complexVal) {
+        for (DS.Node spriteNode : spritesNode.complexVal) {
             if (!(spriteNode instanceof DS.MapNode)) {
                 throw new Sprite.SpriteLoadingException("Must be a map node.");
             }
-    
-            Map<String, DS.Node> spriteAsMap = ((DS.MapNode) spriteNode).getMap();
-            DS.Node typeNode = spriteAsMap.get(":type");
-            if (typeNode == null) {
-                throw new Sprite.SpriteLoadingException("No myType node found! (No mapping)");
-            }
-    
-            if (!(typeNode instanceof DS.StringNode)) {
-                throw new Sprite.SpriteLoadingException("No myType node found! (Wrong type)");
-            }
 
-            String spriteType = ((DS.StringNode) typeNode).value;
+            Map<String, DS.Node> spriteAsMap = ((DS.MapNode) spriteNode).getMap();
+            String spriteType = ((DS.StringNode) getAndValidate(spriteAsMap, DS.StringNode.class, ":type")).value;
             if (spriteType.equals("Teleporter")) {
                 sprites.add(new Teleporter(spriteNode));
             }
@@ -95,8 +81,7 @@ public class Square implements DS.Storable {
         outNode.add(new DS.KeywordNode("sprites"));
 
         DS.VectorNode spritesNode = new DS.VectorNode();
-        for (Sprite sprite : sprites)
-        {
+        for (Sprite sprite : sprites) {
             spritesNode.add(sprite.dump());
         }
 

@@ -44,7 +44,7 @@ public abstract class Sprite implements DS.Storable {
     }
 
     // Construct from DS.Node
-    public Sprite(DS.Node node) throws LoadingException, DS.Node.NonDeserializableException
+    public Sprite(DS.Node node) throws LoadingException, DS.NonDeserializableException
     {
         load(node);
     }
@@ -54,48 +54,36 @@ public abstract class Sprite implements DS.Storable {
     public abstract void onEvent(Game outerState, GameEvent e);
 
     // Load subclass-specific data from a DS.Node
-    public abstract void loadUnique(DS.Node node) throws LoadingException, DS.Node.NonDeserializableException;
+    public abstract void loadUnique(DS.Node node) throws LoadingException, DS.NonDeserializableException;
 
     // Dump subclass-specific data to a DS.Node
     public abstract DS.Node dumpUnique();
 
+    public DS.Node getAndValidate(Map<String, DS.Node> asMap, Class<? extends DS.Node> desired, String key) throws LoadingException
+    {
+        return DS.MapNode.getAndValidate(asMap, desired, key, "Sprite");
+    }
+
     @Override
-    public void load(DS.Node node) throws LoadingException, DS.Node.NonDeserializableException
+    public void load(DS.Node node) throws LoadingException, DS.NonDeserializableException
     {
         if (!(node instanceof DS.MapNode)) {
             throw new SpriteLoadingException("Must be a map node.");
         }
 
         Map<String, DS.Node> asMap = ((DS.MapNode) node).getMap();
-        DS.Node typeNode = asMap.get(":type");
-        if (typeNode == null) {
-            throw new SpriteLoadingException("No myType node found! (No mapping)");
-        }
+        myType = ((DS.StringNode) getAndValidate(asMap, DS.StringNode.class, ":type")).value;
 
-        if (!(typeNode instanceof DS.StringNode)) {
-            throw new SpriteLoadingException("No myType node found! (Wrong type)");
-        }
-
-        myType = ((DS.StringNode) typeNode).value;
-
-        DS.Node visibleNode = asMap.get(":visible");
-        if (visibleNode == null) {
-            throw new SpriteLoadingException("No 'visible' node found! (No mapping)");
-        }
-
-        if (!(visibleNode instanceof DS.IdNode) || !((DS.IdNode) visibleNode).isBool()) {
-            throw new SpriteLoadingException("No 'visible' node found! (Wrong type)");
+        DS.IdNode visibleNode = (DS.IdNode) getAndValidate(asMap, DS.IdNode.class, ":visible");
+        if (!visibleNode.isBool()) {
+            throw new SpriteLoadingException("'visible' node is not a valid boolean.");
         }
 
         visible = ((DS.IdNode) visibleNode).isTrue();
 
-        DS.Node walkableNode = asMap.get(":walkable");
-        if (walkableNode == null) {
-            throw new SpriteLoadingException("No 'walkable' node found! (No mapping)");
-        }
-
-        if (!(walkableNode instanceof DS.IdNode) || !((DS.IdNode) walkableNode).isBool()) {
-            throw new SpriteLoadingException("No 'walkable' node found! (Wrong type)");
+        DS.IdNode walkableNode = (DS.IdNode) getAndValidate(asMap, DS.IdNode.class, ":walkable");
+        if (!walkableNode.isBool()) {
+            throw new SpriteLoadingException("'walkable' node is not a valid boolean.");
         }
 
         walkable = ((DS.IdNode) walkableNode).isTrue();
@@ -121,11 +109,7 @@ public abstract class Sprite implements DS.Storable {
             symbol = symbolString.charAt(0);
         }
 
-        DS.Node uniqueNode = asMap.get(":unique");
-        if (uniqueNode == null) {
-            throw new SpriteLoadingException("No unique info map found.");
-        }
-
+        DS.Node uniqueNode = getAndValidate(asMap, DS.MapNode.class, ":unique");
         loadUnique(uniqueNode);
     }
 
@@ -139,7 +123,7 @@ public abstract class Sprite implements DS.Storable {
         outNode.add(new DS.BoolNode(visible));
         outNode.add(new DS.KeywordNode("walkable"));
         outNode.add(new DS.BoolNode(walkable));
-        
+
         if (visible && symbol != null) {
             outNode.add(new DS.KeywordNode("symbol"));
             outNode.add(new DS.StringNode("" + symbol));

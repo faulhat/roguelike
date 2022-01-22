@@ -28,7 +28,7 @@ public class Teleporter extends Sprite {
         this.toPosition = toPosition;
     }
 
-    public Teleporter(DS.Node node) throws LoadingException, DS.Node.NonDeserializableException
+    public Teleporter(DS.Node node) throws LoadingException, DS.NonDeserializableException
     {
         super(node);
     }
@@ -50,7 +50,13 @@ public class Teleporter extends Sprite {
     }
 
     @Override
-    public void loadUnique(DS.Node node) throws LoadingException, DS.Node.NonDeserializableException
+    public DS.Node getAndValidate(Map<String, DS.Node> asMap, Class<? extends DS.Node> desired, String key) throws LoadingException
+    {
+        return DS.MapNode.getAndValidate(asMap, desired, key, "Teleporter");
+    }
+
+    @Override
+    public void loadUnique(DS.Node node) throws LoadingException, DS.NonDeserializableException
     {
         if (!(node instanceof DS.MapNode)) {
             throw new TeleporterLoadingException("Must be a map node.");
@@ -64,18 +70,10 @@ public class Teleporter extends Sprite {
 
         toMaze = new ChamberMaze(mazeNode);
 
-        DS.Node toLocNode = asMap.get(":to-location");
-        if (toLocNode == null) {
-            throw new TeleporterLoadingException("No toLocation node found. (No mapping)");
-        }
-
+        DS.Node toLocNode = DS.MapNode.getAndValidate(asMap, DS.VectorNode.class, ":to-location", "Teleporter");
         toLocation = new DSPoint(toLocNode);
 
-        DS.Node toPosNode = asMap.get(":to-location");
-        if (toPosNode == null) {
-            throw new TeleporterLoadingException("No toPosition node found. (No mapping)");
-        }
-
+        DS.Node toPosNode = DS.MapNode.getAndValidate(asMap, DS.VectorNode.class, "to-position", "Teleporter");
         toPosition = new DSPoint(toPosNode);
     }
 

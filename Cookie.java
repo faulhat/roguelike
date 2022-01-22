@@ -3,10 +3,15 @@
  * They recover 2 hit points each
  */
 public class Cookie extends GameItem {
-    @Override
-    public String getName()
+    public Cookie()
     {
-        return "Cookie";
+        super("Cookie");
+    }
+
+    @Override
+    public String description()
+    {
+        return "A pepperidge farm chessmen cookie\nHeals 2 HP.";
     }
 
     @Override
@@ -15,11 +20,5 @@ public class Cookie extends GameItem {
         outerState.playerState.inventory.remove(this);
 
         outerState.playerState.hitPoints += 2;
-    }
-
-    @Override
-    public String getDescription()
-    {
-        return "One of those pepperidge farm chessmen cookies.\nHeals 2 HP.";
     }
 }

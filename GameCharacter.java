@@ -36,6 +36,12 @@ public abstract class GameCharacter {
         spellsAffecting = new ArrayList<>();
     }
 
+    // Constructor for serializable subclasses to use
+    protected GameCharacter()
+    {
+        spellsAffecting = new ArrayList<>();
+    }
+
     public void deductHP(double hpDeducted)
     {
         trueHitPoints -= hpDeducted;

@@ -16,6 +16,15 @@ public class PauseMenu extends Menu {
         MenuItem goBack = new MenuItem("Return", goBackAction);
         MenuItem exitGame = new MenuItem("Quit", exitAction);
         items.add(goBack);
+
+        /*
+                if (returnView instanceof ChamberView) {
+                    Consumer<Game> saveAction = game -> {
+                        game.currentView =
+                    }
+                }
+        */
+
         items.add(exitGame);
     }
 }

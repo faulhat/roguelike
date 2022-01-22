@@ -102,7 +102,7 @@ public class BattleView extends GameView {
             outerState.currentView = new PauseMenu(outerState, this);
             return;
         }
-        
+
         if (battleState == State.BATTLE_COMPLETE) {
             if (selectPressed) {
                 outerState.currentView = returnView;
@@ -438,7 +438,7 @@ public class BattleView extends GameView {
                     out += "    ";
                 }
 
-                out += player.inventory.get(i).getName() + "\n";
+                out += player.inventory.get(i).name + "\n";
             }
             break;
         case ENEMY_SELECT:

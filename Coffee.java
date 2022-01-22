@@ -3,7 +3,18 @@
  * Increases the player's speed in battle.
  */
 public class Coffee extends GameItem {
-    public static final double FACTOR = 0.7;
+    public static final double FACTOR = 0.8;
+
+    public Coffee()
+    {
+        super("Coffee");
+    }
+
+    @Override
+    public String description()
+    {
+        return "I'm a regular joe and I like my joe regular\nIncreases speed by 25% for 5 turns.";
+    }
 
     public static class Caffeine extends Spell {
         public int counter;
@@ -30,18 +41,6 @@ public class Coffee extends GameItem {
 
             return "Coffee wore off...";
         }
-    }
-
-    @Override
-    public String getName()
-    {
-        return "Coffee";
-    }
-
-    @Override
-    public String getDescription()
-    {
-        return "A simple cup of coffee";
     }
 
     @Override

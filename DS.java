@@ -6,6 +6,7 @@ import java.util.Stack;
 import java.io.Writer;
 import java.io.StringWriter;
 import java.util.HashMap;
+import java.util.Map;
 
 /*
  * Thomas: Here's a class all about storing data
@@ -22,7 +23,7 @@ public class DS {
         }
 
         // Read data from parse tree
-        public void load(Node node) throws LoadingException, Node.NonDeserializableException;
+        public void load(Node node) throws LoadingException, NonDeserializableException;
 
         // Write serialized data as a parse tree
         public Node dump();
@@ -64,14 +65,14 @@ public class DS {
         }
     }
 
-    public static abstract class Node {
-        public static class NonDeserializableException extends Exception {
-            public NonDeserializableException()
-            {
-                super("Error: this data could not be deserialized!");
-            }
+    public static class NonDeserializableException extends Exception {
+        public NonDeserializableException()
+        {
+            super("Error: this data could not be deserialized!");
         }
+    }
 
+    public static abstract class Node {
         // Write a string containing a diagram of this node
         public abstract String walk(int depth);
 
@@ -235,6 +236,24 @@ public class DS {
                 writer.append(", ");
             }
             writer.append(" } ");
+        }
+
+        // Check that a mapping exists and is of the right type
+        // return it if it is
+        public static Node getAndValidate(Map<String, Node> asMap, Class<? extends Node> desired, String key, String fromClass) throws Storable.LoadingException
+        {
+            Node gotNode = asMap.get(key);
+
+            if (gotNode == null) {
+                throw new Storable.LoadingException(fromClass, "No mapping found for: " + key);
+            }
+
+            Class<? extends Node> gotNodeClass = gotNode.getClass();
+            if (gotNodeClass != desired) {
+                throw new Storable.LoadingException(fromClass, "Mapping for " + key + " is of the wrong type. Wanted: " + desired.toString() + " Got: " + gotNodeClass);
+            }
+
+            return gotNode;
         }
     }
 

@@ -47,7 +47,7 @@ public class Chamber implements DS.Storable {
     }
 
     // Construct from a DS.Node
-    public Chamber(DS.Node node) throws LoadingException, DS.Node.NonDeserializableException
+    public Chamber(DS.Node node) throws LoadingException, DS.NonDeserializableException
     {
         load(node);
     }
@@ -81,31 +81,27 @@ public class Chamber implements DS.Storable {
         }
     }
 
+    public DS.Node getAndValidate(Map<String, DS.Node> asMap, Class<? extends DS.Node> desired, String key) throws LoadingException
+    {
+        return DS.MapNode.getAndValidate(asMap, desired, key, "Chamber");
+    }
+
     @Override
-    public void load(DS.Node node) throws LoadingException, DS.Node.NonDeserializableException
+    public void load(DS.Node node) throws LoadingException, DS.NonDeserializableException
     {
         if (!(node instanceof DS.MapNode)) {
             throw new ChamberLoadingException("Must be a map node!");
         }
 
         Map<String, DS.Node> asMap = ((DS.MapNode) node).getMap();
-        DS.Node matrixNode = asMap.get(":squares");
-        if (matrixNode == null) {
-            throw new ChamberLoadingException("No square matrix node found! (No mapping)");
-        }
-
-        if (!(matrixNode instanceof DS.VectorNode)) {
-            throw new ChamberLoadingException("No square matrix node found! (Wrong type)");
-        }
-
-        DS.VectorNode matrixVectorNode = (DS.VectorNode) matrixNode;
-        if (matrixVectorNode.complexVal.size() != WIDTH) {
+        DS.VectorNode matrixNode = (DS.VectorNode) getAndValidate(asMap, DS.VectorNode.class, ":squares");
+        if (matrixNode.complexVal.size() != WIDTH) {
             throw new ChamberLoadingException("Square matrix has incorrect dimensions! (wrong width)");
         }
 
         squares = new Square[WIDTH][HEIGHT];
         for (int i = 0; i < WIDTH; i++) {
-            DS.Node colNode = matrixVectorNode.complexVal.get(i);
+            DS.Node colNode = matrixNode.complexVal.get(i);
             if (!(colNode instanceof DS.VectorNode)) {
                 throw new ChamberLoadingException("Invalid column vector.");
             }

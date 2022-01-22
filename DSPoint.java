@@ -16,13 +16,13 @@ public class DSPoint extends Point implements DS.Storable {
         super(x, y);
     }
 
-    public DSPoint(DS.Node node) throws LoadingException, DS.Node.NonDeserializableException
+    public DSPoint(DS.Node node) throws LoadingException, DS.NonDeserializableException
     {
         load(node);
     }
 
     @Override
-    public void load(DS.Node node) throws LoadingException, DS.Node.NonDeserializableException
+    public void load(DS.Node node) throws LoadingException, DS.NonDeserializableException
     {
         if (!(node instanceof DS.VectorNode)) {
             throw new PointLoadingException("Must be a vector (x, y).");

@@ -29,7 +29,7 @@ public class ChamberMaze implements DS.Storable {
         init(width, height, rand);
     }
 
-    public ChamberMaze(DS.Node node) throws LoadingException, DS.Node.NonDeserializableException
+    public ChamberMaze(DS.Node node) throws LoadingException, DS.NonDeserializableException
     {
         load(node);
     }
@@ -55,54 +55,31 @@ public class ChamberMaze implements DS.Storable {
         chambers[width - 1][height - 1].encounterRate = 0.0;
     }
 
+    public DS.Node getAndValidate(Map<String, DS.Node> asMap, Class<? extends DS.Node> desired, String key) throws LoadingException
+    {
+        return DS.MapNode.getAndValidate(asMap, desired, key, "ChamberMaze");
+    }
+
     @Override
-    public void load(DS.Node node) throws LoadingException, DS.Node.NonDeserializableException
+    public void load(DS.Node node) throws LoadingException, DS.NonDeserializableException
     {
         if (!(node instanceof DS.MapNode)) {
             throw new CMLoadingException("Must be a map node!");
         }
 
         Map<String, DS.Node> asMap = ((DS.MapNode) node).getMap();
-        DS.Node widthNode = asMap.get(":width");
-        if (widthNode == null) {
-            throw new CMLoadingException("No width parameter found! (No mapping)");
-        }
+        width = ((DS.IntNode) getAndValidate(asMap, DS.IntNode.class, ":width")).value;
+        height = ((DS.IntNode) getAndValidate(asMap, DS.IntNode.class, ":height")).value;
 
-        if (!(widthNode instanceof DS.IntNode)) {
-            throw new CMLoadingException("No width parameter found! (Wrong type)");
-        }
-
-        width = ((DS.IntNode) widthNode).value;
-
-        DS.Node heightNode = asMap.get(":height");
-        if (heightNode == null) {
-            throw new CMLoadingException("No height parameter found! (No mapping)");
-        }
-
-        if (!(heightNode instanceof DS.IntNode)) {
-            throw new CMLoadingException("No height parameter found! (Wrong type)");
-        }
-
-        height = ((DS.IntNode) heightNode).value;
         chambers = new Chamber[width][height];
 
-        DS.Node matrixNode = asMap.get(":chambers");
-        if (matrixNode == null) {
-            throw new CMLoadingException("No chamber matrix found! (No mapping)");
-        }
-
-        if (!(matrixNode instanceof DS.VectorNode)) {
-            throw new CMLoadingException("No chamber matrix found! (Wrong type)");
-        }
-
-
-        DS.VectorNode matrixVectorNode = (DS.VectorNode) matrixNode;
-        if (matrixVectorNode.complexVal.size() != width) {
+        DS.VectorNode matrixNode = (DS.VectorNode) getAndValidate(asMap, DS.VectorNode.class, ":matrix");
+        if (matrixNode.complexVal.size() != width) {
             throw new CMLoadingException("Chamber matrix has incorrect dimensions! (Wrong width)");
         }
 
         for (int i = 0; i < width; i++) {
-            DS.Node colNode = matrixVectorNode.complexVal.get(i);
+            DS.Node colNode = matrixNode.complexVal.get(i);
 
             if (!(colNode instanceof DS.VectorNode)) {
                 throw new CMLoadingException("Invalid column vector.");
