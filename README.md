@@ -6,7 +6,6 @@ How to get the demo version:
 ```
 git clone https://github.com/tafaulhaber590/roguelike/
 cd roguelike
-git checkout --track origin/demo
 ```
 
 Right now, the demo version is very simple. You can randomly encounter basic enemies while wandering around an empty level. You can't save yet. Dying just returns you to the main menu.
