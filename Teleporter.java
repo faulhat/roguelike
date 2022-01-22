@@ -1,11 +1,17 @@
 import java.awt.Point;
+import java.util.Map;
 
 /*
  * Thomas: A class for a Teleporter sprite
  * It takes you to a different map from the current one.
  */
-public class Teleporter implements Sprite {
-    public String name;
+public class Teleporter extends Sprite {
+    public static class TeleporterLoadingException extends LoadingException {
+        public TeleporterLoadingException(String complaint)
+        {
+            super("Teleporter", complaint);
+        }
+    }
 
     public ChamberMaze toMaze;
 
@@ -13,30 +19,18 @@ public class Teleporter implements Sprite {
 
     public Point toPosition;
 
-    public Teleporter(String name, ChamberMaze toMaze, Point toLocation, Point toPosition)
+    public Teleporter(ChamberMaze toMaze, Point toLocation, Point toPosition)
     {
-        this.name = name;
+        super("Teleporter", false, '#');
+
         this.toMaze = toMaze;
         this.toLocation = toLocation;
         this.toPosition = toPosition;
     }
 
-    @Override
-    public boolean isVisible()
+    public Teleporter(DS.Node node) throws LoadingException, DS.Node.NonDeserializableException
     {
-        return true;
-    }
-
-    @Override
-    public char symbol()
-    {
-        return '=';
-    }
-
-    @Override
-    public boolean isWalkable()
-    {
-        return false;
+        super(node);
     }
 
     public void transport(Game outerState)
@@ -53,5 +47,57 @@ public class Teleporter implements Sprite {
         }
 
         transport(outerState);
+    }
+
+    @Override
+    public void loadUnique(DS.Node node) throws LoadingException, DS.Node.NonDeserializableException
+    {
+        if (!(node instanceof DS.MapNode)) {
+            throw new TeleporterLoadingException("Must be a map node.");
+        }
+
+        Map<String, DS.Node> asMap = ((DS.MapNode) node).getMap();
+        DS.Node mazeNode = asMap.get(":to-maze");
+        if (mazeNode == null) {
+            throw new TeleporterLoadingException("No toMaze node found. (No mapping)");
+        }
+
+        toMaze = new ChamberMaze(mazeNode);
+
+        DS.Node toLocNode = asMap.get(":to-location");
+        if (toLocNode == null) {
+            throw new TeleporterLoadingException("No toLocation node found. (No mapping)");
+        }
+
+        toLocation = new DSPoint(toLocNode);
+
+        DS.Node toPosNode = asMap.get(":to-location");
+        if (toPosNode == null) {
+            throw new TeleporterLoadingException("No toPosition node found. (No mapping)");
+        }
+
+        toPosition = new DSPoint(toPosNode);
+    }
+
+    @Override
+    public DS.Node dumpUnique()
+    {
+        DS.MapNode outNode = new DS.MapNode();
+        outNode.add(new DS.KeywordNode("to-maze"));
+        outNode.add(toMaze.dump());
+
+        outNode.add(new DS.KeywordNode("to-location"));
+        DS.VectorNode toLocNode = new DS.VectorNode();
+        toLocNode.add(new DS.IntNode(toLocation.x));
+        toLocNode.add(new DS.IntNode(toLocation.y));
+        outNode.add(toLocNode);
+
+        outNode.add(new DS.KeywordNode("to-position"));
+        DS.VectorNode toPosNode = new DS.VectorNode();
+        toPosNode.add(new DS.IntNode(toPosition.x));
+        toPosNode.add(new DS.IntNode(toPosition.y));
+        outNode.add(toPosNode);
+
+        return outNode;
     }
 }

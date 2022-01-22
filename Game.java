@@ -28,8 +28,8 @@ public class Game {
     // Constants for size of game map (temporary) //
     public static final int MAP_WIDTH = 5, MAP_HEIGHT = 5;
 
-
     public KeyBox keyBox;
+
     private JTextArea displayArea;
 
     // The view being displayed
@@ -68,9 +68,6 @@ public class Game {
     {
         // Set current view to start menu
         currentView = new StartMenu(this);
-
-        // Initialize full game map.
-        gameMap = new ChamberMaze(MAP_WIDTH, MAP_HEIGHT);
 
         // Create the player's inventory and give him some supplies
         playerState = new PlayerState();

@@ -95,7 +95,14 @@ public class BattleView extends GameView {
     @Override
     public void update(double delta)
     {
+        boolean toPause = outerState.keyBox.getReleaseKeys(KeyEvent.VK_ESCAPE, KeyEvent.VK_P);
         boolean selectPressed = outerState.keyBox.getReleaseKeys(KeyEvent.VK_ENTER, KeyEvent.VK_Z);
+
+        if (toPause) {
+            outerState.currentView = new PauseMenu(outerState, this);
+            return;
+        }
+        
         if (battleState == State.BATTLE_COMPLETE) {
             if (selectPressed) {
                 outerState.currentView = returnView;

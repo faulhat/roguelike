@@ -6,6 +6,7 @@ public class StartMenu extends Menu {
         super(outerState);
 
         Consumer<Game> startAction = game -> {
+            game.gameMap = new ChamberMaze(Game.MAP_WIDTH, Game.MAP_HEIGHT, game.rand);
             game.start();
         };
 

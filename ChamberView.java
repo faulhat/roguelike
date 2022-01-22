@@ -232,8 +232,9 @@ public class ChamberView extends GameView {
                 }
                 else if (square.sprites.size() > 0) {
                     for (Sprite sprite : square.sprites) {
-                        if (sprite.isVisible()) {
-                            symbol = sprite.symbol();
+                        if (sprite.visible) {
+                            assert(sprite.symbol != null);
+                            symbol = sprite.symbol;
                         }
                     }
                 }

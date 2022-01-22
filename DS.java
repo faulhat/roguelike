@@ -22,7 +22,7 @@ public class DS {
         }
 
         // Read data from parse tree
-        public void load(Node node) throws LoadingException;
+        public void load(Node node) throws LoadingException, Node.NonDeserializableException;
 
         // Write serialized data as a parse tree
         public Node dump();
@@ -65,6 +65,13 @@ public class DS {
     }
 
     public static abstract class Node {
+        public static class NonDeserializableException extends Exception {
+            public NonDeserializableException()
+            {
+                super("Error: this data could not be deserialized!");
+            }
+        }
+
         // Write a string containing a diagram of this node
         public abstract String walk(int depth);
 
@@ -98,6 +105,11 @@ public class DS {
         public ComplexNode()
         {
             this.complexVal = new ArrayList<>();
+        }
+
+        public void add(DS.Node node)
+        {
+            complexVal.add(node);
         }
 
         public String walkSubordinates(int depth)
@@ -172,13 +184,6 @@ public class DS {
     }
 
     public static class MapNode extends ComplexNode {
-        public static class NonDeserializableException extends Exception {
-            public NonDeserializableException()
-            {
-                super("Error: this data could not be deserialized!");
-            }
-        }
-
         @Override
         public String walk(int depth)
         {
@@ -323,6 +328,18 @@ public class DS {
         }
     }
 
+    public static class BoolNode extends IdNode {
+        public BoolNode(boolean value)
+        {
+            if (value) {
+                this.name = "true";
+            }
+            else {
+                this.name = "false";
+            }
+        }
+    }
+
     public static class KeywordNode extends SimpleNode {
         public String key;
 
@@ -357,6 +374,16 @@ public class DS {
 
     public static class StringNode extends SimpleNode {
         public String value;
+
+        public StringNode(String value)
+        {
+            this.value = value;
+        }
+
+        public StringNode()
+        {
+
+        }
 
         @Override
         public void finalize(String value)
@@ -411,6 +438,16 @@ public class DS {
     public static class IntNode extends SimpleNode {
         public int value;
 
+        public IntNode(int value)
+        {
+            this.value = value;
+        }
+
+        public IntNode()
+        {
+
+        }
+
         @Override
         public void finalize(String s)
         {
@@ -432,6 +469,16 @@ public class DS {
 
     public static class FloatNode extends SimpleNode {
         public double value;
+
+        public FloatNode(double value)
+        {
+            this.value = value;
+        }
+
+        public FloatNode()
+        {
+
+        }
 
         @Override
         public void finalize(String s)
@@ -543,7 +590,7 @@ public class DS {
                     // Store this node
                     Node prev = stack.peek();
                     assert (prev instanceof ComplexNode);
-                    ((ComplexNode) prev).complexVal.add(frame);
+                    ((ComplexNode) prev).add(frame);
 
                     frame = new StringNode(); // Start parsing the new string.
                 }
@@ -564,7 +611,7 @@ public class DS {
 
                     Node prev = stack.peek();
                     assert (prev instanceof ComplexNode);
-                    ((ComplexNode) prev).complexVal.add(frame);
+                    ((ComplexNode) prev).add(frame);
                 }
                 else {
                     stack.push(frame);
@@ -638,7 +685,7 @@ public class DS {
             if (doPop) {
                 Node prev = stack.pop();
                 assert (prev instanceof ComplexNode);
-                ((ComplexNode) prev).complexVal.add(frame);
+                ((ComplexNode) prev).add(frame);
 
                 frame = prev;
             }
@@ -658,7 +705,7 @@ public class DS {
 
             Node prev = stack.pop();
             assert (prev instanceof ComplexNode);
-            ((ComplexNode) prev).complexVal.add(frame);
+            ((ComplexNode) prev).add(frame);
 
             frame = prev;
         }
