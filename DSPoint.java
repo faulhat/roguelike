@@ -47,7 +47,7 @@ public class DSPoint extends Point implements DS.Storable {
 
         x = ((DS.IntNode) xNode).value;
 
-        DS.Node yNode = vectorNode.complexVal.get(0);
+        DS.Node yNode = vectorNode.complexVal.get(1);
         if (!(yNode instanceof DS.IntNode)) {
             throw new PointLoadingException("y is not an int. Both y and y must be ints.");
         }

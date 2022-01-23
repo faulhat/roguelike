@@ -79,7 +79,7 @@ public class Game {
 
         int prev_width = width, prev_height = height;
 
-        for (int i = 0; i < n_levels; i++) {
+        for (int i = 1; i < n_levels; i++) {
             width = m_width + rand.nextInt(2) - 1;
             height = m_height + rand.nextInt(2) - 1;
 

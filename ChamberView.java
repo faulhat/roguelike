@@ -249,7 +249,7 @@ public class ChamberView extends GameView {
             renderState += '\n';
         }
 
-        renderState += "Location in chamber map: ( x = " + location.x + ", y = " + location.y + " )\n";
+        renderState += "Level " + (outerState.currentLevel + 1) + "\n";
 
         for (int i = 0; i < Game.MAP_HEIGHT; i++) {
             for (int j = 0; j < Game.MAP_WIDTH; j++) {

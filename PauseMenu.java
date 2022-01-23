@@ -11,7 +11,7 @@ public class PauseMenu extends Menu {
         };
 
         Runnable exitAction = () -> {
-            System.exit(0);
+            outerState.currentView = new StartMenu(outerState);
         };
 
         MenuItem goBack = new MenuItem("Return", goBackAction);
@@ -25,7 +25,7 @@ public class PauseMenu extends Menu {
             items.add(new MenuItem("Save game", saveAction));
         }
 
-        MenuItem exitGame = new MenuItem("Quit", exitAction);
+        MenuItem exitGame = new MenuItem("Return to main menu", exitAction);
         items.add(exitGame);
     }
 }

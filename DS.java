@@ -257,7 +257,7 @@ public class DS {
 
             Class<? extends Node> gotNodeClass = gotNode.getClass();
             if (gotNodeClass != desired) {
-                throw new Storable.LoadingException(fromClass, "Mapping for " + key + " is of the wrong type. Wanted: " + desired.toString() + " Got: " + gotNodeClass);
+                throw new Storable.LoadingException(fromClass, "Mapping for " + key + " is of the wrong type. Wanted: " + desired.toString() + " Got: " + gotNodeClass + "\nNode:\n" + gotNode.toString());
             }
 
             return gotNode;
@@ -482,7 +482,7 @@ public class DS {
         @Override
         public String walk(int depth)
         {
-            return Repeat.repeat2(" ", depth) + value + "\n";
+            return Repeat.repeat2(" ", depth) + value + " (int)\n";
         }
 
         @Override
@@ -514,7 +514,7 @@ public class DS {
         @Override
         public String walk(int depth)
         {
-            return Repeat.repeat2(" ", depth) + value + "\n";
+            return Repeat.repeat2(" ", depth) + value + "d\n";
         }
 
         @Override
@@ -538,7 +538,7 @@ public class DS {
         String temp = null;
 
         // Last character read;
-        char last_c = 0;
+        char last_c;
 
         // Line and column number
         int lineno = 1, colno = 1;
@@ -550,8 +550,10 @@ public class DS {
          * This allows us to return to that state once we reach a termination character
          * for the current state.
          */
+        char c = 0;
         for (int next = reader.read(); next != -1; next = reader.read()) {
-            char c = (char) next;
+            last_c = c;
+            c = (char) next;
 
             if (inComment) {
                 if (c == '\n') {
