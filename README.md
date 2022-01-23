@@ -13,12 +13,7 @@ Right now, this version is very simple. You can randomly encounter basic enemies
 To build and run the main program:
 
 ```
-make run-main
-
-# Just build
-make build-all
-
-# Run after building
+javac *.java
 java Game
 ```
 
@@ -29,7 +24,7 @@ This repository contains a program that generates simple mazes using the Recursi
 To build:
 
 ```
-make maze-compile
+javac Maze.java
 ```
 
 To run with default parameters:
