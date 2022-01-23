@@ -251,8 +251,8 @@ public class ChamberView extends GameView {
 
         renderState += "Level " + (outerState.currentLevel + 1) + "\n";
 
-        for (int i = 0; i < Game.MAP_HEIGHT; i++) {
-            for (int j = 0; j < Game.MAP_WIDTH; j++) {
+        for (int i = 0; i < map.height; i++) {
+            for (int j = 0; j < map.width; j++) {
                 if (i == location.y && j == location.x) {
                     renderState += "* ";
                 }

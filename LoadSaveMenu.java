@@ -14,11 +14,11 @@ public class LoadSaveMenu extends Menu {
                     outerState.loadSave(saveState);
                 };
 
-                items.add(new MenuItem("File " + i, loadAction));
+                items.add(new MenuItem("File " + (i + 1), loadAction));
             }
             else {
                 Runnable nullAction = () -> {};
-                items.add(new MenuItem("File " + i + " (empty)", nullAction));
+                items.add(new MenuItem("File " + (i + 1) + " (empty)", nullAction));
             }
         }
 

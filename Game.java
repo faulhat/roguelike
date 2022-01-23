@@ -62,11 +62,12 @@ public class Game {
     public SaveList saveList;
 
     // Generate new levels
+    // Each level contains a teleporter to the next level and the previous level (if applicable).
     public static ArrayList<ChamberMaze> genLevels(int n_levels, int m_width, int m_height, Random rand)
     {
         assert(n_levels > 0);
-        assert(m_width > 2);
-        assert(m_height > 2);
+        assert(m_width > 4);
+        assert(m_height > 4);
 
         int width = m_width + rand.nextInt(4) - 2;
         int height = m_height + rand.nextInt(4) - 2;
@@ -76,6 +77,8 @@ public class Game {
         if (n_levels > 1) {
             firstMaze.putSprite(new Point(width - 1, height - 1), new Point(3, 3), new Teleporter(1, new Point(0, 0), new Point(0, 0)));
         }
+
+        levels.add(firstMaze);
 
         int prev_width = width, prev_height = height;
 
@@ -145,7 +148,7 @@ public class Game {
             playerState.inventory.add(new Coffee());
         }
 
-        levels = genLevels(N_LEVELS, 6, 6, rand);
+        levels = genLevels(N_LEVELS, 7, 7, rand);
 
         ChamberView chamberView = new ChamberView(this, currentLevel);
         chamberView.enterAt(0, 0, Chamber.WIDTH / 2, Chamber.HEIGHT / 2);

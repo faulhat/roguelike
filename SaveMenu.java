@@ -15,7 +15,7 @@ public class SaveMenu extends Menu {
         {
             SaveMenu.this.outerState.saveList.saves[target] = new SaveState(SaveMenu.this.outerState, SaveMenu.this.chamberView);
             SaveMenu.this.outerState.saveList.saveSelf();
-            SaveMenu.this.items.get(target).name = "Saved to File " + target;
+            SaveMenu.this.items.get(target).name = "Saved to File " + (target + 1);
         }
     }
 
@@ -31,10 +31,10 @@ public class SaveMenu extends Menu {
         for (int i = 0; i < SaveList.N_SAVES; i++) {
             SaveAction saveAction = new SaveAction(i);
             if (outerState.saveList.saves[i] == null) {
-                items.add(new MenuItem("File " + i + " (empty)", saveAction));
+                items.add(new MenuItem("File " + (i + 1) + " (empty)", saveAction));
             }
             else {
-                items.add(new MenuItem("File " + i, saveAction));
+                items.add(new MenuItem("File " + (i + 1), saveAction));
             }
         }
 
