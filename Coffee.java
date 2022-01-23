@@ -11,6 +11,12 @@ public class Coffee extends GameItem {
     }
 
     @Override
+    public Coffee clone()
+    {
+        return new Coffee();
+    }
+
+    @Override
     public String description()
     {
         return "I'm a regular joe and I like my joe regular\nIncreases speed by 25% for 5 turns.";

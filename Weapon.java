@@ -37,6 +37,12 @@ public abstract class Weapon extends GameItem {
         }
 
         @Override
+        public Default clone()
+        {
+            return new Default();
+        }
+
+        @Override
         public String description()
         {
             return "Your own two hands.\n4 ATK.";

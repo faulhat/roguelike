@@ -1,5 +1,7 @@
 import java.util.Map;
 import java.util.Random;
+import java.awt.Point;
+
 /*
  * Thomas: this class is for a maze of chambers
  */
@@ -33,6 +35,19 @@ public class ChamberMaze implements DS.Storable {
     {
         load(node);
     }
+    // Copy constructor
+    public ChamberMaze(ChamberMaze other)
+    {
+        width = other.width;
+        height = other.height;
+
+        chambers = new Chamber[width][height];
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                chambers[i][j] = new Chamber(other.chambers[i][j]);
+            }
+        }
+    }
 
     public void init(int width, int height, Random rand)
     {
@@ -53,6 +68,11 @@ public class ChamberMaze implements DS.Storable {
 
         chambers[0][0].encounterRate = 0.0;
         chambers[width - 1][height - 1].encounterRate = 0.0;
+    }
+
+    public void putSprite(Point location, Point position, Sprite sprite)
+    {
+        chambers[location.x][location.y].putSprite(position, sprite);
     }
 
     public DS.Node getAndValidate(Map<String, DS.Node> asMap, Class<? extends DS.Node> desired, String key) throws LoadingException
@@ -100,11 +120,11 @@ public class ChamberMaze implements DS.Storable {
     public DS.Node dump()
     {
         DS.MapNode outNode = new DS.MapNode();
-        outNode.add(new DS.KeywordNode("width"));
+        outNode.addKey("width");
         outNode.add(new DS.IntNode(width));
-        outNode.add(new DS.KeywordNode("height"));
+        outNode.addKey("height");
         outNode.add(new DS.IntNode(height));
-        outNode.add(new DS.KeywordNode("chambers"));
+        outNode.addKey("chambers");
 
         DS.VectorNode matrixNode = new DS.VectorNode();
         for (int i = 0; i < width; i++) {

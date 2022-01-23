@@ -5,6 +5,8 @@ import java.time.Instant;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
+import java.util.ArrayList;
+import java.awt.Point;
 
 /*
  * Thomas: the main class that will run the whole thing
@@ -28,6 +30,9 @@ public class Game {
     // Constants for size of game map (temporary) //
     public static final int MAP_WIDTH = 5, MAP_HEIGHT = 5;
 
+    // How many levels in a game?
+    public static final int N_LEVELS = 3;
+
     public KeyBox keyBox;
 
     private JTextArea displayArea;
@@ -38,8 +43,14 @@ public class Game {
     // Which direciton is the player moving?
     public Direction playerDirection;
 
-    // Maze to use for map of whole game area
-    public ChamberMaze gameMap;
+    // Levels in this game
+    public ArrayList<ChamberMaze> levels;
+
+    // Which level is the player on?
+    public int currentLevel;
+
+    // The current level
+    public ChamberMaze levelMap;
 
     // The player's current state
     public PlayerState playerState;
@@ -47,7 +58,45 @@ public class Game {
     // The RNG for the game to use
     public Random rand;
 
-    public Game()
+    // Generate new levels
+    public static ArrayList<ChamberMaze> genLevels(int n_levels, int m_width, int m_height, Random rand)
+    {
+        assert(n_levels > 0);
+        assert(m_width > 2);
+        assert(m_height > 2);
+
+        int width = m_width + rand.nextInt(4) - 2;
+        int height = m_height + rand.nextInt(4) - 2;
+
+        ArrayList<ChamberMaze> levels = new ArrayList<>();
+        ChamberMaze firstMaze = new ChamberMaze(width, height, rand);
+        if (n_levels > 1) {
+            firstMaze.putSprite(new Point(width - 1, height - 1), new Point(3, 3), new Teleporter(1, new Point(0, 0), new Point(0, 0)));
+        }
+
+        int prev_width = width, prev_height = height;
+
+        for (int i = 0; i < n_levels; i++) {
+            width = m_width + rand.nextInt(2) - 1;
+            height = m_height + rand.nextInt(2) - 1;
+
+            ChamberMaze nextMaze = new ChamberMaze(width, height, rand);
+            nextMaze.putSprite(new Point(0, 0), new Point(3, 3), new Teleporter(i - 1, new Point(prev_width - 1, prev_height - 1), new Point(0, 0)));
+
+            if (i < n_levels - 1) {
+                nextMaze.putSprite(new Point(width - 1, height - 1), new Point(3, 3), new Teleporter(i + 1, new Point(0, 0), new Point(0, 0)));
+            }
+
+            levels.add(nextMaze);
+
+            prev_width = width;
+            prev_height = height;
+        }
+
+        return levels;
+    }
+
+    public Game(long seed)
     {
         keyBox = new KeyBox();
 
@@ -61,7 +110,14 @@ public class Game {
         keyBox.frame.pack();
         keyBox.frame.setVisible(true);
 
+        rand = new Random(seed);
+
         init();
+    }
+
+    public Game()
+    {
+        this(System.currentTimeMillis());
     }
 
     public void init()
@@ -78,15 +134,14 @@ public class Game {
         for (int i = 0; i < 5; i++) {
             playerState.inventory.add(new Coffee());
         }
-
-        // Initialize RNG with random seed.
-        rand = new Random(System.currentTimeMillis());
     }
 
     // Method to start the game, placing the player in the first chamber (temporary) //
     public void start()
     {
-        ChamberView chamberView = new ChamberView(this, gameMap);
+        levels = genLevels(N_LEVELS, 6, 6, rand);
+
+        ChamberView chamberView = new ChamberView(this, currentLevel);
         chamberView.enterAt(0, 0, Chamber.WIDTH / 2, Chamber.HEIGHT / 2);
 
         currentView = chamberView;

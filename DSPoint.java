@@ -16,6 +16,12 @@ public class DSPoint extends Point implements DS.Storable {
         super(x, y);
     }
 
+    // Copy constructor
+    public DSPoint(Point other)
+    {
+        this(other.x, other.y);
+    }
+
     public DSPoint(DS.Node node) throws LoadingException, DS.NonDeserializableException
     {
         load(node);

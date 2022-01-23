@@ -13,17 +13,17 @@ public class Teleporter extends Sprite {
         }
     }
 
-    public ChamberMaze toMaze;
+    public int toLevel;
 
     public Point toLocation;
 
     public Point toPosition;
 
-    public Teleporter(ChamberMaze toMaze, Point toLocation, Point toPosition)
+    public Teleporter(int toLevel, Point toLocation, Point toPosition)
     {
         super("Teleporter", false, '#');
 
-        this.toMaze = toMaze;
+        this.toLevel = toLevel;
         this.toLocation = toLocation;
         this.toPosition = toPosition;
     }
@@ -33,10 +33,16 @@ public class Teleporter extends Sprite {
         super(node);
     }
 
+    @Override
+    public Teleporter clone()
+    {
+        return new Teleporter(toLevel, new Point(toLocation.x, toLocation.y), new Point(toPosition.x, toPosition.y));
+    }
+
     public void transport(Game outerState)
     {
-        outerState.currentView = new ChamberView(outerState, toMaze, toLocation, toPosition);
-        outerState.playerState.canTeleportTo.add(this);
+        outerState.currentView = new ChamberView(outerState, toLevel, toLocation, toPosition);
+        outerState.playerState.teleporters.add(this);
     }
 
     @Override
@@ -63,12 +69,7 @@ public class Teleporter extends Sprite {
         }
 
         Map<String, DS.Node> asMap = ((DS.MapNode) node).getMap();
-        DS.Node mazeNode = asMap.get(":to-maze");
-        if (mazeNode == null) {
-            throw new TeleporterLoadingException("No toMaze node found. (No mapping)");
-        }
-
-        toMaze = new ChamberMaze(mazeNode);
+        toLevel = ((DS.IntNode) getAndValidate(asMap, DS.IntNode.class, ":to-level")).value;
 
         DS.Node toLocNode = DS.MapNode.getAndValidate(asMap, DS.VectorNode.class, ":to-location", "Teleporter");
         toLocation = new DSPoint(toLocNode);
@@ -81,16 +82,16 @@ public class Teleporter extends Sprite {
     public DS.Node dumpUnique()
     {
         DS.MapNode outNode = new DS.MapNode();
-        outNode.add(new DS.KeywordNode("to-maze"));
-        outNode.add(toMaze.dump());
+        outNode.addKey("to-level");
+        outNode.add(new DS.IntNode(toLevel));
 
-        outNode.add(new DS.KeywordNode("to-location"));
+        outNode.addKey("to-location");
         DS.VectorNode toLocNode = new DS.VectorNode();
         toLocNode.add(new DS.IntNode(toLocation.x));
         toLocNode.add(new DS.IntNode(toLocation.y));
         outNode.add(toLocNode);
 
-        outNode.add(new DS.KeywordNode("to-position"));
+        outNode.addKey("to-position");
         DS.VectorNode toPosNode = new DS.VectorNode();
         toPosNode.add(new DS.IntNode(toPosition.x));
         toPosNode.add(new DS.IntNode(toPosition.y));

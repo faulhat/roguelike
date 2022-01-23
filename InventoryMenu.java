@@ -43,14 +43,15 @@ public class InventoryMenu extends Menu {
             yesAction = game -> {
                 InventoryMenu.this.items.remove(InventoryMenu.this.selected);
                 outerState.playerState.inventory.remove(InventoryMenu.this.selected);
-                
-                if (InventoryMenu.this.selected != 0) {
+
+                if (InventoryMenu.this.selected != 0)
+                {
                     InventoryMenu.this.selected--;
                 }
-                
+
                 InventoryMenu.this.state = State.NAV;
             };
-            
+
             noAction = game -> {
                 InventoryMenu.this.state = State.NAV;
             };

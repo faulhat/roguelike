@@ -226,6 +226,11 @@ public class DS {
             return map;
         }
 
+        public void addKey(String key)
+        {
+            add(new KeywordNode(key));
+        }
+
         @Override
         public void dump(Writer writer) throws IOException
         {

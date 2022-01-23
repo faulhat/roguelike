@@ -16,14 +16,15 @@ public class PlayerState extends GameCharacter implements DS.Storable {
     // The player can have eight items at most.
     public static int MAX_ITEMS = 8;
 
+    // Where can the player teleport to?
+    public ArrayList<Teleporter> teleporters;
+
     // What items does the player have in his inventory?
     public ArrayList<GameItem> inventory;
 
-    // Where can the player teleport to?
-    public ArrayList<Teleporter> canTeleportTo;
-
     // The player's default waitPeriod
     public static final double WAIT_PERIOD = 7000.0;
+
     public GameItem equippedWeapon;
 
     public GameItem equippedShield;
@@ -38,7 +39,7 @@ public class PlayerState extends GameCharacter implements DS.Storable {
         equipShield(new Shield.Default());
 
         inventory = new ArrayList<>();
-        canTeleportTo = new ArrayList<>();
+        teleporters = new ArrayList<>();
 
         gold = 0;
     }
@@ -50,6 +51,28 @@ public class PlayerState extends GameCharacter implements DS.Storable {
         name = "Player";
 
         load(node);
+    }
+
+    // Copy constructor
+    public PlayerState(PlayerState other)
+    {
+        equippedWeapon = other.equippedWeapon.clone();
+        equippedShield = other.equippedShield.clone();
+
+        inventory = new ArrayList<>();
+        for (GameItem item : other.inventory) {
+            if (item == other.equippedWeapon && !(other.equippedWeapon instanceof Weapon.Default)) {
+                inventory.add(equippedWeapon);
+            }
+            else if (item == other.equippedShield && !(other.equippedShield instanceof Shield.Default)) {
+                inventory.add(equippedShield);
+            }
+            else {
+                inventory.add(item.clone());
+            }
+        }
+
+        gold = other.gold;
     }
 
     @Override
@@ -119,7 +142,7 @@ public class PlayerState extends GameCharacter implements DS.Storable {
         outNode.add(new DS.KeywordNode("items"));
         DS.VectorNode inventoryNode = new DS.VectorNode();
         for (GameItem item : inventory) {
-            if (!(item == equippedWeapon || item == equippedShield)) {
+            if (item != equippedWeapon && item != equippedShield) {
                 inventoryNode.add(item.dumpItem());
             }
         }

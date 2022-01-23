@@ -9,6 +9,12 @@ public class Cookie extends GameItem {
     }
 
     @Override
+    public Cookie clone()
+    {
+        return new Cookie();
+    }
+
+    @Override
     public String description()
     {
         return "A pepperidge farm chessmen cookie\nHeals 2 HP.";

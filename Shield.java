@@ -39,6 +39,12 @@ public abstract class Shield extends GameItem {
         }
 
         @Override
+        public Default clone()
+        {
+            return new Default();
+        }
+
+        @Override
         public String description()
         {
             return "A piece of cardboard you found on the ground.\n3 DEF";

@@ -37,26 +37,26 @@ public class ChamberView extends GameView {
     public DirectionEx lastPlayerDirection;
 
     // Start player in top-leftmost Chamber
-    public ChamberView(Game outerState, ChamberMaze map)
+    public ChamberView(Game outerState, int level)
     {
         super(outerState);
 
-        this.map = map;
+        this.map = outerState.levels.get(level);
 
         playerDirection = new DirectionEx();
         lastPlayerDirection = new DirectionEx(Direction.N);
     }
 
-    public ChamberView(Game outerState, ChamberMaze map, int map_x, int map_y, int chamber_x,int chamber_y)
+    public ChamberView(Game outerState, int level, int map_x, int map_y, int chamber_x,int chamber_y)
     {
-        this(outerState, map);
+        this(outerState, level);
 
         enterAt(map_x, map_y, chamber_x, chamber_y);
     }
 
-    public ChamberView(Game outerState, ChamberMaze map, Point location, Point position)
+    public ChamberView(Game outerState, int level, Point location, Point position)
     {
-        this(outerState, map, location.x, location.y, position.x, position.y);
+        this(outerState, level, location.x, location.y, position.x, position.y);
     }
 
     // Put the player in the chamber at a given position

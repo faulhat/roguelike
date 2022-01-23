@@ -1,5 +1,6 @@
 import java.util.EnumSet;
 import java.util.Map;
+import java.awt.Point;
 
 /*
  * Thomas: a class representing rooms in the game.
@@ -25,17 +26,10 @@ public class Chamber implements DS.Storable {
     // What is the encounter rate in this chamber?
     public double encounterRate;
 
-    // Constructor for creating a Chamber from a matrix of Squares (move semantics)
-    public Chamber(Square[][] squares)
-    {
-        // This new Chamber assumes ownership of this matrix
-        this.squares = squares;
-    }
-
     // Constructor for empty Chamber
     public Chamber()
     {
-        this(new Square[WIDTH][HEIGHT]);
+        squares = new Square[WIDTH][HEIGHT];
 
         for (int i = 0; i < WIDTH; i++) {
             for (int j = 0; j < HEIGHT; j++) {
@@ -50,6 +44,20 @@ public class Chamber implements DS.Storable {
     public Chamber(DS.Node node) throws LoadingException, DS.NonDeserializableException
     {
         load(node);
+    }
+
+    // Copy constructor
+    public Chamber(Chamber other)
+    {
+        squares = new Square[WIDTH][HEIGHT];
+
+        for (int i = 0; i < WIDTH; i++) {
+            for (int j = 0; j < HEIGHT; j++) {
+                squares[i][j] = new Square(other.squares[i][j]);
+            }
+        }
+
+        encounterRate = other.encounterRate;
     }
 
     // Method to fill in Chamber
@@ -84,6 +92,11 @@ public class Chamber implements DS.Storable {
     public DS.Node getAndValidate(Map<String, DS.Node> asMap, Class<? extends DS.Node> desired, String key) throws LoadingException
     {
         return DS.MapNode.getAndValidate(asMap, desired, key, "Chamber");
+    }
+
+    public void putSprite(Point position, Sprite sprite)
+    {
+        squares[position.x][position.y].sprites.add(sprite);
     }
 
     @Override
@@ -121,9 +134,9 @@ public class Chamber implements DS.Storable {
     public DS.Node dump()
     {
         DS.MapNode outNode = new DS.MapNode();
-        outNode.add(new DS.KeywordNode("encounterRate"));
+        outNode.addKey("encounterRate");
         outNode.add(new DS.FloatNode(encounterRate));
-        outNode.add(new DS.KeywordNode("squares"));
+        outNode.addKey("squares");
 
         DS.VectorNode matrixNode = new DS.VectorNode();
         for (int i = 0; i < WIDTH; i++) {

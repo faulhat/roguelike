@@ -4,7 +4,7 @@ import javax.naming.OperationNotSupportedException;
  * Thomas: this class represents an item in the game
  * Items must be fungible and have names which are unique by subclass
  */
-public abstract class GameItem {
+public abstract class GameItem implements Cloneable {
     public static class ItemLoadingException extends DS.Storable.LoadingException {
         public ItemLoadingException(String complaint)
         {
@@ -23,6 +23,10 @@ public abstract class GameItem {
     {
         this.name = name;
     }
+
+    // clone method should always return an instance of the calling subclass created with its default constructor.
+    @Override
+    public abstract GameItem clone();
 
     // Get this item's attack points. (no such value by default)
     public int attackPoints() throws OperationNotSupportedException
@@ -65,7 +69,7 @@ public abstract class GameItem {
     public DS.Node dumpItem()
     {
         DS.MapNode outNode = new DS.MapNode();
-        outNode.add(new DS.KeywordNode("name"));
+        outNode.addKey("name");
         outNode.add(new DS.IdNode(name));
 
         return outNode;

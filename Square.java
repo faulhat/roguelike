@@ -28,6 +28,17 @@ public class Square implements DS.Storable {
         load(node);
     }
 
+    // Copy constructor
+    public Square(Square other)
+    {
+        isWall = other.isWall;
+
+        sprites = new ArrayList<>();
+        for (Sprite sprite : other.sprites) {
+            sprites.add(sprite.clone());
+        }
+    }
+
     public void onEvent(Game outerState, GameEvent e)
     {
         for (Sprite sprite : sprites) {
@@ -76,9 +87,9 @@ public class Square implements DS.Storable {
     public DS.Node dump()
     {
         DS.MapNode outNode = new DS.MapNode();
-        outNode.add(new DS.KeywordNode("wall"));
+        outNode.addKey("wall");
         outNode.add(new DS.BoolNode(isWall));
-        outNode.add(new DS.KeywordNode("sprites"));
+        outNode.addKey("sprites");
 
         DS.VectorNode spritesNode = new DS.VectorNode();
         for (Sprite sprite : sprites) {

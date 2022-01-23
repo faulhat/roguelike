@@ -4,7 +4,7 @@ import java.util.Map;
  * Thomas: this interface doesn't have to just represent a drawn sprite.
  * It can represent any object that exists at a certain place in the game.
  */
-public abstract class Sprite implements DS.Storable {
+public abstract class Sprite implements DS.Storable, Cloneable {
     public static class SpriteLoadingException extends LoadingException {
         public SpriteLoadingException(String complaint)
         {
@@ -48,6 +48,10 @@ public abstract class Sprite implements DS.Storable {
     {
         load(node);
     }
+
+    // Create a copy of this sprite
+    @Override
+    public abstract Sprite clone();
 
     // All-purpose event handling method.
     // Different event types should be dealt with separately.
@@ -117,19 +121,19 @@ public abstract class Sprite implements DS.Storable {
     public DS.Node dump()
     {
         DS.MapNode outNode = new DS.MapNode();
-        outNode.add(new DS.KeywordNode("type"));
+        outNode.addKey("type");
         outNode.add(new DS.StringNode(myType));
-        outNode.add(new DS.KeywordNode("visible"));
+        outNode.addKey("visible");
         outNode.add(new DS.BoolNode(visible));
-        outNode.add(new DS.KeywordNode("walkable"));
+        outNode.addKey("walkable");
         outNode.add(new DS.BoolNode(walkable));
 
         if (visible && symbol != null) {
-            outNode.add(new DS.KeywordNode("symbol"));
+            outNode.addKey("symbol");
             outNode.add(new DS.StringNode("" + symbol));
         }
 
-        outNode.add(new DS.KeywordNode("unique"));
+        outNode.addKey("unique");
         outNode.add(dumpUnique());
 
         return outNode;
