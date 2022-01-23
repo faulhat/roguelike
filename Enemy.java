@@ -14,11 +14,7 @@ public abstract class Enemy extends GameCharacter {
     public Enemy(String name, int hitPoints, int attackPoints, int defensePoints, int gold, double waitPeriod)
     {
         super(name, hitPoints, attackPoints, defensePoints, waitPeriod, waitPeriod);
-
         this.gold = gold;
-
-        this.waitPeriod = waitPeriod;
-        timeLeft = waitPeriod;
     }
 
     // Get this enemy's next attack.

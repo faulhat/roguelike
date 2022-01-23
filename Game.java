@@ -144,7 +144,7 @@ public class Game {
             playerState.inventory.add(new Cookie());
         }
 
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 7; i++) {
             playerState.inventory.add(new Coffee());
         }
 

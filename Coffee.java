@@ -3,7 +3,7 @@
  * Increases the player's speed in battle.
  */
 public class Coffee extends GameItem {
-    public static final double FACTOR = 0.8;
+    public static final double FACTOR = 0.77;
 
     public Coffee()
     {
@@ -19,23 +19,19 @@ public class Coffee extends GameItem {
     @Override
     public String description()
     {
-        return "I'm a regular joe and I like my joe regular\nIncreases speed by 25% for 5 turns.";
+        return "I'm a regular joe and I like my joe regular\nIncreases speed by 30% for 4 turns.";
     }
 
     public static class Caffeine extends Spell {
-        public int counter;
-
         public Caffeine(GameCharacter user)
         {
-            super(true, user, user, 5);
-
-            counter = 0;
+            super(true, user, user, 4);
         }
 
         @Override
         public String apply()
         {
-            user.waitPeriod *= FACTOR;
+            target.waitPeriod *= FACTOR;
 
             return "You go faster now!";
         }
@@ -43,7 +39,7 @@ public class Coffee extends GameItem {
         @Override
         public String unapply()
         {
-            user.waitPeriod /= FACTOR;
+            target.waitPeriod /= FACTOR;
 
             return "Coffee wore off...";
         }
@@ -54,6 +50,6 @@ public class Coffee extends GameItem {
     {
         outerState.playerState.inventory.remove(this);
 
-        new Caffeine(outerState.playerState);
+        new Caffeine(outerState.playerState).apply();
     }
 }

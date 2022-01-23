@@ -14,7 +14,7 @@ public class PlayerState extends GameCharacter implements DS.Storable {
     }
 
     // The player can have eight items at most.
-    public static int MAX_ITEMS = 8;
+    public static int MAX_ITEMS = 10;
 
     // Where can the player teleport to?
     public ArrayList<Teleporter> teleporters;
