@@ -70,7 +70,7 @@ public abstract class GameItem implements Cloneable {
     {
         DS.MapNode outNode = new DS.MapNode();
         outNode.addKey("name");
-        outNode.add(new DS.IdNode(name));
+        outNode.add(new DS.StringNode(name));
 
         return outNode;
     }
@@ -80,6 +80,8 @@ public abstract class GameItem implements Cloneable {
         if (!(node instanceof DS.MapNode)) {
             throw new ItemLoadingException("Must be a map node.");
         }
+
+        System.out.println(node.toString());
 
         return ((DS.StringNode) DS.MapNode.getAndValidate(((DS.MapNode) node).getMap(), DS.StringNode.class, ":name", "GameItem")).value;
     }

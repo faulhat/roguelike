@@ -30,7 +30,7 @@ public class SaveState implements DS.Storable {
         this.levels = new ArrayList<>();
         for (ChamberMaze level : levels) {
             // Invoke copy constructor
-            levels.add(new ChamberMaze(level));
+            this.levels.add(new ChamberMaze(level));
         }
 
         this.currentLevel = currentLevel;
@@ -47,6 +47,11 @@ public class SaveState implements DS.Storable {
     public SaveState(Game state, Point location, Point position)
     {
         this(state.levels, state.currentLevel, location, position, state.playerState);
+    }
+
+    public SaveState(Game state, ChamberView view)
+    {
+        this(state, view.location, new Point((int) view.position.x, (int) view.position.y));
     }
 
     public DS.Node getAndValidate(Map<String, DS.Node> asMap, Class<? extends DS.Node> desired, String key) throws LoadingException
@@ -71,6 +76,7 @@ public class SaveState implements DS.Storable {
         currentLevel = ((DS.IntNode) getAndValidate(asMap, DS.IntNode.class, ":on-level")).value;
         location = new DSPoint((DS.VectorNode) getAndValidate(asMap, DS.VectorNode.class, ":location"));
         position = new DSPoint((DS.VectorNode) getAndValidate(asMap, DS.VectorNode.class, ":position"));
+        player = new PlayerState((DS.MapNode) getAndValidate(asMap, DS.MapNode.class, ":player"));
     }
 
     @Override
@@ -92,6 +98,8 @@ public class SaveState implements DS.Storable {
         outNode.add(location.dump());
         outNode.addKey("position");
         outNode.add(position.dump());
+        outNode.addKey("player");
+        outNode.add(player.dump());
 
         return outNode;
     }

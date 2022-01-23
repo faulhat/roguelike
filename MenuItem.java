@@ -1,5 +1,3 @@
-import java.util.function.Consumer;
-
 /*
  * Thomas: this class represents an item in a menu.
  * It contains a string to be printed in the menu and a consumer specifying its action.
@@ -7,9 +5,9 @@ import java.util.function.Consumer;
 public class MenuItem {
     public String name;
 
-    public Consumer<Game> action;
+    public Runnable action;
 
-    public MenuItem(String name, Consumer<Game> action)
+    public MenuItem(String name, Runnable action)
     {
         this.name = name;
         this.action = action;

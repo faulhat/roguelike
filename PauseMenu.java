@@ -1,30 +1,31 @@
-import java.util.function.Consumer;
-
+/*
+ * Thomas: a menu for when you pause the game.
+ */
 public class PauseMenu extends Menu {
     public PauseMenu(Game outerState, GameView returnView)
     {
         super(outerState, returnView);
 
-        Consumer<Game> goBackAction = game -> {
-            game.currentView = returnView;
+        Runnable goBackAction = () -> {
+            outerState.currentView = returnView;
         };
 
-        Consumer<Game> exitAction = game -> {
+        Runnable exitAction = () -> {
             System.exit(0);
         };
 
         MenuItem goBack = new MenuItem("Return", goBackAction);
-        MenuItem exitGame = new MenuItem("Quit", exitAction);
         items.add(goBack);
 
-        /*
-                if (returnView instanceof ChamberView) {
-                    Consumer<Game> saveAction = game -> {
-                        game.currentView =
-                    }
-                }
-        */
+        if (returnView instanceof ChamberView) {
+            Runnable saveAction = () -> {
+                outerState.currentView = new SaveMenu(outerState, this, (ChamberView) returnView);
+            };
 
+            items.add(new MenuItem("Save game", saveAction));
+        }
+
+        MenuItem exitGame = new MenuItem("Quit", exitAction);
         items.add(exitGame);
     }
 }

@@ -52,6 +52,27 @@ public class Square implements DS.Storable {
     }
 
     @Override
+    public boolean equals(Object other)
+    {
+        if (other instanceof Square) {
+            Square oSquare = (Square) other;
+            if (isWall == oSquare.isWall) {
+                if (sprites.size() == oSquare.sprites.size()) {
+                    for (int i = 0; i < sprites.size(); i++) {
+                        if (!sprites.get(i).equals(oSquare.sprites.get(i))) {
+                            return false;
+                        }
+                    }
+
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    @Override
     public void load(DS.Node node) throws LoadingException, DS.NonDeserializableException
     {
         if (!(node instanceof DS.MapNode)) {

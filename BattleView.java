@@ -93,7 +93,7 @@ public class BattleView extends GameView {
     }
 
     @Override
-    public void update(double delta)
+    public void update(double delta) throws Exception
     {
         boolean toPause = outerState.keyBox.getReleaseKeys(KeyEvent.VK_ESCAPE, KeyEvent.VK_P);
         boolean selectPressed = outerState.keyBox.getReleaseKeys(KeyEvent.VK_ENTER, KeyEvent.VK_Z);

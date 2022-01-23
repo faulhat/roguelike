@@ -100,6 +100,27 @@ public class Chamber implements DS.Storable {
     }
 
     @Override
+    public boolean equals(Object other)
+    {
+        if (other instanceof Chamber) {
+            Chamber oChamber = (Chamber) other;
+            if (encounterRate == oChamber.encounterRate) {
+                for (int i = 0; i < WIDTH; i++) {
+                    for (int j = 0; j < HEIGHT; j++) {
+                        if (!squares[i][j].equals(oChamber.squares[i][j])) {
+                            return false;
+                        }
+                    }
+                }
+
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    @Override
     public void load(DS.Node node) throws LoadingException, DS.NonDeserializableException
     {
         if (!(node instanceof DS.MapNode)) {
@@ -148,6 +169,7 @@ public class Chamber implements DS.Storable {
             matrixNode.add(colNode);
         }
 
+        outNode.add(matrixNode);
         return outNode;
     }
 }

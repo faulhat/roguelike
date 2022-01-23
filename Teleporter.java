@@ -39,6 +39,19 @@ public class Teleporter extends Sprite {
         return new Teleporter(toLevel, new Point(toLocation.x, toLocation.y), new Point(toPosition.x, toPosition.y));
     }
 
+    @Override
+    public boolean equals(Object other)
+    {
+        if (other instanceof Teleporter) {
+            Teleporter oTeleporter = (Teleporter) other;
+            if (toLevel == oTeleporter.toLevel && toLocation.equals(oTeleporter.toLocation) && toPosition.equals(oTeleporter.toPosition)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public void transport(Game outerState)
     {
         outerState.currentView = new ChamberView(outerState, toLevel, toLocation, toPosition);

@@ -81,6 +81,28 @@ public class ChamberMaze implements DS.Storable {
     }
 
     @Override
+    public boolean equals(Object other)
+    {
+        if (other instanceof ChamberMaze) {
+            ChamberMaze oChamberMaze = (ChamberMaze) other;
+
+            if (width == oChamberMaze.width && height == oChamberMaze.height) {
+                for (int i = 0; i < width; i++) {
+                    for (int j = 0; j < height; j++) {
+                        if (!chambers[i][j].equals(oChamberMaze.chambers[i][j])) {
+                            return false;
+                        }
+                    }
+                }
+
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    @Override
     public void load(DS.Node node) throws LoadingException, DS.NonDeserializableException
     {
         if (!(node instanceof DS.MapNode)) {
@@ -124,7 +146,7 @@ public class ChamberMaze implements DS.Storable {
         outNode.add(new DS.IntNode(width));
         outNode.addKey("height");
         outNode.add(new DS.IntNode(height));
-        outNode.addKey("chambers");
+        outNode.addKey("matrix");
 
         DS.VectorNode matrixNode = new DS.VectorNode();
         for (int i = 0; i < width; i++) {

@@ -49,7 +49,6 @@ public class PlayerState extends GameCharacter implements DS.Storable {
         super();
 
         name = "Player";
-
         load(node);
     }
 
@@ -73,6 +72,29 @@ public class PlayerState extends GameCharacter implements DS.Storable {
         }
 
         gold = other.gold;
+    }
+
+    @Override
+    public boolean equals(Object other)
+    {
+        if (other instanceof PlayerState) {
+            PlayerState oPlayer = (PlayerState) other;
+            if (equippedWeapon.equals(oPlayer.equippedWeapon) && equippedShield.equals(oPlayer.equippedShield)) {
+                if (inventory.size() == oPlayer.inventory.size()) {
+                    for (int i = 0; i < inventory.size(); i++) {
+                        if (!inventory.get(i).equals(oPlayer.inventory.get(i))) {
+                            return false;
+                        }
+                    }
+
+                    if (gold == oPlayer.gold) {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
     }
 
     @Override

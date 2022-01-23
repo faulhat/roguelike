@@ -28,7 +28,4 @@ hs_err_pid*
 *.orig
 
 # Ignore game save files
-
-*.savedata.txt
-
 data/

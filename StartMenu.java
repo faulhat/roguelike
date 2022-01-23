@@ -1,15 +1,16 @@
-import java.util.function.Consumer;
-
+/*
+ * Thomas: menu for starting the game
+ */
 public class StartMenu extends Menu {
     public StartMenu(Game outerState)
     {
         super(outerState);
 
-        Consumer<Game> startAction = game -> {
-            game.start();
+        Runnable startAction = () -> {
+            outerState.currentView = new LoadSaveMenu(outerState, this);
         };
 
-        Consumer<Game> exitAction = game -> {
+        Runnable exitAction = () -> {
             System.exit(0);
         };
 

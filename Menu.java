@@ -68,7 +68,7 @@ public class Menu extends GameView {
         }
 
         if (selectPressed) {
-            items.get(selected).action.accept(outerState);
+            items.get(selected).action.run();
         }
     }
 

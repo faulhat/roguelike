@@ -234,6 +234,8 @@ public class DS {
         @Override
         public void dump(Writer writer) throws IOException
         {
+            assert(complexVal.size() % 2 == 0);
+
             writer.append("{ ");
             for (int i = 0; i < complexVal.size(); i += 2) {
                 complexVal.get(i).dump(writer);
@@ -302,7 +304,6 @@ public class DS {
                 writer.append(' ' + (String) data);
             }
         }
-
     }
 
     public static class IdNode extends SimpleNode {
@@ -418,7 +419,7 @@ public class DS {
         @Override
         public String walk(int depth)
         {
-            String out = Repeat.repeat2(" ", depth);
+            String out = Repeat.repeat2(" ", depth) + '"';
 
             if (value.length() > 10) { // We will truncate the string if it is longer than ten characters.
                 for (int i = 0; i < 7; i++) {
@@ -591,23 +592,23 @@ public class DS {
                     }
                 }
                 else if (c == '"') {   // If this character is an unescaped quote...
+                    ((StringNode) frame).finalize(temp);
                     doPop = true; // ...the string is complete.
                 }
                 else if (c != '\\') {   // Do not consume backslashes unless escaped
                     temp += c;
                 }
             }
-            if (Character.isWhitespace(c) || c == ',') { // Commas are considered whitespace in Lisp
+            else if (Character.isWhitespace(c) || c == ',') { // Commas are considered whitespace in Lisp
                 // Deal with whitespace
-                if (frame instanceof StringNode) { // Consume whitespace if this is a string.
-                    temp += c;
-                }
-                else if (frame instanceof SimpleNode) {
+                if (frame instanceof SimpleNode) {
                     ((SimpleNode) frame).finalize(temp);
                     doPop = true;
                 }
             }
             else if (c == '"') {
+                temp = "";
+
                 if (frame instanceof SimpleNode) { // We already dealt with quotes in strings.
                     ((SimpleNode) frame).finalize(temp); // Finish parsing this token.
 

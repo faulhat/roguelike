@@ -1,4 +1,3 @@
-import java.util.function.Consumer;
 import java.awt.event.*;
 
 /*
@@ -16,10 +15,10 @@ public class InventoryMenu extends Menu {
             super(item.getName(), null);
 
             this.item = item;
-            this.action = game -> {
-                item.onUse(game);
+            this.action = () -> {
+                item.onUse(outerState);
 
-                assert(game.currentView instanceof InventoryMenu);
+                assert(outerState.currentView instanceof InventoryMenu);
 
                 if (!player.inventory.contains(item))
                 {
@@ -34,13 +33,13 @@ public class InventoryMenu extends Menu {
     }
 
     public class DropMenu extends Menu {
-        private Consumer<Game> yesAction, noAction;
+        private Runnable yesAction, noAction;
 
         public DropMenu(Game outerState)
         {
             super(outerState, (GameView) null);
 
-            yesAction = game -> {
+            yesAction = () -> {
                 InventoryMenu.this.items.remove(InventoryMenu.this.selected);
                 outerState.playerState.inventory.remove(InventoryMenu.this.selected);
 
@@ -52,7 +51,7 @@ public class InventoryMenu extends Menu {
                 InventoryMenu.this.state = State.NAV;
             };
 
-            noAction = game -> {
+            noAction = () -> {
                 InventoryMenu.this.state = State.NAV;
             };
 
@@ -66,7 +65,7 @@ public class InventoryMenu extends Menu {
             boolean cancelPressed = outerState.keyBox.getReleaseKeys(KeyEvent.VK_ESCAPE, KeyEvent.VK_X);
 
             if (cancelPressed) {
-                noAction.accept(outerState);
+                noAction.run();
                 return;
             }
 

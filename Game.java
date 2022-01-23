@@ -58,6 +58,9 @@ public class Game {
     // The RNG for the game to use
     public Random rand;
 
+    // The save files
+    public SaveList saveList;
+
     // Generate new levels
     public static ArrayList<ChamberMaze> genLevels(int n_levels, int m_width, int m_height, Random rand)
     {
@@ -96,7 +99,7 @@ public class Game {
         return levels;
     }
 
-    public Game(long seed)
+    public Game(long seed) throws Exception
     {
         keyBox = new KeyBox();
 
@@ -115,7 +118,7 @@ public class Game {
         init();
     }
 
-    public Game()
+    public Game() throws Exception
     {
         this(System.currentTimeMillis());
     }
@@ -134,9 +137,11 @@ public class Game {
         for (int i = 0; i < 5; i++) {
             playerState.inventory.add(new Coffee());
         }
+
+        saveList = SaveList.loadList();
     }
 
-    // Method to start the game, placing the player in the first chamber (temporary) //
+    // Method to start the game, placing the player in the first chamber of a newly generated game world
     public void start()
     {
         levels = genLevels(N_LEVELS, 6, 6, rand);
@@ -145,6 +150,20 @@ public class Game {
         chamberView.enterAt(0, 0, Chamber.WIDTH / 2, Chamber.HEIGHT / 2);
 
         currentView = chamberView;
+    }
+
+    // Load a save state
+    public void loadSave(SaveState state)
+    {
+        levels = new ArrayList<>();
+        for (ChamberMaze level : state.levels) {
+            levels.add(new ChamberMaze(level));
+        }
+
+        currentLevel = state.currentLevel;
+        playerState = new PlayerState(state.player);
+
+        currentView = new ChamberView(this, currentLevel, state.location, state.position);
     }
 
     public void setDisplayText(String toDisplay) throws RenderException
