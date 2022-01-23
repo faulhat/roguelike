@@ -127,6 +127,13 @@ public class Game {
     {
         // Set current view to start menu
         currentView = new StartMenu(this);
+        saveList = SaveList.loadList();
+    }
+
+    // Method to start a new game, placing the player in the first chamber of a newly generated game world
+    public void startNew()
+    {
+        playerState = new PlayerState();
 
         // Create the player's inventory and give him some supplies
         playerState = new PlayerState();
@@ -138,12 +145,6 @@ public class Game {
             playerState.inventory.add(new Coffee());
         }
 
-        saveList = SaveList.loadList();
-    }
-
-    // Method to start the game, placing the player in the first chamber of a newly generated game world
-    public void start()
-    {
         levels = genLevels(N_LEVELS, 6, 6, rand);
 
         ChamberView chamberView = new ChamberView(this, currentLevel);

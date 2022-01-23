@@ -242,7 +242,7 @@ public class BattleView extends GameView {
                     player.gold += gold;
 
                     for (int i = 0; i < player.spellsAffecting.size(); i++) {
-                        player.spellsAffecting.remove(i);
+                        player.spellsAffecting.get(i).remove(); // undo the spell
                     }
 
                     battleState = State.BATTLE_COMPLETE;

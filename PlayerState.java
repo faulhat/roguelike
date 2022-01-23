@@ -55,8 +55,10 @@ public class PlayerState extends GameCharacter implements DS.Storable {
     // Copy constructor
     public PlayerState(PlayerState other)
     {
-        equippedWeapon = other.equippedWeapon.clone();
-        equippedShield = other.equippedShield.clone();
+        super("Player", other.hitPoints, 0, 0, WAIT_PERIOD, 0);
+
+        equipWeapon((Weapon) other.equippedWeapon.clone());
+        equipShield((Shield) other.equippedShield.clone());
 
         inventory = new ArrayList<>();
         for (GameItem item : other.inventory) {
@@ -131,12 +133,14 @@ public class PlayerState extends GameCharacter implements DS.Storable {
 
         Map<String, DS.Node> asMap = ((DS.MapNode) node).getMap();
         trueHitPoints = ((DS.FloatNode) getAndValidate(asMap, DS.FloatNode.class, ":true-hp")).value;
-        equippedWeapon = GameItem.loadFromName((DS.MapNode) getAndValidate(asMap, DS.MapNode.class, ":weapon"));
+        hitPoints = (int) Math.ceil(trueHitPoints);
+
+        equipWeapon((Weapon) GameItem.loadFromName((DS.MapNode) getAndValidate(asMap, DS.MapNode.class, ":weapon")));
         if (!(equippedWeapon instanceof Weapon.Default)) {
             inventory.add(equippedWeapon);
         }
 
-        equippedShield = GameItem.loadFromName((DS.MapNode) getAndValidate(asMap, DS.MapNode.class, ":shield"));
+        equipShield((Shield) GameItem.loadFromName((DS.MapNode) getAndValidate(asMap, DS.MapNode.class, ":shield")));
         if (!(equippedShield instanceof Shield.Default)) {
             inventory.add(equippedShield);
         }

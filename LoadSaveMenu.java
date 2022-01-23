@@ -23,7 +23,7 @@ public class LoadSaveMenu extends Menu {
         }
 
         Runnable newGameAction = () -> {
-            outerState.start();
+            outerState.startNew();
         };
 
         Runnable returnAction = () -> {
