@@ -326,8 +326,6 @@ public class Maze {
         boolean debug_rand = args.length >= 3 && args[2].equals("debug-rand");
 
         Maze maze = new Maze(debug || debug_rand, width, height);
-        System.out.println(maze.toString());
-        System.out.println();
 
         if (debug_rand) {
             maze.divRecursive(new Random(System.currentTimeMillis()));
@@ -336,6 +334,6 @@ public class Maze {
             maze.genMaze();
         }
 
-        System.out.println("Final:\n" + maze.toString());
+        System.out.println("Your maze:\n" + maze.toString());
     }
 }

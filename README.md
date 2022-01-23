@@ -1,22 +1,24 @@
 # roguelike
 A roguelike game (somewhat)
 
-How to get the demo version:
+How to get the working version:
 
 ```
 git clone https://github.com/tafaulhaber590/roguelike/
 cd roguelike
 ```
 
-Right now, the demo version is very simple. You can randomly encounter basic enemies while wandering around an empty level. You can't save yet. Dying just returns you to the main menu.
+Right now, this version is very simple. You can randomly encounter basic enemies while wandering around an empty level. You can save the game and return to save states.
 
-How to run the demo:
+To build and run the main program:
 
 ```
-# Compile...
+make run-main
+
+# Just build
 make build-all
 
-# ...and run
+# Run after building
 java Game
 ```
 
@@ -42,7 +44,11 @@ To specify width and height:
 
 ```
 java Maze [width] [height]
-# For example:
+```
+
+For example:
+
+```
 java Maze 8 9
 ```
 
@@ -54,20 +60,8 @@ To run in debug mode (must specify dimensions):
 java Maze [width] [height] debug
 ```
 
-For example:
-
-```
-java Maze 8 9 debug
-```
-
 To run in debug mode, but still use a random seed:
 
 ```
 java Maze [width] [height] debug-rand
-```
-
-For example:
-
-```
-java Maze 8 9 debug-rand
 ```

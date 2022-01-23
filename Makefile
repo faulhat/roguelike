@@ -1,10 +1,7 @@
-maze-compile:
+maze-build:
 	javac Maze.java
 
-maze-debug: maze-compile
-	java Maze 9 10 debug
-
-maze: maze-compile
+maze: maze-build
 	java Maze
 
 build-all:
