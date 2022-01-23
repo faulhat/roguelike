@@ -14,6 +14,7 @@ public abstract class Spell {
     // How long does this spell last?
     public int turnsRemaining;
 
+    // Constructor attaches this spell to its target.
     public Spell(boolean isGood, GameCharacter user, GameCharacter target, int turnsRemaining)
     {
         this.isGood = isGood;

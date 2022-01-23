@@ -25,9 +25,6 @@ public class BattleView extends GameView {
 
     public int selectedItem;
 
-    // Is the player on guard?
-    public boolean defending;
-
     // What does the dialogue box say?
     public String dialogueNow;
 
@@ -58,7 +55,6 @@ public class BattleView extends GameView {
         selectedMenuOption = 0;
         selectedEnemy = 0;
         selectedItem = 0;
-        defending = false;
         gold = 0;
 
         assert(enemies.size() > 0);
@@ -138,7 +134,9 @@ public class BattleView extends GameView {
         for (Enemy enemy : enemies) {
             enemy.timeLeft -= delta;
 
-            for (Spell spell : enemy.spellsAffecting) {
+            ArrayList<Spell> spells = new ArrayList<>();
+            spells.addAll(enemy.spellsAffecting);
+            for (Spell spell : spells) {
                 spell.eachTurn();
             }
 
@@ -169,7 +167,15 @@ public class BattleView extends GameView {
             player.timeLeft -= delta;
 
             if (player.timeLeft <= 0) {
-                defending = false;
+                ArrayList<Spell> spells = new ArrayList<>();
+                spells.addAll(player.spellsAffecting);
+                for (Spell spell : spells) {
+                    String toSay = spell.eachTurn();
+                    if (toSay != null) {
+                        dialogueQueue.add(toSay);
+                    }
+                }
+
                 battleState = State.MENU;
             }
 
@@ -189,8 +195,8 @@ public class BattleView extends GameView {
                     battleState = State.ENEMY_SELECT;
                 }
                 else if (selectedMenuOption == DEFEND) {
-                    defending = true;
-                    player.defensePoints += player.defensePoints / 2;
+                    DefenseBuff defenseBuff = new DefenseBuff(player); // Up the player's defense for 1 turn.
+                    dialogueQueue.addLast(defenseBuff.apply());
                     selectedMenuOption = 0;
                     battleState = State.WAITING;
                     player.timeLeft = player.waitPeriod;
@@ -241,8 +247,10 @@ public class BattleView extends GameView {
                     nextDialogue += "\nPress enter to continue...";
                     player.gold += gold;
 
-                    for (int i = 0; i < player.spellsAffecting.size(); i++) {
-                        player.spellsAffecting.get(i).remove(); // undo the spell
+                    ArrayList<Spell> spells = new ArrayList<>();
+                    spells.addAll(player.spellsAffecting);
+                    for (Spell spell : spells) {
+                        spell.remove(); // undo the spell
                     }
 
                     battleState = State.BATTLE_COMPLETE;

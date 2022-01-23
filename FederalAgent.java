@@ -6,7 +6,7 @@ public class FederalAgent extends Enemy {
 
         public MKSpell(GameCharacter user, GameCharacter target)
         {
-            super(false, user, target, 4);
+            super(false, user, target, 2);
         }
 
         @Override
@@ -20,7 +20,7 @@ public class FederalAgent extends Enemy {
             }
 
             target.defensePoints -= 1;
-            return message + "\n" + target.name + "'s DEF went down by 1.";
+            return message + "\n" + target.name + "'s DEF went down by 1.\nDEF: " + target.defensePoints;
         }
 
         @Override
@@ -28,7 +28,7 @@ public class FederalAgent extends Enemy {
         {
             target.defensePoints++;
 
-            return target.name + "has been freed from CIA mind control!\nDEF +1";
+            return target.name + " has been freed from CIA mind control!\nDEF: " + target.defensePoints;
         }
     }
 

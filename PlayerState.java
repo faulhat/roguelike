@@ -114,7 +114,8 @@ public class PlayerState extends GameCharacter implements DS.Storable {
     public void equipShield(Shield shield)
     {
         equippedShield = shield;
-        defensePoints = shield.defensePoints();
+        baseDefensePoints = shield.defensePoints();
+        defensePoints = baseDefensePoints;
     }
 
     public DS.Node getAndValidate(Map<String, DS.Node> asMap, Class<? extends DS.Node> desired, String key) throws LoadingException

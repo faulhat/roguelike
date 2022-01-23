@@ -18,6 +18,9 @@ public abstract class GameCharacter {
 
     public int attackPoints;
 
+    // Default defense points with current equipment.
+    public int baseDefensePoints;
+
     public int defensePoints;
 
     public ArrayList<Spell> spellsAffecting;
@@ -27,6 +30,7 @@ public abstract class GameCharacter {
         this.name = name;
         this.hitPoints = hitPoints;
         this.attackPoints = attackPoints;
+        this.baseDefensePoints = defensePoints;
         this.defensePoints = defensePoints;
         this.waitPeriod = waitPeriod;
         this.timeLeft = timeLeft;
