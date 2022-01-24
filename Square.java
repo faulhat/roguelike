@@ -103,6 +103,12 @@ public class Square implements DS.Storable {
             if (spriteType.equals("Teleporter")) {
                 sprites.add(new Teleporter(spriteNode));
             }
+            else if (spriteType.equals("BossFight")) {
+                sprites.add(new BossFight(spriteNode));
+            }
+            else {
+                throw new SquareLoadingException("Invalid sprite class name: " + spriteType);
+            }
         }
     }
 

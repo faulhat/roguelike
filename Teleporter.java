@@ -62,11 +62,9 @@ public class Teleporter extends Sprite {
     @Override
     public void onEvent(Game outerState, GameEvent e)
     {
-        if (!(e instanceof GameEvent.InteractEvent)) {
-            return;
+        if (e instanceof GameEvent.InteractEvent) {
+            transport(outerState);
         }
-
-        transport(outerState);
     }
 
     @Override

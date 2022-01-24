@@ -18,6 +18,7 @@ public abstract class LevelTransition extends GameView {
         boolean selectPressed = outerState.keyBox.getReleaseKeys(KeyEvent.VK_ENTER, KeyEvent.VK_Z);
 
         if (selectPressed) {
+            outerState.currentLevel = level;
             ChamberView nextView = new ChamberView(outerState, level);
             nextView.enterAt(0, 0, 5, 5);
             outerState.currentView = nextView;

@@ -23,7 +23,7 @@ public class PlayerState extends GameCharacter implements DS.Storable {
     public ArrayList<GameItem> inventory;
 
     // The player's default waitPeriod
-    public static final double WAIT_PERIOD = 5500.0;
+    public static final double WAIT_PERIOD = 5000.0;
 
     public GameItem equippedWeapon;
 
@@ -33,7 +33,7 @@ public class PlayerState extends GameCharacter implements DS.Storable {
 
     public PlayerState()
     {
-        super("Player", 20, 0, 0, WAIT_PERIOD, 0.0);
+        super("Player", 40, 0, 0, WAIT_PERIOD, 0.0);
 
         equipWeapon(new Weapon.Default());
         equipShield(new Shield.Default());

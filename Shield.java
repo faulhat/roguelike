@@ -28,14 +28,14 @@ public abstract class Shield extends GameItem {
     @Override
     public int defensePoints()
     {
-        return 3;
+        return 4;
     }
 
     // The shield you start the game with.
     public static class Default extends Shield {
         public Default()
         {
-            super("Cardboard");
+            super("WoodenShield");
         }
 
         @Override
@@ -47,7 +47,7 @@ public abstract class Shield extends GameItem {
         @Override
         public String description()
         {
-            return "A piece of cardboard you found on the ground.\n3 DEF";
+            return "A piece of wood you found on the ground.\n4 DEF";
         }
 
         // Since this is the default shield, it cannot be un-equipped

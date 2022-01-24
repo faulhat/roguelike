@@ -101,7 +101,7 @@ public abstract class GameItem implements Cloneable {
             return new Weapon.Default();
         }
 
-        if (className.equals("Cardboard")) {
+        if (className.equals("WoodenShield")) {
             return new Shield.Default();
         }
 

@@ -16,7 +16,7 @@ public class Bread extends GameItem {
     @Override
     public String description()
     {
-        return "A loaf of hearty Roman bread.\nHeals 6 HP.";
+        return "A loaf of hearty Roman bread.\nHeals 9 HP.";
     }
 
     @Override
@@ -24,6 +24,6 @@ public class Bread extends GameItem {
     {
         outerState.playerState.inventory.remove(this);
 
-        outerState.playerState.hitPoints += 6;
+        outerState.playerState.hitPoints += 9;
     }
 }
