@@ -1,5 +1,5 @@
-# roguelike
-De Re Publica: A game somewhere between a roguelike and an RPG that takes place in the Late Republic. Named for a political treatise by Cicero.
+# De Re Publica
+A game somewhere between a roguelike and an RPG that takes place in the Late Republic. Named for a political treatise by Cicero.
 
 How to get the working version:
 
