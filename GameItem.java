@@ -93,8 +93,8 @@ public abstract class GameItem implements Cloneable {
             return new Coffee();
         }
 
-        if (className.equals("Cookie")) {
-            return new Cookie();
+        if (className.equals("Bread")) {
+            return new Bread();
         }
 
         if (className.equals("Fists")) {

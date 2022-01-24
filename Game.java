@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 import java.util.ArrayList;
+import java.awt.Point;
 
 /*
  * Thomas: the main class that will run the whole thing
@@ -75,6 +76,10 @@ public class Game {
             levels.add(new ChamberMaze(i, m_width + rand.nextInt(4) - 2, m_height + rand.nextInt(4) + 2, rand));
         }
 
+        for (int i = 1; i < N_LEVELS; i++) {
+            levels.get(i).chambers[0][0].putSprite(new Point(3, 3), new Teleporter(i - 1, levels.get(i - 1).bossLocation, new Point(5, 5)));
+        }
+
         return levels;
     }
 
@@ -105,7 +110,7 @@ public class Game {
     public void init()
     {
         // Set current view to start menu
-        currentView = new StartMenu(this);
+        currentView = new TitleScreen(this);
         saveList = SaveList.loadList();
     }
 
@@ -116,11 +121,11 @@ public class Game {
 
         // Create the player's inventory and give him some supplies
         playerState = new PlayerState();
-        for (int i = 0; i < 2; i++) {
-            playerState.inventory.add(new Cookie());
+        for (int i = 0; i < 5; i++) {
+            playerState.inventory.add(new Bread());
         }
 
-        for (int i = 0; i < 7; i++) {
+        for (int i = 0; i < 4; i++) {
             playerState.inventory.add(new Coffee());
         }
 

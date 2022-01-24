@@ -29,6 +29,18 @@ public class Legionary extends Enemy {
     }
 
     @Override
+    public String onDeath(Game outerState)
+    {
+        String out = "";
+        if (outerState.playerState.inventory.size() < PlayerState.MAX_ITEMS) {
+            outerState.playerState.inventory.add(new Bread());
+            out = name + " dropped a loaf of bread!\n";
+        }
+        
+        return out + super.onDeath(outerState);
+    }
+
+    @Override
     public Legionary getNew()
     {
         return new Legionary(name);

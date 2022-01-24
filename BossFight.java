@@ -1,4 +1,5 @@
 import java.awt.Point;
+import java.util.ArrayList;
 import java.util.Map;
 
 /*
@@ -60,7 +61,10 @@ public class BossFight extends Sprite {
     {
         if (e instanceof GameEvent.InteractEvent) {
             // I know this is awful but not only do I not care, I don't have time to care either.
-            outerState.levels.get(level).chambers[location.x][location.y].putSprite(new Point(Chamber.WIDTH / 2, Chamber.HEIGHT / 2), toNextLevel);
+            Chamber inChamber = outerState.levels.get(level).chambers[location.x][location.y];
+            Square squareOn = inChamber.squares[Chamber.WIDTH / 2][Chamber.HEIGHT / 2];
+            squareOn.sprites = new ArrayList<>();
+            inChamber.putSprite(new Point(Chamber.WIDTH / 2, Chamber.HEIGHT / 2), toNextLevel);
             outerState.currentView = new BattleView(outerState, boss, outerState.currentView);
         }
     }

@@ -38,11 +38,11 @@ public class Veles extends Enemy {
     public String onDeath(Game outerState)
     {
         String out = "";
-        int nextInt = outerState.rand.nextInt(2);
+        int nextInt = outerState.rand.nextInt(3);
         if (outerState.playerState.inventory.size() < PlayerState.MAX_ITEMS) {
-            if (nextInt == 0) {
-                outerState.playerState.inventory.add(new Cookie());
-                out = "\n" + name + " dropped a cookie!";
+            if (nextInt <= 1) {
+                outerState.playerState.inventory.add(new Bread());
+                out = "\n" + name + " dropped a loaf of bread!";
             }
             else {
                 outerState.playerState.inventory.add(new Coffee());
