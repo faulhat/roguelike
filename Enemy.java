@@ -25,7 +25,8 @@ public abstract class Enemy extends GameCharacter {
         return null;
     }
 
-    public String onDeath(Game outerState) {
+    public String onDeath(Game outerState)
+    {
         outerState.playerState.gold += gold;
         return name + " died! Gold +" + gold;
     }

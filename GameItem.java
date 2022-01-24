@@ -105,6 +105,22 @@ public abstract class GameItem implements Cloneable {
             return new Shield.Default();
         }
 
+        if (className.equals("IronShield")) {
+            return new IronShield();
+        }
+
+        if (className.equals("Gladius")) {
+            return new Gladius();
+        }
+
+        if (className.equals("Spear")) {
+            return new Spear();
+        }
+
+        if (className.equals("Fasces")) {
+            return new Fasces();
+        }
+
         throw new ItemLoadingException("Invalid class name.");
     }
 }

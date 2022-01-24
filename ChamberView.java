@@ -5,8 +5,7 @@ import java.awt.event.KeyEvent;
 import java.awt.Point;
 
 /*
- * This class is a wrapper for a ChamberMaze that allows it to be used as a game view,
- * since that necessitates it keeping track of certain state
+ * The overworld view
  */
 public class ChamberView extends GameView {
     // Constants
@@ -276,6 +275,9 @@ public class ChamberView extends GameView {
                 }
                 else if (i == map.bossLocation.y && j == map.bossLocation.x) {
                     renderState += "B ";
+                }
+                else if (i == map.merchantLocation.y && j == map.merchantLocation.x) {
+                    renderState += "M ";
                 }
                 else {
                     renderState += "- ";

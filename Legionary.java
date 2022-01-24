@@ -36,7 +36,7 @@ public class Legionary extends Enemy {
             outerState.playerState.inventory.add(new Bread());
             out = name + " dropped a loaf of bread!\n";
         }
-        
+
         return out + super.onDeath(outerState);
     }
 

@@ -124,6 +124,7 @@ public class InventoryMenu extends Menu {
         menuStr += "\nHP: " + player.hitPoints + " ";
         menuStr += "ATK:" + player.attackPoints + " ";
         menuStr += "DEF:" + player.defensePoints + "\n";
+        menuStr += "GOLD: " + player.gold;
 
         if (items.size() == 0) {
             menuStr += "Your inventory is empty!";

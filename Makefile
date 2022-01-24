@@ -7,5 +7,5 @@ maze: maze-build
 build:
 	javac *.java
 
-run-main: build
-	java Game
+run-debug: build
+	java Game debug

@@ -14,7 +14,7 @@ public class TitleScreen extends GameView {
 
         state = State.TITLE;
     }
-    
+
     @Override
     public void update(double delta)
     {

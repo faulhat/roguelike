@@ -1,6 +1,5 @@
 public abstract class Weapon extends GameItem {
-    // Private, since only Default can have isDefault be true
-    private Weapon(String name)
+    public Weapon(String name)
     {
         super(name);
     }

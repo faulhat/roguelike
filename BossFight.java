@@ -25,7 +25,7 @@ public class BossFight extends Sprite {
         toNextLevel = new Teleporter(level + 1, new Point(0, 0), new Point(5, 5));
         this.location = new DSPoint(location);
     }
-    
+
     public BossFight(DS.Node node) throws LoadingException, DS.NonDeserializableException
     {
         super(node);

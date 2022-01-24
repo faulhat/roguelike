@@ -29,6 +29,8 @@ public class ChamberMaze implements DS.Storable {
 
     public DSPoint bossLocation;
 
+    public DSPoint merchantLocation;
+
     public ChamberMaze(int level)
     {
         this(level, 5, 5, new Random(1));
@@ -51,6 +53,7 @@ public class ChamberMaze implements DS.Storable {
         width = other.width;
         height = other.height;
         bossLocation = new DSPoint(other.bossLocation);
+        merchantLocation = new DSPoint(other.merchantLocation);
 
         chambers = new Chamber[width][height];
         for (int i = 0; i < width; i++) {
@@ -99,6 +102,11 @@ public class ChamberMaze implements DS.Storable {
         bossLocation = new DSPoint(leaves.get(rand.nextInt(leaves.size())));
         chambers[bossLocation.x][bossLocation.y].putSprite(new Point(Chamber.WIDTH / 2, Chamber.HEIGHT / 2), new BossFight(level, bossLocation));
         chambers[bossLocation.x][bossLocation.y].encounterRate = 0.0;
+
+        leaves.remove(bossLocation);
+        merchantLocation = new DSPoint(leaves.get(rand.nextInt(leaves.size())));
+        chambers[merchantLocation.x][merchantLocation.y].putSprite(new Point(Chamber.WIDTH / 2, Chamber.HEIGHT / 2), new Merchant(level));
+        chambers[merchantLocation.x][merchantLocation.y].encounterRate = 0.0;
 
         chambers[0][0].encounterRate = 0.0;
         loadFromLevel();
@@ -187,6 +195,7 @@ public class ChamberMaze implements DS.Storable {
         width = ((DS.IntNode) getAndValidate(asMap, DS.IntNode.class, ":width")).value;
         height = ((DS.IntNode) getAndValidate(asMap, DS.IntNode.class, ":height")).value;
         bossLocation = new DSPoint(getAndValidate(asMap, DS.VectorNode.class, ":boss-loc"));
+        merchantLocation = new DSPoint(getAndValidate(asMap, DS.VectorNode.class, ":merchant-loc"));
 
         chambers = new Chamber[width][height];
 
@@ -227,6 +236,8 @@ public class ChamberMaze implements DS.Storable {
         outNode.add(new DS.IntNode(height));
         outNode.addKey("boss-loc");
         outNode.add(bossLocation.dump());
+        outNode.addKey("merchant-loc");
+        outNode.add(merchantLocation.dump());
         outNode.addKey("matrix");
 
         DS.VectorNode matrixNode = new DS.VectorNode();
