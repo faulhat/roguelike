@@ -2,7 +2,7 @@ import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
 /*
- * Thomas: A class for game menus.
+ * A class for game menus.
  * Uses lambdas for actions performed by menu items.
  */
 public class Menu extends GameView {

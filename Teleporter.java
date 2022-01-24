@@ -2,7 +2,7 @@ import java.awt.Point;
 import java.util.Map;
 
 /*
- * Thomas: A class for a Teleporter sprite
+ * A class for a Teleporter sprite
  * It takes you to a different map from the current one.
  */
 public class Teleporter extends Sprite {
@@ -56,7 +56,6 @@ public class Teleporter extends Sprite {
     {
         outerState.currentLevel = toLevel;
         outerState.currentView = new ChamberView(outerState, toLevel, toLocation, toPosition);
-        outerState.playerState.teleporters.add(this);
     }
 
     @Override

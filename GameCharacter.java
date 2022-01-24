@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 
 /*
- * Thomas: this class represents a character who can engage in battle.
+ * This class represents a character who can engage in battle.
  */
 public abstract class GameCharacter {
     public String name;

@@ -3,7 +3,7 @@ import java.util.Map;
 import java.awt.Point;
 
 /*
- * Thomas: a class representing rooms in the game.
+ * A class representing rooms in the game.
  * These rooms are constant in height and width.
  */
 public class Chamber implements DS.Storable {

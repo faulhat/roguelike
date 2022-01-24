@@ -1,7 +1,7 @@
 import java.awt.Point;
 
 /*
- * Thomas: a subclass of java.awt.Point which can be serialized.
+ * A subclass of java.awt.Point which can be serialized.
  */
 public class DSPoint extends Point implements DS.Storable {
     public static class PointLoadingException extends LoadingException {

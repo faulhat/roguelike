@@ -1,5 +1,5 @@
 /*
- * Thomas: these are the main food item in the game
+ * These are the main food item in the game
  */
 public class Bread extends GameItem {
     public Bread()

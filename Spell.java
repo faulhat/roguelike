@@ -1,5 +1,5 @@
 /*
- * Thomas: this class specifies spells which provide buffs or debuffs to their targets.
+ * This class specifies spells which provide buffs or debuffs to their targets.
  */
 public abstract class Spell {
     // Is this a spell to harm or help?

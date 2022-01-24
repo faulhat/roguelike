@@ -1,5 +1,5 @@
 /*
- * Thomas: a menu for when you pause the game.
+ * A menu for when you pause the game.
  */
 public class PauseMenu extends Menu {
     public PauseMenu(Game outerState, GameView returnView)

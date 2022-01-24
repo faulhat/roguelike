@@ -3,7 +3,7 @@ import java.awt.Point;
 import java.util.EnumSet;
 
 /*
- * Thomas: An extension of the direction enum that allows for diagonal directions.
+ * An extension of the direction enum that allows for diagonal directions.
  */
 public class DirectionEx {
     // x and y of the point on a unit circle at pi/4 radians

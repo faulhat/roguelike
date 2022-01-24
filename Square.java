@@ -2,7 +2,7 @@ import java.util.ArrayList;
 import java.util.Map;
 
 /*
- * Thomas: this class represents a square in a chamber.
+ * This class represents a square in a chamber.
  * It may be a wall, and it may have sprites on it.
  */
 public class Square implements DS.Storable {

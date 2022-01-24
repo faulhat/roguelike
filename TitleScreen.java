@@ -1,5 +1,8 @@
 import java.awt.event.*;
 
+/*
+ * The title screen
+ */
 public class TitleScreen extends GameView {
     public static enum State { TITLE, CONTROLS }
 

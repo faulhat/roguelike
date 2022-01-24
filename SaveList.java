@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.io.Reader;
 
 /*
- * Thomas: a class representing all of the user's save files.
+ * A class representing all of the user's save files.
  */
 public class SaveList implements DS.Storable {
     public static class SaveListLoadingException extends LoadingException {

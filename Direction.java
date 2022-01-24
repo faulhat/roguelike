@@ -1,7 +1,7 @@
 import java.awt.Point;
 
 /*
- * Thomas: an enumeration representing directions on a grid
+ * An enumeration representing directions on a grid
  * N = up, E = right, S = down, W = left.
  */
 public enum Direction {

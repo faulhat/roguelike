@@ -1,7 +1,7 @@
 import javax.naming.OperationNotSupportedException;
 
 /*
- * Thomas: this class represents a view in the game.
+ * This class represents a view in the game.
  * This could be a menu, the inventory screen, the overworld...
  * Basically just any state that the game can be in.
  */

@@ -1,5 +1,5 @@
 /*
- * Thomas: Gladiators were Rome's most popular sportsmen and her most ruthless warriors.
+ * Gladiators were Rome's most popular sportsmen and her most ruthless warriors.
  * Boss of stage 2.
  */
 public class Gladiator extends Enemy {

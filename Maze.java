@@ -6,7 +6,7 @@ import java.util.EnumMap;
 import java.util.EnumSet;
 
 /*
- * Thomas: This is a class for generating mazes.
+ * This is a class for generating mazes.
  * This will be used for the procedural level generation.
  */
 public class Maze {

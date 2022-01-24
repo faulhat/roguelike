@@ -1,5 +1,5 @@
 /*
- * Thomas: menu for starting the game
+ * Menu for starting the game
  */
 public class StartMenu extends Menu {
     public StartMenu(Game outerState)

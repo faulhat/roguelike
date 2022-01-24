@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 
 /*
- * Thomas: which encounters can occur in a level?
+ * Which encounters can occur in a level?
  */
 public class Encounters {
     private ArrayList<Encounter> encounters;

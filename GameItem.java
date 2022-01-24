@@ -1,7 +1,7 @@
 import javax.naming.OperationNotSupportedException;
 
 /*
- * Thomas: this class represents an item in the game
+ * This class represents an item in the game
  * Items must be fungible and have names which are unique by subclass
  */
 public abstract class GameItem implements Cloneable {

@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 /*
- * Thomas: this class is for a maze of chambers
+ * This class is for a maze of chambers
  */
 
 public class ChamberMaze implements DS.Storable {

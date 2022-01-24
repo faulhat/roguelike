@@ -3,7 +3,7 @@ import java.util.Map;
 import java.awt.Point;
 
 /*
- * Thomas: this class represents a game save state, which can be serialized.
+ * This class represents a game save state, which can be serialized.
  */
 public class SaveState implements DS.Storable {
     public static class SaveStateLoadingException extends LoadingException {

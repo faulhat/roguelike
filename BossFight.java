@@ -3,7 +3,7 @@ import java.util.ArrayList;
 import java.util.Map;
 
 /*
- * Thomas: this class represents a boss fight.
+ * This class represents a boss fight.
  * You have to interact with the sprite to start the battle.
  */
 public class BossFight extends Sprite {

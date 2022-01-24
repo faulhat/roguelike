@@ -1,5 +1,5 @@
 /*
- * Thomas: a class for shields.
+ * A class for shields.
  */
 public abstract class Shield extends GameItem {
     public Shield(String name)

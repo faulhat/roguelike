@@ -1,5 +1,5 @@
 /*
- * Thomas: Dictator was a political title in the Roman Republic, granted to generals in times of emergency.
+ * Dictator was a political title in the Roman Republic, granted to generals in times of emergency.
  * It gave the general unilateral command over Rome's legions and the legal authority to raise new legions at will.
  * Final boss.
  */

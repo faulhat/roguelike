@@ -1,7 +1,7 @@
 import java.util.Map;
 
 /*
- * Thomas: this interface doesn't have to just represent a drawn sprite.
+ * This interface doesn't have to just represent a drawn sprite.
  * It can represent any object that exists at a certain place in the game.
  */
 public abstract class Sprite implements DS.Storable, Cloneable {

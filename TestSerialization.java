@@ -1,7 +1,7 @@
 import java.awt.Point;
 
 /*
- * Thomas: test to make sure all serialization works.
+ * Test to make sure all serialization works.
  */
 public class TestSerialization {
     public static void main(String[] args)

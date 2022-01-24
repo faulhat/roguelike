@@ -2,7 +2,7 @@ import java.util.ArrayList;
 import java.util.Map;
 
 /*
- * Thomas: a class representing the game state regarding the player at a point in the game.
+ * A class representing the game state regarding the player at a point in the game.
  * This should be serialized and saved to a save file when the user saves the game.
  */
 public class PlayerState extends GameCharacter implements DS.Storable {
@@ -15,9 +15,6 @@ public class PlayerState extends GameCharacter implements DS.Storable {
 
     // The player can have eight items at most.
     public static int MAX_ITEMS = 10;
-
-    // Where can the player teleport to?
-    public ArrayList<Teleporter> teleporters;
 
     // What items does the player have in his inventory?
     public ArrayList<GameItem> inventory;
@@ -39,8 +36,6 @@ public class PlayerState extends GameCharacter implements DS.Storable {
         equipShield(new Shield.Default());
 
         inventory = new ArrayList<>();
-        teleporters = new ArrayList<>();
-
         gold = 0;
     }
 

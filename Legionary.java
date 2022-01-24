@@ -1,5 +1,5 @@
 /*
- * Thomas: Legionaries were more experienced than velites.
+ * Legionaries were more experienced than velites.
  * Overworld enemy for stage 2.
  */
 public class Legionary extends Enemy {

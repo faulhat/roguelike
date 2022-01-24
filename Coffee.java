@@ -1,5 +1,5 @@
 /*
- * Thomas: another game item. A cup of coffee.
+ * Another game item. A cup of coffee.
  * Increases the player's speed in battle.
  */
 public class Coffee extends GameItem {

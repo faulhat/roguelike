@@ -1,5 +1,5 @@
 /*
- * Thomas: Here's a class that represents an enemy that you can fight.
+ * Here's a class that represents an enemy that you can fight.
  */
 public abstract class Enemy extends GameCharacter {
     // How much gold is this enemy carrying?

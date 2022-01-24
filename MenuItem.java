@@ -1,5 +1,5 @@
 /*
- * Thomas: this class represents an item in a menu.
+ * This class represents an item in a menu.
  * It contains a string to be printed in the menu and a consumer specifying its action.
  */
 public class MenuItem {

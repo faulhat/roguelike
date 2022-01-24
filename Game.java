@@ -1,3 +1,8 @@
+/*
+ * De Re Publica, a game about ancient Rome
+ * created by Athenase, Lukas, Ricardo, Thomas, and Tobias.
+ */
+
 import javax.swing.JTextArea;
 import java.awt.Font;
 import java.time.Duration;
@@ -9,7 +14,7 @@ import java.util.ArrayList;
 import java.awt.Point;
 
 /*
- * Thomas: the main class that will run the whole thing
+ * The main class that will run the whole thing
  * Manages both the Swing-based display and the game state.
  */
 public class Game {

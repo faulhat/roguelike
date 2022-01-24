@@ -1,5 +1,5 @@
 /*
- * Thomas: Velites (sg. veles) were the lowest-ranking roman troops.
+ * Velites (sg. veles) were the lowest-ranking roman troops.
  * Overworld enemy for stage 1.
  */
 public class Veles extends Enemy {

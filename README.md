@@ -1,5 +1,5 @@
 # roguelike
-A roguelike game (somewhat)
+De Re Publica: A game somewhere between a roguelike and an RPG that takes place in the Late Republic. Named for a political treatise by Cicero.
 
 How to get the working version:
 
@@ -8,7 +8,7 @@ git clone https://github.com/tafaulhaber590/roguelike/
 cd roguelike
 ```
 
-Right now, this version is very simple. You can randomly encounter basic enemies while wandering around an empty level. You can save the game and return to save states.
+As of now, the game has three levels with a boss at the end of each level. The levels are procedurally generated. They are very empty, unfortunately. You can randomly encounter different enemies in each level. You can also save the game.
 
 To build and run the main program:
 
@@ -16,6 +16,13 @@ To build and run the main program:
 javac *.java
 java Game
 ```
+
+To get maps of each level printed to the command line when you start a new game:
+
+```
+java Game debug
+```
+
 
 Maze generation program:
 
@@ -60,3 +67,15 @@ To run in debug mode, but still use a random seed:
 ```
 java Maze [width] [height] debug-rand
 ```
+
+Credits:
+
+Ricardo Camba
+
+Thomas Faulhaber
+
+Athenase Nishemezwe
+
+Lukas Probst
+
+Tobias Waldron

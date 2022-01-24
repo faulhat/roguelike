@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 
 /*
- * Thomas: this class represents a possible random enemy encounter.
+ * This class represents a possible random enemy encounter.
  */
 public class Encounter {
     private ArrayList<Enemy> enemies;

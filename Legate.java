@@ -1,5 +1,5 @@
 /*
- * Thomas: Legates (anglicized from Latin legati) were senior military officers and magistrates
+ * Legates (anglicized from Latin legati) were senior military officers and magistrates
  * who served under Rome's generals. They held imperium, the legal right to exercise their every whim,
  * and therefore only highly skilled military men attained this rank.
  * Boss for stage 1.

@@ -8,7 +8,7 @@ import java.awt.event.KeyEvent;
 import java.awt.FlowLayout;
 
 /*
- * Thomas: Here is a class that handles keyboard input.
+ * Here is a class that handles keyboard input.
  */
 public class KeyBox {
     // A lock to control internal state access

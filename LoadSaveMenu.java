@@ -1,5 +1,5 @@
 /*
- * Thomas: A menu for loading save files
+ * A menu for loading save files
  * god i'm tired
  */
 public class LoadSaveMenu extends Menu {

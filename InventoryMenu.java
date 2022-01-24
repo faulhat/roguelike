@@ -1,7 +1,7 @@
 import java.awt.event.*;
 
 /*
- * Thomas: this is a class for a menu showing the player's inventory
+ * This is a class for a menu showing the player's inventory
  * Navigating to an item will show a description of that item and selecting it will use it.
  */
 public class InventoryMenu extends Menu {

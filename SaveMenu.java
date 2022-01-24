@@ -1,5 +1,5 @@
 /*
- * Thomas: the menu to save the game.
+ * The menu to save the game.
  */
 public class SaveMenu extends Menu {
     public class SaveAction implements Runnable {

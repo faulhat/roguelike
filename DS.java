@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /*
- * Thomas: Here's a class all about storing data
+ * Here's a class all about storing data
  * We are using an s-expression based format to store game data.
  * It is loosely based on the Clojure EDN format but many features unnecessary for our purposes are absent.
  */
