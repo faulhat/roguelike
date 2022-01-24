@@ -24,6 +24,7 @@ public class Bread extends GameItem {
     {
         outerState.playerState.inventory.remove(this);
 
-        outerState.playerState.hitPoints += 9;
+        outerState.playerState.trueHitPoints += 9.0;
+        outerState.playerState.hitPoints = (int) Math.ceil(outerState.playerState.trueHitPoints);
     }
 }

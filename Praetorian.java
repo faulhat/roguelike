@@ -1,5 +1,5 @@
 /*
- * Praetorians were elite soldiers who served as bodyguards for consuls and praetors, and later emperors.
+ * Praetorians were elite soldiers who served as bodyguards for senators, and later emperors.
  * They were among the most feared men in Rome and could control Roman politics with a weak emperor on the throne.
  * Overworld enemy for stage 3.
  */

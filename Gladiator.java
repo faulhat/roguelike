@@ -49,7 +49,7 @@ public class Gladiator extends Enemy {
     @Override
     public char getSymbol()
     {
-        return 'P';
+        return 'G';
     }
 
     @Override
