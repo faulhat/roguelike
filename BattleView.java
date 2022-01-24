@@ -31,9 +31,6 @@ public class BattleView extends GameView {
     // What should the dialogue box say next?
     public LinkedList<String> dialogueQueue;
 
-    // How much gold will the player win?
-    public int gold;
-
     // Where to return to after the battle ends
     public GameView returnView;
 
@@ -55,7 +52,6 @@ public class BattleView extends GameView {
         selectedMenuOption = 0;
         selectedEnemy = 0;
         selectedItem = 0;
-        gold = 0;
 
         assert(enemies.size() > 0);
         Enemy firstEnemy = enemies.get(0);
@@ -234,18 +230,15 @@ public class BattleView extends GameView {
                 boolean enemyDied = enemySelected.receiveAttack(player.attackPoints);
 
                 if (enemyDied) {
+                    nextDialogue += "\n" + enemySelected.onDeath(outerState);
                     enemies.remove(enemySelected);
-                    nextDialogue += "\n" + enemySelected.name + " has died!";
-                    gold += enemySelected.gold;
                 }
                 else {
                     nextDialogue += "\n" + (prevEnemyHP - enemySelected.hitPoints) + " damage! HP: " + enemySelected.hitPoints;
                 }
 
                 if (enemies.size() == 0) {
-                    nextDialogue += "\nYou won! GOLD +" + gold;
                     nextDialogue += "\nPress enter to continue...";
-                    player.gold += gold;
 
                     ArrayList<Spell> spells = new ArrayList<>();
                     spells.addAll(player.spellsAffecting);

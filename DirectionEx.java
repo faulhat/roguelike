@@ -52,6 +52,15 @@ public class DirectionEx {
         return directions.contains(direction);
     }
 
+    public Direction first()
+    {
+        for (Direction direction : directions) {
+            return direction;
+        }
+
+        return Direction.S;
+    }
+
     @Override
     public boolean equals(Object other)
     {

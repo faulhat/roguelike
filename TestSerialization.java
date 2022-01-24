@@ -8,18 +8,21 @@ public class TestSerialization {
     {
         try {
             DS.Node node;
+            String nodeStr;
 
             Chamber chamber = new Chamber();
             node = chamber.dump();
             assert(chamber.equals(new Chamber(node)));
 
-            ChamberMaze chamberMaze = new ChamberMaze();
+            ChamberMaze chamberMaze = new ChamberMaze(1);
             node = chamberMaze.dump();
+            nodeStr = node.dumps();
+            node = DS.loads(nodeStr);
             assert(chamberMaze.equals(new ChamberMaze(node)));
 
             DSPoint point = new DSPoint(1, -1);
             node = point.dump();
-            String nodeStr = node.dumps();
+            nodeStr = node.dumps();
             System.out.println(nodeStr);
             node = DS.loads(nodeStr);
             node.print();

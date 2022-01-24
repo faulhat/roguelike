@@ -54,6 +54,7 @@ public class Teleporter extends Sprite {
 
     public void transport(Game outerState)
     {
+        outerState.currentLevel = toLevel;
         outerState.currentView = new ChamberView(outerState, toLevel, toLocation, toPosition);
         outerState.playerState.teleporters.add(this);
     }

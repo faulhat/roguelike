@@ -1,7 +1,6 @@
 import javax.naming.OperationNotSupportedException;
 
 import java.awt.geom.Point2D;
-import java.util.ArrayList;
 import java.awt.event.KeyEvent;
 import java.awt.Point;
 
@@ -34,17 +33,21 @@ public class ChamberView extends GameView {
     public DirectionEx playerDirection;
 
     // Which direction was the player last going?
-    public DirectionEx lastPlayerDirection;
+    public Direction lastPlayerDirection;
+
+    // Which level is this?
+    public int level;
 
     // Start player in top-leftmost Chamber
     public ChamberView(Game outerState, int level)
     {
         super(outerState);
 
+        this.level = level;
         this.map = outerState.levels.get(level);
 
         playerDirection = new DirectionEx();
-        lastPlayerDirection = new DirectionEx(Direction.N);
+        lastPlayerDirection = Direction.S;
     }
 
     public ChamberView(Game outerState, int level, int map_x, int map_y, int chamber_x,int chamber_y)
@@ -88,6 +91,14 @@ public class ChamberView extends GameView {
         if (goToInventory) {
             outerState.currentView = new InventoryMenu(outerState, this);
             return;
+        }
+
+        // Interact?
+        boolean toInteract = outerState.keyBox.getReleaseKeys(KeyEvent.VK_ENTER, KeyEvent.VK_Z);
+        Point lastDirOffset = lastPlayerDirection.asOffset();
+        Point nextGridPos = new Point((int) position.x + lastDirOffset.x, (int) position.y + lastDirOffset.y);
+        if (toInteract && nextGridPos.x >= 0 && nextGridPos.x < Chamber.WIDTH && nextGridPos.y >= 0 && nextGridPos.y < Chamber.HEIGHT) {
+            chamber.squares[nextGridPos.x][nextGridPos.y].onEvent(outerState, new GameEvent.InteractEvent(lastPlayerDirection.getOpposite()));
         }
 
         // Get key input
@@ -190,23 +201,30 @@ public class ChamberView extends GameView {
                 position = newPosition;
             }
             // Otherwise, move normally, but don't run into a wall.
+            // Don't walk on an unwalkable sprite either
             else if (!chamber.squares[newGridPos_x][newGridPos_y].isWall) {
-                position = newPosition;
+                boolean walkable = true;
+                for (Sprite sprite : chamber.squares[newGridPos_x][newGridPos_y].sprites) {
+                    if (!sprite.walkable) {
+                        walkable = false;
+                        break;
+                    }
+                }
+
+                if (walkable) {
+                    position = newPosition;
+                }
             }
 
             // Roll the dice
             if ((int) position.x != prevGridPos_x || (int) position.y != prevGridPos_y) {
                 if (outerState.rand.nextDouble() < chamber.encounterRate) {
-                    ArrayList<Enemy> enemies = new ArrayList<>();
-                    enemies.add(new FederalAgent(1));
-                    enemies.add(new FederalAgent(2));
-
-                    outerState.currentView = new BattleView(outerState, enemies, this);
+                    outerState.currentView = new BattleView(outerState, map.encounters.getNextEncounter(outerState), this);
                 }
             }
 
             // Update lastPlayerDirection. We do this here because we must only do it after the player has moved.
-            lastPlayerDirection = playerDirection;
+            lastPlayerDirection = playerDirection.first();
         }
     }
 
@@ -256,6 +274,9 @@ public class ChamberView extends GameView {
                 if (i == location.y && j == location.x) {
                     renderState += "* ";
                 }
+                else if (i == map.bossLocation.y && j == map.bossLocation.x) {
+                    renderState += "B ";
+                }
                 else {
                     renderState += "- ";
                 }
@@ -265,11 +286,5 @@ public class ChamberView extends GameView {
         }
 
         return renderState;
-    }
-
-    public void eventAtPos(Point2D.Double pointAt, GameEvent e)
-    {
-        Square square = chamber.squares[(int) pointAt.y][(int) pointAt.x];
-        square.onEvent(outerState, e);
     }
 }

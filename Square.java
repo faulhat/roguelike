@@ -41,7 +41,9 @@ public class Square implements DS.Storable {
 
     public void onEvent(Game outerState, GameEvent e)
     {
-        for (Sprite sprite : sprites) {
+        ArrayList<Sprite> spritesCopy = new ArrayList<>();
+        spritesCopy.addAll(sprites);
+        for (Sprite sprite : spritesCopy) {
             sprite.onEvent(outerState, e);
         }
     }

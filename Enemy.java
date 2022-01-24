@@ -19,5 +19,16 @@ public abstract class Enemy extends GameCharacter {
 
     // Get this enemy's next attack.
     // Returns null to attack the player normally.
-    public abstract Spell getNextSpell(Game outerState);
+    // Always returns null by default
+    public Spell getNextSpell(Game outerState)
+    {
+        return null;
+    }
+
+    public String onDeath(Game outerState) {
+        outerState.playerState.gold += gold;
+        return name + " died! Gold +" + gold;
+    }
+
+    public abstract Enemy getNew();
 }

@@ -4,8 +4,8 @@ maze-build:
 maze: maze-build
 	java Maze
 
-build-all:
+build:
 	javac *.java
 
-run-main: build-all
+run-main: build
 	java Game

@@ -6,7 +6,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 import java.util.ArrayList;
-import java.awt.Point;
 
 /*
  * Thomas: the main class that will run the whole thing
@@ -61,6 +60,8 @@ public class Game {
     // The save files
     public SaveList saveList;
 
+    private static boolean debug;
+
     // Generate new levels
     // Each level contains a teleporter to the next level and the previous level (if applicable).
     public static ArrayList<ChamberMaze> genLevels(int n_levels, int m_width, int m_height, Random rand)
@@ -69,34 +70,9 @@ public class Game {
         assert(m_width > 4);
         assert(m_height > 4);
 
-        int width = m_width + rand.nextInt(4) - 2;
-        int height = m_height + rand.nextInt(4) - 2;
-
         ArrayList<ChamberMaze> levels = new ArrayList<>();
-        ChamberMaze firstMaze = new ChamberMaze(width, height, rand);
-        if (n_levels > 1) {
-            firstMaze.putSprite(new Point(width - 1, height - 1), new Point(3, 3), new Teleporter(1, new Point(0, 0), new Point(0, 0)));
-        }
-
-        levels.add(firstMaze);
-
-        int prev_width = width, prev_height = height;
-
-        for (int i = 1; i < n_levels; i++) {
-            width = m_width + rand.nextInt(2) - 1;
-            height = m_height + rand.nextInt(2) - 1;
-
-            ChamberMaze nextMaze = new ChamberMaze(width, height, rand);
-            nextMaze.putSprite(new Point(0, 0), new Point(3, 3), new Teleporter(i - 1, new Point(prev_width - 1, prev_height - 1), new Point(0, 0)));
-
-            if (i < n_levels - 1) {
-                nextMaze.putSprite(new Point(width - 1, height - 1), new Point(3, 3), new Teleporter(i + 1, new Point(0, 0), new Point(0, 0)));
-            }
-
-            levels.add(nextMaze);
-
-            prev_width = width;
-            prev_height = height;
+        for (int i = 0; i < N_LEVELS; i++) {
+            levels.add(new ChamberMaze(i, m_width + rand.nextInt(4) - 2, m_height + rand.nextInt(4) + 2, rand));
         }
 
         return levels;
@@ -148,12 +124,14 @@ public class Game {
             playerState.inventory.add(new Coffee());
         }
 
-        levels = genLevels(N_LEVELS, 7, 7, rand);
+        levels = genLevels(N_LEVELS, 5, 5, rand);
+        if (debug) {
+            for (ChamberMaze level : levels) {
+                System.out.println(level.maze.toString() + "\n");
+            }
+        }
 
-        ChamberView chamberView = new ChamberView(this, currentLevel);
-        chamberView.enterAt(0, 0, Chamber.WIDTH / 2, Chamber.HEIGHT / 2);
-
-        currentView = chamberView;
+        currentView = new LevelTransition.StartTransition(this);
     }
 
     // Load a save state
@@ -226,7 +204,10 @@ public class Game {
     public static void main(String args[])
     {
         try {
-            new Game().run();
+            Game game = new Game();
+            debug = args.length > 0 && args[0].equals("debug");
+
+            game.run();
         }
         catch (Exception e) {
             e.printStackTrace();
