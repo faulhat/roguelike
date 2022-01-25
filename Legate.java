@@ -36,7 +36,7 @@ public class Legate extends Enemy {
 
     private Legate(String name)
     {
-        super(name, 13, 4, 4, 30, 5500.0);
+        super(name, 13, 6, 4, 30, 5500.0);
 
         approachMessage = "An old commander orders his men to stand back as he challenges you.";
         attackMessage = name + " strikes!";

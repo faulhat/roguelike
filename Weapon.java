@@ -15,18 +15,14 @@ public abstract class Weapon extends GameItem {
     public void onUse(Game outerState)
     {
         if (outerState.playerState.equippedWeapon == this) {
-            outerState.playerState.equippedWeapon = new Default();
+            outerState.playerState.equipWeapon(new Default());
         }
         else {
-            outerState.playerState.equippedWeapon = this;
+            outerState.playerState.equipWeapon(this);
         }
     }
 
-    @Override
-    public int attackPoints()
-    {
-        return 4;
-    }
+    public abstract int attackPoints();
 
     // The weapon the player starts with
     public static class Default extends Weapon {
@@ -42,6 +38,12 @@ public abstract class Weapon extends GameItem {
         }
 
         @Override
+        public int attackPoints()
+        {
+            return 4;
+        }
+
+        @Override
         public String description()
         {
             return "Your own two hands.\n4 ATK.";
@@ -51,7 +53,7 @@ public abstract class Weapon extends GameItem {
         @Override
         public void onUse(Game outerState)
         {
-            outerState.playerState.equippedWeapon = this;
+            outerState.playerState.equipWeapon(this);
         }
     }
 }

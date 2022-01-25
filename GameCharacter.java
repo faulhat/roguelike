@@ -56,7 +56,7 @@ public abstract class GameCharacter {
     // Returns a boolean saying whether or not this character is dead.
     public boolean receiveAttack(int attackMagnitude)
     {
-        trueHitPoints -= attackMagnitude * Math.pow(0.8, defensePoints);
+        trueHitPoints -= attackMagnitude * Math.pow(0.9, defensePoints);
         hitPoints = (int) Math.ceil(trueHitPoints);
 
         return hitPoints <= 0;

@@ -66,6 +66,7 @@ public class Game {
     // The save files
     public SaveList saveList;
 
+    // Print debug ingo?
     private static boolean debug;
 
     // Generate new levels

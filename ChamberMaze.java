@@ -116,7 +116,8 @@ public class ChamberMaze implements DS.Storable {
     {
         ArrayList<Encounter> encounterList = new ArrayList<>();
         ArrayList<Enemy> twoVelites = new ArrayList<>(Arrays.asList(new Veles(1), new Veles(2)));
-        double encounterRate = 0.0045;
+        ArrayList<Enemy> velesAndLegionary = new ArrayList<>(Arrays.asList(new Legionary(), new Veles()));
+        double encounterRate = 0.007;
         switch (level) {
         case 0:
             ArrayList<Enemy> oneVeles = new ArrayList<>(Arrays.asList(new Veles()));
@@ -127,15 +128,15 @@ public class ChamberMaze implements DS.Storable {
             encounterList.add(new Encounter(twoVelites)); // Don't worry about copying; only one of these conditions can occur
             ArrayList<Enemy> oneLegionary = new ArrayList<>(Arrays.asList(new Legionary()));
             encounterList.add(new Encounter(oneLegionary));
-            encounterRate = 0.0055;
+            encounterList.add(new Encounter(velesAndLegionary));
             break;
         case 2:
-            encounterList.add(new Encounter(twoVelites));
+            encounterList.add(new Encounter(velesAndLegionary));
             ArrayList<Enemy> twoLegionaries = new ArrayList<>(Arrays.asList(new Legionary(1), new Legionary(2)));
             encounterList.add(new Encounter(twoLegionaries));
             ArrayList<Enemy> onePraetorian = new ArrayList<>(Arrays.asList(new Praetorian()));
             encounterList.add(new Encounter(onePraetorian));
-            encounterRate = 0.007;
+            encounterRate = 0.008;
         }
 
         encounters = new Encounters(encounterList);

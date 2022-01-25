@@ -266,7 +266,7 @@ public class ChamberView extends GameView {
             renderState += '\n';
         }
 
-        renderState += "Level " + (outerState.currentLevel + 1) + "\n";
+        renderState += "\nLevel " + (outerState.currentLevel + 1) + "\n";
 
         for (int i = 0; i < map.height; i++) {
             for (int j = 0; j < map.width; j++) {
@@ -286,6 +286,8 @@ public class ChamberView extends GameView {
 
             renderState += "\n";
         }
+
+        renderState += "\nB = boss\nM = merchant";
 
         return renderState;
     }

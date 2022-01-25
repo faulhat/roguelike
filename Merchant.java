@@ -65,6 +65,7 @@ public class Merchant extends Sprite {
             super(outerState, returnView);
 
             this.trades = trades;
+            message = "";
 
             for (Trade trade : trades) {
                 Runnable tradeAction = () -> {
@@ -128,14 +129,13 @@ public class Merchant extends Sprite {
 
         // The fallthrough is intentional.
         switch (level) {
-        case 0:
-            trades.add(new Trade(new Gladius(), 11));
+        case 2:
+            trades.add(new Trade(new Fasces(), 16));
         case 1:
             trades.add(new Trade(new Spear(), 13));
             trades.add(new Trade(new IronShield(), 12));
-        case 2:
-            trades.add(new Trade(new Fasces(), 16));
-            break;
+        case 0:
+            trades.add(new Trade(new Gladius(), 11));
         default:
         }
     }

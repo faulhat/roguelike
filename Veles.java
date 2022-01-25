@@ -5,7 +5,7 @@
 public class Veles extends Enemy {
     private Veles(String name)
     {
-        super(name, 5, 1, 1, 10, 9000.0);
+        super(name, 6, 3, 2, 10, 9000.0);
 
         approachMessage = "A young soldier shivers as he draws his gladius...";
         attackMessage = name + " slashes at you weakly.";

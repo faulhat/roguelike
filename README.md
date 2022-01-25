@@ -8,7 +8,7 @@ git clone https://github.com/tafaulhaber590/roguelike/
 cd roguelike
 ```
 
-As of now, the game has three levels with a boss at the end of each level. The levels are procedurally generated. They are very empty, unfortunately. You can randomly encounter different enemies in each level. You can also save the game.
+As of now, the game has three levels with a boss at the end of each level. The levels are procedurally generated. They are very empty, unfortunately. You can randomly encounter different enemies in each level and buy stuff from merchants. You can also save the game.
 
 To build and run the main program:
 

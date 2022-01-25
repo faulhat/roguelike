@@ -6,7 +6,7 @@
 public class Dictator extends Enemy {
     private Dictator(String name)
     {
-        super(name, 22, 6, 3, 0, 5000.0);
+        super(name, 22, 7, 5, 0, 5000.0);
 
         approachMessage = "A man who brought nations to their knees stands relaxed before you, a dagger at his side.";
         attackMessage = name + " slices at you!";

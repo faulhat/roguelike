@@ -6,7 +6,7 @@
 public class Praetorian extends Enemy {
     private Praetorian(String name)
     {
-        super(name, 15, 5, 4, 20, 8000.0);
+        super(name, 15, 7, 5, 20, 8000.0);
 
         approachMessage = "An older soldier approaches with fasces in one hand and a sword in the other.";
         attackMessage = name + " strikes decisively!";

@@ -5,7 +5,7 @@
 public class Legionary extends Enemy {
     private Legionary(String name)
     {
-        super(name, 12, 3, 3, 15, 8000.0);
+        super(name, 12, 6, 4, 15, 8000.0);
 
         approachMessage = "An experienced soldier orders you to stop.";
         attackMessage = name + " lunges!";

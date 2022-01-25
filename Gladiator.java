@@ -4,6 +4,8 @@
  */
 public class Gladiator extends Enemy {
     public static class CastNet extends Spell {
+        public static final double FACTOR = 1.7;
+
         public CastNet(GameCharacter user, GameCharacter target)
         {
             super(false, user, target, 2);
@@ -12,14 +14,14 @@ public class Gladiator extends Enemy {
         @Override
         public String apply()
         {
-            target.waitPeriod *= 2;
+            target.waitPeriod *= FACTOR;
             return user.name + " casts his net over you! Your movement is restricted.";
         }
 
         @Override
         public String unapply()
         {
-            target.waitPeriod /= 2;
+            target.waitPeriod /= FACTOR;
             return "You broke free from " + user.name + "'s net.";
         }
     }
@@ -28,7 +30,7 @@ public class Gladiator extends Enemy {
 
     private Gladiator(String name)
     {
-        super(name, 20, 6, 4, 30, 5000.0);
+        super(name, 20, 8, 4, 30, 5000.0);
 
         approachMessage = "A man engineered in body and spirit by Mars himself stares you down.";
         attackMessage = name + " thrusts his trident at you!";

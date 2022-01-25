@@ -18,18 +18,14 @@ public abstract class Shield extends GameItem {
     public void onUse(Game outerState)
     {
         if (outerState.playerState.equippedShield == this) {
-            outerState.playerState.equippedShield = new Default();
+            outerState.playerState.equipShield(new Default());
         }
         else {
-            outerState.playerState.equippedShield = this;
+            outerState.playerState.equipShield(this);
         }
     }
 
-    @Override
-    public int defensePoints()
-    {
-        return 4;
-    }
+    public abstract int defensePoints();
 
     // The shield you start the game with.
     public static class Default extends Shield {
@@ -45,6 +41,12 @@ public abstract class Shield extends GameItem {
         }
 
         @Override
+        public int defensePoints()
+        {
+            return 4;
+        }
+
+        @Override
         public String description()
         {
             return "A piece of wood you found on the ground.\n4 DEF";
@@ -54,7 +56,7 @@ public abstract class Shield extends GameItem {
         @Override
         public void onUse(Game outerState)
         {
-            outerState.playerState.equippedShield = this;
+            outerState.playerState.equipShield(this);
         }
     }
 }

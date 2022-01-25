@@ -20,12 +20,13 @@ public class InventoryMenu extends Menu {
 
                 assert(outerState.currentView instanceof InventoryMenu);
 
+                // Consumable items will remove themselves on use.
                 if (!player.inventory.contains(item))
                 {
-                    InventoryMenu.this.items.remove(InventoryMenu.this.selected);
+                    items.remove(selected);
 
-                    if (InventoryMenu.this.selected != 0) {
-                        InventoryMenu.this.selected--;
+                    if (selected != 0) {
+                        selected--;
                     }
                 }
             };
@@ -37,22 +38,33 @@ public class InventoryMenu extends Menu {
 
         public DropMenu(Game outerState)
         {
-            super(outerState, (GameView) null);
+            super(outerState, InventoryMenu.this);
 
             yesAction = () -> {
+                GameItem item = player.inventory.get(InventoryMenu.this.selected);
+                if (player.equippedShield == item)
+                {
+                    player.equipShield(new Shield.Default());
+                }
+
+                if (player.equippedWeapon == item)
+                {
+                    player.equipWeapon(new Weapon.Default());
+                }
+
                 InventoryMenu.this.items.remove(InventoryMenu.this.selected);
-                outerState.playerState.inventory.remove(InventoryMenu.this.selected);
+                player.inventory.remove(InventoryMenu.this.selected);
 
                 if (InventoryMenu.this.selected != 0)
                 {
                     InventoryMenu.this.selected--;
                 }
 
-                InventoryMenu.this.state = State.NAV;
+                state = State.NAV;
             };
 
             noAction = () -> {
-                InventoryMenu.this.state = State.NAV;
+                state = State.NAV;
             };
 
             items.add(new MenuItem("yes", yesAction));
@@ -124,13 +136,32 @@ public class InventoryMenu extends Menu {
         menuStr += "\nHP: " + player.hitPoints + " ";
         menuStr += "ATK:" + player.attackPoints + " ";
         menuStr += "DEF:" + player.defensePoints + "\n";
-        menuStr += "GOLD: " + player.gold;
+        menuStr += "GOLD: " + player.gold + "\n";
 
         if (items.size() == 0) {
             menuStr += "Your inventory is empty!";
         }
         else {
-            menuStr += "Your inventory:\n" + super.render();
+            menuStr += "Your inventory:\n";
+
+            for (int i = 0; i < items.size(); i++) {
+                if (i == selected) {
+                    menuStr += " -> ";
+                }
+                else {
+                    menuStr += "    ";
+                }
+
+                GameItem thisItem = player.inventory.get(i);
+                if (thisItem == player.equippedShield || thisItem == player.equippedWeapon) {
+                    menuStr += "- (E) ";
+                }
+                else {
+                    menuStr += "- ";
+                }
+
+                menuStr += items.get(i).name + "\n";
+            }
 
             for (int i = 0; i < PlayerState.MAX_ITEMS - (items.size() - 1); i++) {
                 menuStr += "\n";
