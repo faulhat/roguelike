@@ -192,15 +192,15 @@ public class ChamberMaze implements DS.Storable {
         }
 
         Map<String, DS.Node> asMap = ((DS.MapNode) node).getMap();
-        level = ((DS.IntNode) getAndValidate(asMap, DS.IntNode.class, ":levelno")).value;
-        width = ((DS.IntNode) getAndValidate(asMap, DS.IntNode.class, ":width")).value;
-        height = ((DS.IntNode) getAndValidate(asMap, DS.IntNode.class, ":height")).value;
-        bossLocation = new DSPoint(getAndValidate(asMap, DS.VectorNode.class, ":boss-loc"));
-        merchantLocation = new DSPoint(getAndValidate(asMap, DS.VectorNode.class, ":merchant-loc"));
+        level = ((DS.IntNode) getAndValidate(asMap, DS.IntNode.class, "levelno")).value;
+        width = ((DS.IntNode) getAndValidate(asMap, DS.IntNode.class, "width")).value;
+        height = ((DS.IntNode) getAndValidate(asMap, DS.IntNode.class, "height")).value;
+        bossLocation = new DSPoint(getAndValidate(asMap, DS.VectorNode.class, "boss-loc"));
+        merchantLocation = new DSPoint(getAndValidate(asMap, DS.VectorNode.class, "merchant-loc"));
 
         chambers = new Chamber[width][height];
 
-        DS.VectorNode matrixNode = (DS.VectorNode) getAndValidate(asMap, DS.VectorNode.class, ":matrix");
+        DS.VectorNode matrixNode = (DS.VectorNode) getAndValidate(asMap, DS.VectorNode.class, "matrix");
         if (matrixNode.complexVal.size() != width) {
             throw new CMLoadingException("Chamber matrix has incorrect dimensions! (Wrong width)");
         }

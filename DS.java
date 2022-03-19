@@ -226,6 +226,11 @@ public class DS {
             return map;
         }
 
+        public static Node getKey(Map<String, Node> asMap, String key)
+        {
+            return asMap.get(":" + key);
+        }
+
         public void addKey(String key)
         {
             add(new KeywordNode(key));
@@ -249,7 +254,7 @@ public class DS {
         // return it if it is
         public static Node getAndValidate(Map<String, Node> asMap, Class<? extends Node> desired, String key, String fromClass) throws Storable.LoadingException
         {
-            Node gotNode = asMap.get(key);
+            Node gotNode = getKey(asMap, key);
 
             if (gotNode == null) {
                 throw new Storable.LoadingException(fromClass, "No mapping found for: " + key);

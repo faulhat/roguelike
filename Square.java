@@ -82,7 +82,7 @@ public class Square implements DS.Storable {
         }
 
         Map<String, DS.Node> asMap = ((DS.MapNode) node).getMap();
-        DS.Node wallNode = getAndValidate(asMap, DS.IdNode.class, ":wall");
+        DS.Node wallNode = getAndValidate(asMap, DS.IdNode.class, "wall");
 
         if (!((DS.IdNode) wallNode).isBool()) {
             throw new SquareLoadingException("isWall node is not a valid boolean.");
@@ -90,7 +90,7 @@ public class Square implements DS.Storable {
 
         isWall = ((DS.IdNode) wallNode).isTrue();
 
-        DS.VectorNode spritesNode = (DS.VectorNode) getAndValidate(asMap, DS.VectorNode.class, ":sprites");
+        DS.VectorNode spritesNode = (DS.VectorNode) getAndValidate(asMap, DS.VectorNode.class, "sprites");
 
         sprites = new ArrayList<>();
         for (DS.Node spriteNode : spritesNode.complexVal) {
@@ -99,7 +99,7 @@ public class Square implements DS.Storable {
             }
 
             Map<String, DS.Node> spriteAsMap = ((DS.MapNode) spriteNode).getMap();
-            String spriteType = ((DS.StringNode) getAndValidate(spriteAsMap, DS.StringNode.class, ":type")).value;
+            String spriteType = ((DS.StringNode) getAndValidate(spriteAsMap, DS.StringNode.class, "type")).value;
             if (spriteType.equals("Teleporter")) {
                 sprites.add(new Teleporter(spriteNode));
             }

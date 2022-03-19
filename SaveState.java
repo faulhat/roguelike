@@ -67,16 +67,16 @@ public class SaveState implements DS.Storable {
         }
 
         Map<String, DS.Node> asMap = ((DS.MapNode) node).getMap();
-        DS.VectorNode levelsNode = (DS.VectorNode) getAndValidate(asMap, DS.VectorNode.class, ":levels");
+        DS.VectorNode levelsNode = (DS.VectorNode) getAndValidate(asMap, DS.VectorNode.class, "levels");
         levels = new ArrayList<>();
         for (DS.Node levelNode : levelsNode.complexVal) {
             levels.add(new ChamberMaze(levelNode));
         }
 
-        currentLevel = ((DS.IntNode) getAndValidate(asMap, DS.IntNode.class, ":on-level")).value;
-        location = new DSPoint((DS.VectorNode) getAndValidate(asMap, DS.VectorNode.class, ":location"));
-        position = new DSPoint((DS.VectorNode) getAndValidate(asMap, DS.VectorNode.class, ":position"));
-        player = new PlayerState((DS.MapNode) getAndValidate(asMap, DS.MapNode.class, ":player"));
+        currentLevel = ((DS.IntNode) getAndValidate(asMap, DS.IntNode.class, "on-level")).value;
+        location = new DSPoint((DS.VectorNode) getAndValidate(asMap, DS.VectorNode.class, "location"));
+        position = new DSPoint((DS.VectorNode) getAndValidate(asMap, DS.VectorNode.class, "position"));
+        player = new PlayerState((DS.MapNode) getAndValidate(asMap, DS.MapNode.class, "player"));
     }
 
     @Override

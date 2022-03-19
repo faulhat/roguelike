@@ -38,8 +38,8 @@ public class Merchant extends Sprite {
             }
 
             Map<String, DS.Node> asMap = ((DS.MapNode) node).getMap();
-            item = GameItem.loadFromName(getAndValidate(asMap, DS.MapNode.class, ":item"));
-            price = ((DS.IntNode) getAndValidate(asMap, DS.IntNode.class, ":price")).value;
+            item = GameItem.loadFromName(getAndValidate(asMap, DS.MapNode.class, "item"));
+            price = ((DS.IntNode) getAndValidate(asMap, DS.IntNode.class, "price")).value;
         }
 
         @Override
@@ -174,7 +174,7 @@ public class Merchant extends Sprite {
         }
 
         Map<String, DS.Node> asMap = ((DS.MapNode) node).getMap();
-        DS.VectorNode tradesNode = (DS.VectorNode) DS.MapNode.getAndValidate(asMap, DS.VectorNode.class, ":trades", "Merchant");
+        DS.VectorNode tradesNode = (DS.VectorNode) DS.MapNode.getAndValidate(asMap, DS.VectorNode.class, "trades", "Merchant");
         trades = new ArrayList<>();
         for (DS.Node tradeNode : tradesNode.complexVal) {
             trades.add(new Trade(tradeNode));

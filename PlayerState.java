@@ -128,21 +128,21 @@ public class PlayerState extends GameCharacter implements DS.Storable {
         inventory = new ArrayList<>();
 
         Map<String, DS.Node> asMap = ((DS.MapNode) node).getMap();
-        trueHitPoints = ((DS.FloatNode) getAndValidate(asMap, DS.FloatNode.class, ":true-hp")).value;
+        trueHitPoints = ((DS.FloatNode) getAndValidate(asMap, DS.FloatNode.class, "true-hp")).value;
         hitPoints = (int) Math.ceil(trueHitPoints);
 
-        equipWeapon((Weapon) GameItem.loadFromName((DS.MapNode) getAndValidate(asMap, DS.MapNode.class, ":weapon")));
+        equipWeapon((Weapon) GameItem.loadFromName((DS.MapNode) getAndValidate(asMap, DS.MapNode.class, "weapon")));
         if (!(equippedWeapon instanceof Weapon.Default)) {
             inventory.add(equippedWeapon);
         }
 
-        equipShield((Shield) GameItem.loadFromName((DS.MapNode) getAndValidate(asMap, DS.MapNode.class, ":shield")));
+        equipShield((Shield) GameItem.loadFromName((DS.MapNode) getAndValidate(asMap, DS.MapNode.class, "shield")));
         if (!(equippedShield instanceof Shield.Default)) {
             inventory.add(equippedShield);
         }
 
-        gold = ((DS.IntNode) getAndValidate(asMap, DS.IntNode.class, ":dolla-dolla-bills")).value;
-        DS.VectorNode itemsNode = (DS.VectorNode) getAndValidate(asMap, DS.VectorNode.class, ":items");
+        gold = ((DS.IntNode) getAndValidate(asMap, DS.IntNode.class, "dolla-dolla-bills")).value;
+        DS.VectorNode itemsNode = (DS.VectorNode) getAndValidate(asMap, DS.VectorNode.class, "items");
         for (DS.Node itemNode : itemsNode.complexVal) {
             inventory.add(GameItem.loadFromName(itemNode));
         }

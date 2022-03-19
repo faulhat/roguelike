@@ -128,9 +128,9 @@ public class Chamber implements DS.Storable {
         }
 
         Map<String, DS.Node> asMap = ((DS.MapNode) node).getMap();
-        encounterRate = ((DS.FloatNode) getAndValidate(asMap, DS.FloatNode.class, ":encounter-rate")).value;
+        encounterRate = ((DS.FloatNode) getAndValidate(asMap, DS.FloatNode.class, "encounter-rate")).value;
 
-        DS.VectorNode matrixNode = (DS.VectorNode) getAndValidate(asMap, DS.VectorNode.class, ":squares");
+        DS.VectorNode matrixNode = (DS.VectorNode) getAndValidate(asMap, DS.VectorNode.class, "squares");
         if (matrixNode.complexVal.size() != WIDTH) {
             throw new ChamberLoadingException("Square matrix has incorrect dimensions! (wrong width)");
         }

@@ -80,12 +80,12 @@ public class Teleporter extends Sprite {
         }
 
         Map<String, DS.Node> asMap = ((DS.MapNode) node).getMap();
-        toLevel = ((DS.IntNode) getAndValidate(asMap, DS.IntNode.class, ":to-level")).value;
+        toLevel = ((DS.IntNode) getAndValidate(asMap, DS.IntNode.class, "to-level")).value;
 
-        DS.VectorNode toLocNode = (DS.VectorNode) getAndValidate(asMap, DS.VectorNode.class, ":to-location");
+        DS.VectorNode toLocNode = (DS.VectorNode) getAndValidate(asMap, DS.VectorNode.class, "to-location");
         toLocation = new DSPoint(toLocNode);
 
-        DS.VectorNode toPosNode = (DS.VectorNode) getAndValidate(asMap, DS.VectorNode.class, ":to-position");
+        DS.VectorNode toPosNode = (DS.VectorNode) getAndValidate(asMap, DS.VectorNode.class, "to-position");
         toPosition = new DSPoint(toPosNode);
     }
 

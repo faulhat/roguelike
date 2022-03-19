@@ -76,23 +76,23 @@ public abstract class Sprite implements DS.Storable, Cloneable {
         }
 
         Map<String, DS.Node> asMap = ((DS.MapNode) node).getMap();
-        myType = ((DS.StringNode) getAndValidate(asMap, DS.StringNode.class, ":type")).value;
+        myType = ((DS.StringNode) getAndValidate(asMap, DS.StringNode.class, "type")).value;
 
-        DS.IdNode visibleNode = (DS.IdNode) getAndValidate(asMap, DS.IdNode.class, ":visible");
+        DS.IdNode visibleNode = (DS.IdNode) getAndValidate(asMap, DS.IdNode.class, "visible");
         if (!visibleNode.isBool()) {
             throw new SpriteLoadingException("'visible' node is not a valid boolean.");
         }
 
         visible = ((DS.IdNode) visibleNode).isTrue();
 
-        DS.IdNode walkableNode = (DS.IdNode) getAndValidate(asMap, DS.IdNode.class, ":walkable");
+        DS.IdNode walkableNode = (DS.IdNode) getAndValidate(asMap, DS.IdNode.class, "walkable");
         if (!walkableNode.isBool()) {
             throw new SpriteLoadingException("'walkable' node is not a valid boolean.");
         }
 
         walkable = ((DS.IdNode) walkableNode).isTrue();
 
-        DS.Node symbolNode = asMap.get(":symbol");
+        DS.Node symbolNode = DS.MapNode.getKey(asMap, "symbol");
         if (symbolNode == null) {
             if (visible) {
                 throw new SpriteLoadingException("Sprite is visible but has no symbol.");
@@ -113,7 +113,7 @@ public abstract class Sprite implements DS.Storable, Cloneable {
             symbol = symbolString.charAt(0);
         }
 
-        DS.Node uniqueNode = getAndValidate(asMap, DS.MapNode.class, ":unique");
+        DS.Node uniqueNode = getAndValidate(asMap, DS.MapNode.class, "unique");
         loadUnique(uniqueNode);
     }
 

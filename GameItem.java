@@ -81,7 +81,7 @@ public abstract class GameItem implements Cloneable {
             throw new ItemLoadingException("Must be a map node.");
         }
 
-        return ((DS.StringNode) DS.MapNode.getAndValidate(((DS.MapNode) node).getMap(), DS.StringNode.class, ":name", "GameItem")).value;
+        return ((DS.StringNode) DS.MapNode.getAndValidate(((DS.MapNode) node).getMap(), DS.StringNode.class, "name", "GameItem")).value;
     }
 
     // Get a GameItem from a node.

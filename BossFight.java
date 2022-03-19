@@ -83,10 +83,10 @@ public class BossFight extends Sprite {
         }
 
         Map<String, DS.Node> asMap = ((DS.MapNode) node).getMap();
-        level = ((DS.IntNode) getAndValidate(asMap, DS.IntNode.class, ":level")).value;
+        level = ((DS.IntNode) getAndValidate(asMap, DS.IntNode.class, "level")).value;
         loadFromLevel();
 
-        location = new DSPoint(getAndValidate(asMap, DS.VectorNode.class, ":location"));
+        location = new DSPoint(getAndValidate(asMap, DS.VectorNode.class, "location"));
     }
 
     @Override
